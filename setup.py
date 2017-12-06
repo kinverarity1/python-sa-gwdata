@@ -15,7 +15,7 @@ except:
     with open('README.md') as f:
         long_description = f.read()
 
-from blank_python_project import __version__
+from waterconnect import __version__
 
 with open("requirements.txt") as f:
     requirements = f.read().splitlines()
@@ -33,21 +33,21 @@ CLASSIFIERS = [
     ]
 
 
-setup(name='blank_python_project',
+setup(name='waterconnect',
       version=__version__,
       description=__doc__,
       long_description=long_description,
-      url="https://github.com/kinverarity1/blank_python_project",
+      url="https://github.com/kinverarity1/waterconnect",
       author="Kent Inverarity",
       author_email="kinverarity@hotmail.com",
       license="MIT",
       classifiers=CLASSIFIERS,
       keywords=WHITESPACE_SEP_KEYWORDS,
-      packages=['blank_python_project', ],
+      packages=['waterconnect', ],
       install_requires=requirements,
       entry_points={
           'console_scripts': [
-              # 'script_executable_name = blank_python_project.module:function',
+              # 'script_executable_name = waterconnect.module:function',
           ],
       }
       )

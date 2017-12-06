@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# blank_python_project documentation build configuration file, created by
+# waterconnect documentation build configuration file, created by
 # sphinx-quickstart on Thu Aug 20 10:59:20 2015.
 #
 # This file is execfile()d with the current directory set to its
@@ -59,7 +59,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'blank_python_project'
+project = u'waterconnect'
 copyright = u''
 author = u'Kent Inverarity'
 
@@ -218,7 +218,7 @@ html_theme_options = {
 #html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'blank_python_projectdoc'
+htmlhelp_basename = 'waterconnectdoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -240,7 +240,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  (master_doc, 'blank_python_project.tex', u'blank_python_project Documentation',
+  (master_doc, 'waterconnect.tex', u'waterconnect Documentation',
    u'Kent Inverarity', 'manual'),
 ]
 
@@ -270,7 +270,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'blank_python_project', u'blank_python_project Documentation',
+    (master_doc, 'waterconnect', u'waterconnect Documentation',
      [author], 1)
 ]
 
@@ -284,8 +284,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  (master_doc, 'blank_python_project', u'blank_python_project Documentation',
-   author, 'blank_python_project', 'One line description of project.',
+  (master_doc, 'waterconnect', u'waterconnect Documentation',
+   author, 'waterconnect', 'One line description of project.',
    'Miscellaneous'),
 ]
 
