@@ -1,4 +1,6 @@
-__version__ = '0.0'
+from .groundwater import GroundwaterDataSession
+
+__version__ = '0.1'
 
 
 def version():
