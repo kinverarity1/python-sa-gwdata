@@ -24,3 +24,9 @@ class GroundwaterDataSession(object):
         self.nrm_regions = {item['V']: item['T'] + ' NRM Region' for item in list_data['NRMRegion']}
         self.pwas = {item['V']: item['V'] + ' PWA' for item in list_data['PrescribedArea']}
         self.pwras = {item['V']: item['V'] + ' PWRA' for item in list_data['PrescribedWRArea']}
+
+    def data_pwa(self, pwa):
+        pass
+        # SALINITY - can join by  AND 
+        # https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetPWASearchData?PWA=Angas-Bremer&Q=SALSTATUS='C'
+        # https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetPWASearchData?PWA=Angas-Bremer&Q=SWLSTATUS='C'%20AND%20SALSTATUS='C'
