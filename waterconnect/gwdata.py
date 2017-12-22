@@ -30,3 +30,5 @@ class GroundwaterDataSession(object):
         # SALINITY - can join by  AND 
         # https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetPWASearchData?PWA=Angas-Bremer&Q=SALSTATUS='C'
         # https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetPWASearchData?PWA=Angas-Bremer&Q=SWLSTATUS='C'%20AND%20SALSTATUS='C'
+
+    

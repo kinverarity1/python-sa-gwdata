@@ -1,4 +1,4 @@
-from .groundwater import GroundwaterDataSession
+from .gwdata import GroundwaterDataSession
 
 __version__ = '0.1'
 

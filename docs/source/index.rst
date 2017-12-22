@@ -1,4 +1,4 @@
-Groundwater Data website data interface via Python
+WaterConnect website data interface via Python
 ==================================================
 
 Intended initially to be for groundwater use.
@@ -7,7 +7,8 @@ Intended initially to be for groundwater use.
    :maxdepth: 2
    :caption: Contents:
 
-   
+   webservices
+   waterconnect
 
 Indices and tables
 ==================
