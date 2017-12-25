@@ -1,5 +1,0 @@
-Metadata
-=============
-
-- GetAdvancedListsData
-- GetBoundaryFromTitle
