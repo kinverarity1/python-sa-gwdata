@@ -16,6 +16,7 @@ Searching by well identifiers
 These services all take a comma-delimited list and return a list of drillhole numbers (DHNO), together with some summary information:
 
 .. toctree::
+    :maxdepth: 5
 
     GetUnitNumberSearchData
     GetObswellNumberSearchData
@@ -29,6 +30,7 @@ These also return a list of drillhole numbers, sometimes with other keys -- chec
 There are geometric queries:
 
 .. toctree::
+    :maxdepth: 5
 
     GetGridData
     GetCircleData
@@ -36,6 +38,7 @@ There are geometric queries:
 You can search by general-purpose geographic information:
 
 .. toctree::
+    :maxdepth: 5
 
     GetSuburbFromName
     GetLGAFromName
@@ -45,6 +48,7 @@ You can search by general-purpose geographic information:
 Or more groundwater-specific areas:
 
 .. toctree::
+    :maxdepth: 5
 
     GetObswellNetworkData
     GetPWASearchData
@@ -52,27 +56,27 @@ Or more groundwater-specific areas:
 
 Lists of valid query values for many of these can be obtained through the metadata requests shown in the :ref:`webservice-metadata` section below.
 
-Well details
-============
+Data from a drillhole
+=======================
 
-Query with DHNO:
+Most groundwater information is obtained through these queries. All these requests are for a single drillhole at a time; see the pages for more details.
 
-- GetSummaryDetails
-- GetExtraSummaryDetails
-- GetWaterLevelDetails
-- GetSalinityDetails
-- GetWellYieldDetails - returns WELL_YIELD_MEAS_NOs
-- GetWaterChemistryDetails - returns SAMPLE_NOs
+.. toctree::
+    :maxdepth: 5
+
+    GetSummaryDetails
+    GetWaterLevelDetails
+    GetSalinityDetails
+    GetWellYieldDetails
+    GetWaterChemistryDetails
+    GetElevationDetails
+
 - GetConstructionInformation - returns COMPLETION_NOs
 - GetElevationDetails - returns ELEVATION_NOs
 - GetDrillersLogInformation - returns LOG_NOs
 - GetLithologicalLogInformation
 - GetHydrostratInformation - returns HYDRO_INT_NOs
 - GetStratigraphicLogsDetails
-
-Query with SAMPLE_NO:
-
-- GetExtraWaterChemistryAllData
 
 Query with COMPLETION_NO:
 

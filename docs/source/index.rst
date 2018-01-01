@@ -4,7 +4,7 @@ WaterConnect website data interface via Python
 Intended initially to be for groundwater use.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 5
    :caption: Contents:
 
    webservices
