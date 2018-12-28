@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name="waterconnect",
     packages=("waterconnect", ),
-    version="0.2.0",
+    version="0.3.0",
     description=
     "Unofficial Python package to access groundwater data from the DEW WaterConnect website",
     long_description=open("README.md", "r").read(),
