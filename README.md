@@ -1,4 +1,5 @@
 # waterconnect
 
-Scope: interface to the web services available on the WaterConnect Groundwater 
-Data website.
+Python interface to water data available on DEW's WaterConnect website.
+Primarily groundwater data for now.
+
