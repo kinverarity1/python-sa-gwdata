@@ -17,15 +17,20 @@ class Response(object):
     def r(self):
         return self.response
 
+    @property
     def json(self):
-        return json.loads(self.text)
+        if not hasattr(self, "_json"):
+            self._json = json.loads(self.response.text)
+        return self._json
 
+    @property
     def df(self):
-        j = self.json()
-        if isinstance(j, list):
-            df = pandas.DataFrame(j)
-        df.columns = [s.lower() for s in df.columns]
-        return df
+        if not hasattr(self, "_df"):
+            if isinstance(self.json, list):
+                df = pandas.DataFrame(self.json)
+            df.columns = [s.lower() for s in df.columns]
+            self._df = df
+        return self._df
 
 
 class Session(requests.Session):
@@ -58,20 +63,20 @@ class Session(requests.Session):
         logger.debug("GET {} verify={}".format(path, verify))
         response = super().get(path, verify=verify, **kwargs)
         self.last_request = time.time()
-        return response
+        return Response(response)
 
     def refresh_available_groupings(self):
+        '''Load lists data from API.'''
         response = self.get("GetAdvancedListsData")
-        list_data = json.loads(response.text)
-        self.networks = {item["V"]: item["T"] for item in list_data["Networks"]}
+        self.networks = {item["V"]: item["T"] for item in response.json["Networks"]}
         self.nrm_regions = {
-            item["V"]: item["T"] + " NRM Region" for item in list_data["NRMRegion"]
+            item["V"]: item["T"] + " NRM Region" for item in response.json["NRMRegion"]
         }
         self.pwas = {
-            item["V"]: item["V"] + " PWA" for item in list_data["PrescribedArea"]
+            item["V"]: item["V"] + " PWA" for item in response.json["PrescribedArea"]
         }
         self.pwras = {
-            item["V"]: item["V"] + " PWRA" for item in list_data["PrescribedWRArea"]
+            item["V"]: item["V"] + " PWRA" for item in response.json["PrescribedWRArea"]
         }
 
     def data_pwa(self, pwa):
