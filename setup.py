@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name="pygd",
     packages=("pygd",),
-    version="0.3.1",
+    version="0.4.0",
     description="Unofficial Python package to access groundwater data from the DEW Groundwater Data website",
     long_description=open("README.md", "r").read(),
     long_description_content_type="text/markdown",
