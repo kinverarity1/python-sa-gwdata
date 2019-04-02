@@ -6,6 +6,9 @@ import lxml.html
 SARIG_QUERY = "https://minerals.sarig.sa.gov.au/Details.aspx?DRILLHOLE_NO={drillhole}"
 
 
+__all__ = ("collect_sarig_images",)
+
+
 def collect_sarig_images(self):
     query = SARIG_QUERY.format(drillhole=str(int(self.drillhole)))
     response = requests.get(query)
