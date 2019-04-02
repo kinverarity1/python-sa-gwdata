@@ -1,21 +1,21 @@
-Docstrings for ``waterconnect`` package
+Docstrings for ``pygd`` package
 =======================================
 
 Submodules
 ----------
 
-waterconnect\.gwdata module
+pygd\.groundwater module
 ---------------------------
 
-.. automodule:: waterconnect.gwdata
+.. automodule:: pygd.groundwater
     :members:
     :undoc-members:
     :show-inheritance:
 
-waterconnect\.sarig module
+pygd\.sarig module
 --------------------------
 
-.. automodule:: waterconnect.sarig
+.. automodule:: pygd.sarig
     :members:
     :undoc-members:
     :show-inheritance:
@@ -24,7 +24,7 @@ waterconnect\.sarig module
 Module contents
 ---------------
 
-.. automodule:: waterconnect
+.. automodule:: pygd
     :members:
     :undoc-members:
     :show-inheritance:

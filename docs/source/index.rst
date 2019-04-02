@@ -8,7 +8,7 @@ Intended initially to be for groundwater use.
    :caption: Contents:
 
    webservices
-   waterconnect
+   pygd
 
 Indices and tables
 ==================
