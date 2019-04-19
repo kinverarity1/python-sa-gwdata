@@ -1,4 +1,4 @@
-# waterconnect
+# pygwdata
 
 Python -> pandas wrapper for the [WaterConnect Groundwater Data](https://www.waterconnect.sa.gov.au/Systems/GD/Pages/Default.aspx) website.
 
@@ -7,7 +7,7 @@ Unofficial.
 ## Install
 
 ```
-$ pip install pygd
+$ pip install pygwdata
 ```
 
 ## How to use
@@ -15,8 +15,8 @@ $ pip install pygd
 Everything starts with a web session:
 
 ```python
->>> import pygd
->>> s = pygd.Session()
+>>> import pygwdata
+>>> s = pygwdata.Session()
 ```
 
 On initialisation it downloads some summary information.
