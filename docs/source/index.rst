@@ -10,6 +10,7 @@ This is an unofficial hobby project, use at your own risk. Or reward :-)
    :caption: Contents:
 
    webservices
+   install
    sa_gwdata
 
 Indices and tables
