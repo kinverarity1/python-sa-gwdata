@@ -5,7 +5,7 @@ The `Groundwater Data <https://www.waterconnect.sa.gov.au/Systems/GD/Pages/Defau
 
 The links below detail a variety of GET request URLs and examples of the returned JSON responses.
 
-See further in this documentation for the Python methods which wrap these calls.
+(The documentation is a work in progress; help would be welcome!)
 
 Searching for wells
 ===================
