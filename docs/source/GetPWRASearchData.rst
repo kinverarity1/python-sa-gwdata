@@ -1,7 +1,7 @@
 Prescribed Water Resources Area (PWRA)
 =========================================================
 
-`GetPWRASearchData?PWA=Marne River and Saunders Creek <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetPWRASearchData?PWA=Marne River and Saunders Creek>`__
+`GetPWRASearchData?PWA=Marne%20River%20and%20Saunders%20Creek <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetPWRASearchData?PWA=Marne%20River%20and%20Saunders%20Creek>`__
 
 The query keyword of `PWA` is not a typographic error; it is correct. See the :ref:`webservice-metadata` section for how to retrieve the valid PWRAs (to use in the above GET URL).
 
@@ -67,7 +67,7 @@ Returns (this only shows 2 of the many returned "DHNO" records):
         }
     ]
 
-There is also the related `GetPWRAFromName?NAME=Marne River and Saunders Creek <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDWFS.ashx/GetPWRAFromName?NAME=Marne River and Saunders Creek>`__ query, which returns the geographical polygon representing the PWRA.
+There is also the related `GetPWRAFromName?NAME=Marne%20River%20and%20Saunders%20Creek <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDWFS.ashx/GetPWRAFromName?NAME=Marne%20River%20and%20Saunders%20Creek>`__ query, which returns the geographical polygon representing the PWRA.
 
 .. include:: polyline-explainer.rst
 

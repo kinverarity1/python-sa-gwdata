@@ -1,7 +1,7 @@
 Prescribed Well Area (PWA)
 =========================================================
 
-`GetPWASearchData?PWA=Northern Adelaide Plains <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetPWASearchData?PWA=Northern Adelaide Plains>`__
+`GetPWASearchData?PWA=Northern%20Adelaide%20Plains <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetPWASearchData?PWA=Northern%20Adelaide%20Plains>`__
 
 See the :ref:`webservice-metadata` section for how to retrieve the valid PWA names.
 
@@ -58,7 +58,7 @@ Returns (this only shows 2 of the many returned "DHNO" records):
         }
     ]
 
-There is also the `GetPWAFromName?NAME=Northern Adelaide Plains <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDWFS.ashx/GetPWAFromName?NAME=Northern Adelaide Plains>`__ request, which returns data for the geographical shape of the PWA.
+There is also the `GetPWAFromName?NAME=Northern%20Adelaide%20Plains <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDWFS.ashx/GetPWAFromName?NAME=Northern%20Adelaide%20Plains>`__ request, which returns data for the geographical shape of the PWA.
 
 .. include:: polyline-explainer.rst
 

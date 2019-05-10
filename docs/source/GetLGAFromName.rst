@@ -1,7 +1,7 @@
 Local council
 ==============
 
-`GetLGAFromName?ABBNAME=COPPER COAST <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDWFS.ashx/GetLGAFromName?ABBNAME=COPPER COAST>`__
+`GetLGAFromName?ABBNAME=COPPER COAST <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDWFS.ashx/GetLGAFromName?ABBNAME=COPPER%20COAST>`__
 
 The :ref:`webservice-metadata` section shows how to get a list of valid council names.
 

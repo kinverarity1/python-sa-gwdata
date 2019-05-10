@@ -1,7 +1,7 @@
 Natural resource management (NRM) region
 ========================================
 
-`GetNRMRegionSearchData?NRMRegion=Kangaroo Island <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetNRMRegionSearchData?NRMRegion=Kangaroo Island>`__
+`GetNRMRegionSearchData?NRMRegion=Kangaroo%20Island <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetNRMRegionSearchData?NRMRegion=Kangaroo%20Island>`__
 
 The :ref:`webservice-metadata` section shows how to retrieve the NRM names which can be used in this request.
 
@@ -59,7 +59,7 @@ Returns groundwater data (this only shows 2 of many returned "DHNO" records):
     }
     ]
 
-There is also the related query `GetNRMRegionFromName?NAME=Kangaroo Island <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDWFS.ashx/GetNRMRegionFromName?NAME=Kangaroo Island>`__
+There is also the related query `GetNRMRegionFromName?NAME=Kangaroo%20Island <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDWFS.ashx/GetNRMRegionFromName?NAME=Kangaroo%20Island>`__
 
 .. include:: polyline-explainer.rst
 
