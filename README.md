@@ -16,6 +16,9 @@ This is an unofficial hobby project of mine. Use at your own risk... or perhaps 
 
 ## How to use
 
+Check out the [documentation](https://python-sa-gwdata.readthedocs.io/en/latest/index.html), and 
+some tutorial Jupyter Notebooks in the [notebooks](notebooks) folder.
+
 Start a web session with Groundwater Data:
 
 ```python
