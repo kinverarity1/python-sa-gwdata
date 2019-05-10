@@ -1,28 +1,32 @@
-# pygwdata
+# python-sa-gwdata
 
-Python -> pandas wrapper for the [WaterConnect Groundwater Data](https://www.waterconnect.sa.gov.au/Systems/GD/Pages/Default.aspx) website.
+``sa_gwdata`` is a Python package to ease access to groundwater data in South Australia.
+It provides access to JSON data from the 
+[WaterConnect Groundwater Data](https://www.waterconnect.sa.gov.au/Systems/GD/Pages/Default.aspx) website, 
+and also provides some well data from [SARIG](https://minerals.sarig.sa.gov.au/QuickSearch.aspx).
+There are simple methods to easily turn this data into pandas DataFrames.
 
-Unofficial.
+This is an unofficial hobby project of mine. Use at your own risk... or perhaps reward? :-)
 
 ## Install
 
-```
-$ pip install pygwdata
+```posh
+> pip install python-sa-gwdata
 ```
 
 ## How to use
 
-Everything starts with a web session:
+Start a web session with Groundwater Data:
 
 ```python
->>> import pygwdata
->>> s = pygwdata.Session()
+>>> import sa_gwdata
+>>> session = sa_gwdata.WaterConnectSession()
 ```
 
 On initialisation it downloads some summary information.
 
 ```python
->>> s.networks
+>>> session.networks
 {'ANGBRM': 'Angas Bremer PWA',
  'AW_NP': 'Alinytjara Wilurara Non-Prescribed Area',
  'BAROOTA': 'Baroota PWRA',
@@ -39,7 +43,7 @@ On initialisation it downloads some summary information.
 With this information we can make some direct REST calls:
 
 ```python
->>> r = s.get("GetObswellNetworkData", params={"Network": "CENT_ADEL"})
+>>> r = session.get("GetObswellNetworkData", params={"Network": "CENT_ADEL"})
 >>> r.df.head(5)
 	aq_mon	chem	class	dhno	drill_date	lat	latest_open_date	latest_open_depth	latest_sal_date	latest_swl_date	...	pwa	replaceunitnum	sal	salstatus	stat_desc	swl	swlstatus	tds	water	yield
 0	Tomw(T2)	Y	WW	27382	1968-02-07	-34.764662	1992-02-20	225.00	2013-09-02	2018-09-18	...	Central Adelaide	NaN	Y	C	OPR	3.47	C	3620.0	Y	2.00
@@ -52,7 +56,7 @@ With this information we can make some direct REST calls:
 Get water levels:
 
 ```python
->>> wl = s.get("GetWaterLevelDetails", params={"DHNO": 188444}).df
+>>> wl = session.get("GetWaterLevelDetails", params={"DHNO": 188444}).df
 >>> wl.head(5)
 	anomalous_ind	data_source_code	measured_during	obs_date	pumping_ind	rswl	standing_water_level
 0	N	DEWNR	D	2002-01-28	N	-8.12	15.08

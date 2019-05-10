@@ -1,13 +1,13 @@
 from setuptools import setup
 
 setup(
-    name="pygwdata",
-    packages=("pygwdata",),
+    name="python-sa-gwdata",
+    packages=("sa_gwdata",),
     version="0.4.0",
-    description="Unofficial Python package to access groundwater data from the DEW Groundwater Data website",
+    description="Unofficial Python package to ease access to groundwater data in South Australia",
     long_description=open("README.md", "r").read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/kinverarity1/pygwdata",
+    url="https://github.com/kinverarity1/python-sa-gwdata",
     author="Kent Inverarity",
     author_email="kinverarity@hotmail.com",
     license="MIT",

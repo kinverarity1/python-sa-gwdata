@@ -1,5 +1,5 @@
-Web services
-~~~~~~~~~~~~
+WaterConnect web services
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The `Groundwater Data <https://www.waterconnect.sa.gov.au/Systems/GD/Pages/Default.aspx>`__ section of the WaterConnect website uses a number of straightforward GET calls to obtain groundwater data in JSON format.
 

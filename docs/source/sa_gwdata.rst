@@ -1,21 +1,21 @@
-Docstrings for ``pygd`` package
+Docstrings for ``sa_gwdata`` package
 =======================================
 
 Submodules
 ----------
 
-pygd\.groundwater module
----------------------------
+sa_gwdata\.waterconnect module
+------------------------------
 
-.. automodule:: pygd.groundwater
+.. automodule:: sa_gwdata.waterconnect
     :members:
     :undoc-members:
     :show-inheritance:
 
-pygd\.sarig module
+sa_gwdata\.sarig module
 --------------------------
 
-.. automodule:: pygd.sarig
+.. automodule:: sa_gwdata.sarig
     :members:
     :undoc-members:
     :show-inheritance:
@@ -24,7 +24,7 @@ pygd\.sarig module
 Module contents
 ---------------
 
-.. automodule:: pygd
+.. automodule:: sa_gwdata
     :members:
     :undoc-members:
     :show-inheritance:

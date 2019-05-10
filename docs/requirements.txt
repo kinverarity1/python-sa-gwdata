@@ -1,2 +1,2 @@
 IPython
-waterconnect
+python-sa-gwdata

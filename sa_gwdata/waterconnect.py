@@ -6,7 +6,7 @@ import time
 import requests
 
 
-__all__ = ("Session", "Response")
+__all__ = ("WaterConnectSession", "Response")
 
 
 logger = logging.getLogger(__name__)
@@ -55,20 +55,20 @@ class Response(object):
         return False
 
 
-class Session(requests.Session):
+class WaterConnectSession(requests.Session):
     """Wrapper around repeated requests to Groundwater Data.
 
     Args:
         endpoint (str): url endpoint for API, optional
         sleep (int): minimum interval between requests in seconds. 
-            Keep it ethical and do not reduce it.
+            Keep things ethical -- do not reduce it.
         verify (bool): require valid SSL certificate
 
     Other args and kwargs are passed to request.Session constructor.
 
     Usage:
 
-        >>> with pygd.Session() as s:
+        >>> with sa_gwdata.WaterConnectSession() as s:
         ...     df = s.get("GetObswellNetworkData", params={"Network": "CENT_ADEL"})
 
     """
