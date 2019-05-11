@@ -6,7 +6,7 @@ Python access to groundwater data in South Australia
 This is an unofficial hobby project, use at your own risk. Or reward :-)
 
 .. toctree::
-   :maxdepth: 5
+   :maxdepth: 1
    :caption: Contents:
 
    webservices

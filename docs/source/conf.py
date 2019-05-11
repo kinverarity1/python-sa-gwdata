@@ -119,19 +119,32 @@ todo_include_todos = True
 
 # -- Options for HTML output ----------------------------------------------
 
-html_theme = 'sphinx_rtd_theme'
-html_sidebars = {
-    '**': [
-        'about.html',
-        'navigation.html',
-        'relations.html',
-        'searchbox.html',
-        'donate.html',
-    ]
-}
+import guzzle_sphinx_theme
+html_theme_path = guzzle_sphinx_theme.html_theme_path()
+html_theme = 'guzzle_sphinx_theme'
+extensions.append("guzzle_sphinx_theme")
 html_theme_options = {
+    # Set the name of the project to appear in the sidebar
+    "project_nav_name": "python-sa-gwdata",
 }
 
+# import sphinx_bootstrap_theme
+# html_theme = 'bootstrap'
+# html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
+
+# html_theme = 'guzzle_sphinx_theme'
+# html_theme_options = {
+# }
+
+# html_sidebars = {
+#     '**': [
+#         'about.html',
+#         'navigation.html',
+#         'relations.html',
+#         'searchbox.html',
+#         'donate.html',
+#     ]
+# }
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
@@ -168,7 +181,7 @@ html_theme_options = {
 
 # If true, SmartyPants will be used to convert quotes and dashes to
 # typographically correct entities.
-#html_use_smartypants = True
+# html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
 #html_sidebars = {}

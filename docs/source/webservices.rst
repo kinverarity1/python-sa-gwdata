@@ -7,6 +7,9 @@ The links below detail a variety of GET request URLs and examples of the returne
 
 (The documentation is a work in progress; help would be welcome!)
 
+.. contents:: :local:
+    :depth: 5
+
 Searching for wells
 ===================
 
