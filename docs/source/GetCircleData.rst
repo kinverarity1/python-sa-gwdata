@@ -1,16 +1,16 @@
-Circle around a point
-=======================
+GetCircleData
+^^^^^^^^^^^^^
 
 `GetCircleData?Box=-34.155353,138.455916&Radius=2 <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetCircleData?Box=-34.155353,138.455916&Radius=2>`__
 
 Radius is in kilometres.
 
-Returns (this only shows 2 of the many returned "DHNO" records):
+It returns an JSON array of objects, for example:
 
 .. code-block:: json
 
     [
-    {
+      {
         "NAME": "B408",
         "DHNO": 28757,
         "LAT": -34.1419354,
@@ -40,8 +40,8 @@ Returns (this only shows 2 of the many returned "DHNO" records):
         "SWLSTATUS": "N",
         "SALSTATUS": "H",
         "LATEST_OPEN_DATE": "1974-01-01"
-    },
-    {
+      },
+      {
         "NAME": "UWIBAMI 1",
         "DHNO": 239671,
         "LAT": -34.1441968,
@@ -62,7 +62,6 @@ Returns (this only shows 2 of the many returned "DHNO" records):
         "HSTRATLOG": "Y",
         "LATEST_OPEN_DEPTH": 300.2,
         "LATEST_OPEN_DATE": "2009-02-15"
-    }
+      }
     ]
 
-.. include:: footer.rst

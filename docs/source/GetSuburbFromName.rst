@@ -1,5 +1,5 @@
-Suburb
-==========================
+GetSuburbFromName
+^^^^^^^^^^^^^^^^^
 
 `GetSuburbFromName?Suburb=ALBERT%20PARK <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetSuburbFromName?Suburb=ALBERT%20PARK>`__
 
@@ -10,7 +10,7 @@ Returns (this only shows 2 of many returned "DHNO" records):
 .. code-block:: json
 
     [
-    {
+      {
         "OBJECTID": 54,
         "POSTCODE": "5014",
         "SUBURB": "ALBERT PARK",
@@ -18,7 +18,7 @@ Returns (this only shows 2 of many returned "DHNO" records):
         "SHAPE.LEN": 4694.4468670681,
         "URL": "http:\/\/sdsi.sa.gov.au\/arcgis\/rest\/services\/DEWNRint\/WaterConnect_WaterConnect\/MapServer\/",
         "DHNO": [
-        {
+          {
             "DHNO": 55783,
             "LAT": -34.8780246,
             "LON": 138.5248554,
@@ -50,8 +50,8 @@ Returns (this only shows 2 of many returned "DHNO" records):
             "LATEST_SAL_DATE": "1946-01-09",
             "LATEST_OPEN_DEPTH": 36.58,
             "LATEST_OPEN_DATE": "1946-01-09"
-        },
-        {
+          },
+          {
             "DHNO": 284994,
             "LAT": -34.8732987,
             "LON": 138.5238972,
@@ -76,12 +76,10 @@ Returns (this only shows 2 of many returned "DHNO" records):
             "LATEST_SWL_DATE": "2015-04-15",
             "LATEST_OPEN_DEPTH": 5,
             "LATEST_OPEN_DATE": "2015-04-15"
-        }
+          }
         ],
         "Boundary": [
-        "pvzsE{golYnCwE\\nAj@xAp@dBFN~AzCFH?@b@p@fAzAzAlBVZFHrBlBhEzDlD|C|ArAfA`ArI|HFFA?U\\CD_BrCkAnBy@B}HLsFN??k@FaHROByGPwBFOAPfL_BD_ELcBFeABaABmBDY@mBFe@@A[uQh@sELA?dFwIj@_AHQjAmBzDyGx@uApDiGpBkD|@{AbCcExAgCz@yAjIqN"
+          "pvzsE{golYnCwE\\nAj@xAp@dBFN~AzCFH?@b@p@fAzAzAlBVZFHrBlBhEzDlD|C|ArAfA`ArI|HFFA?U\\CD_BrCkAnBy@B}HLsFN??k@FaHROByGPwBFOAPfL_BD_ELcBFeABaABmBDY@mBFe@@A[uQh@sELA?dFwIj@_AHQjAmBzDyGx@uApDiGpBkD|@{AbCcExAgCz@yAjIqN"
         ]
-    }
+      }
     ]
-
-.. include:: footer.rst

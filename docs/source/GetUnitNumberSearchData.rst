@@ -1,5 +1,5 @@
-Unit number
-=======================
+GetUnitNumberSearchData
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Requesting unit numbers 6529-119 and 6529-120:
 
@@ -10,7 +10,7 @@ Returns:
 .. code-block:: json
 
     [
-    {
+      {
         "NAME": "B 361",
         "DHNO": 28764,
         "LAT": -34.155353,
@@ -42,8 +42,8 @@ Returns:
         "SALSTATUS": "H",
         "LATEST_OPEN_DEPTH": 26.4,
         "LATEST_OPEN_DATE": "1995-06-29"
-    },
-    {
+      },
+      {
         "DHNO": 28765,
         "LAT": -34.1548522,
         "LON": 138.4685417,
@@ -71,7 +71,5 @@ Returns:
         "LATEST_YIELD_DATE": "1995-06-19",
         "LATEST_OPEN_DEPTH": 49,
         "LATEST_OPEN_DATE": "1995-06-19"
-    }
+      }
     ]
-
-.. include:: footer.rst
