@@ -119,14 +119,7 @@ todo_include_todos = True
 
 # -- Options for HTML output ----------------------------------------------
 
-import guzzle_sphinx_theme
-html_theme_path = guzzle_sphinx_theme.html_theme_path()
-html_theme = 'guzzle_sphinx_theme'
-extensions.append("guzzle_sphinx_theme")
-html_theme_options = {
-    # Set the name of the project to appear in the sidebar
-    "project_nav_name": "python-sa-gwdata",
-}
+html_theme = 'alabaster'
 
 # import sphinx_bootstrap_theme
 # html_theme = 'bootstrap'

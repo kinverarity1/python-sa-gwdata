@@ -1,4 +1,4 @@
-Installation of `sa_gwdata`
+Installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Install using pip the usual way:
