@@ -1,216 +1,210 @@
 WaterConnect web services
-~~~~~~~~~~~~~~~~~~~~~~~~~
+=========================
 
-The `Groundwater Data <https://www.waterconnect.sa.gov.au/Systems/GD/Pages/Default.aspx>`__ section of the WaterConnect website uses a number of straightforward GET calls to obtain groundwater data in JSON format.
+Most of the data that can be accessed through this package comes from HTTP requests to some web services
+on the `Groundwater Data <https://www.waterconnect.sa.gov.au/Systems/GD/Pages/Default.aspx>`__ section of the WaterConnect website, which return JSON. Although you do not need to understand these requests to use the sa_gwdata
+package, I have included some details of the requests below so you can understand exactly where the data is coming
+from, and as a resource for building and expanding the sa_gwdata package (and perhaps others).
 
-The links below detail a variety of GET request URLs and examples of the returned JSON responses.
+Not all of the JSON calls have been documented yet. In particular, the bulk download calls are not listed
+below.
 
-(The documentation is a work in progress; help would be welcome!)
+.. contents:: :local:
 
 Searching for wells
-===================
+~~~~~~~~~~~~~~~~~~~
 
-Searching by well identifiers
-------------------------------------------------------------
+By unit/observation well/permit number
+--------------------------------------
 
 These services all take a comma-delimited list and return a list of drillhole numbers (DHNO), together with some summary information:
 
-.. toctree::
-    :maxdepth: 5
-
-    GetUnitNumberSearchData
-    GetObswellNumberSearchData
-    GetPermitNumberSearchData
+.. include:: GetUnitNumberSearchData.rst
+.. include:: GetObswellNumberSearchData.rst
+.. include:: GetPermitNumberSearchData.rst
     
-Spatial searches
-----------------
+Spatially (by rectangle or circle)
+----------------------------------
 
 These also return a list of drillhole numbers, sometimes with other keys -- check the examples for the exact format.
 
 There are geometric queries:
 
-.. toctree::
-    :maxdepth: 5
+.. include:: GetGridData.rst
+.. include:: GetCircleData.rst
 
-    GetGridData
-    GetCircleData
+Spatially (by suburb, council, NRM, or hundred)
+-----------------------------------------------
 
 You can search by general-purpose geographic information:
 
-.. toctree::
-    :maxdepth: 5
+.. include:: GetSuburbFromName.rst
+.. include:: GetLGAFromName.rst
+.. include:: GetNRMRegionSearchData.rst
+.. include:: GetHundredParcelData.rst
 
-    GetSuburbFromName
-    GetLGAFromName
-    GetNRMRegionSearchData
-    GetHundredParcelData
+Spatially (by observation network, PWA, or PWRA)
+------------------------------------------------
 
 Or more groundwater-specific areas:
 
-.. toctree::
-    :maxdepth: 5
-
-    GetObswellNetworkData
-    GetPWASearchData
-    GetPWRASearchData
+.. include:: GetObswellNetworkData.rst
+.. include:: GetPWASearchData.rst
+.. include:: GetPWRASearchData.rst
 
 Lists of valid query values for many of these can be obtained through the metadata requests shown in the :ref:`webservice-metadata` section below.
 
-Data from a drillhole
-=======================
+Data for a single well
+~~~~~~~~~~~~~~~~~~~~~~
 
 Most groundwater information is obtained through these queries. All these requests are for a single drillhole at a time; see the pages for more details.
 
-.. toctree::
-    :maxdepth: 5
+Query by DRILLHOLE_NO
+---------------------
 
-    GetSummaryDetails
-    GetWaterLevelDetails
-    GetSalinityDetails
-    GetWellYieldDetails
-    GetWaterChemistryDetails
-    GetElevationDetails
+.. include:: GetSummaryDetails.rst
+.. include:: GetWaterLevelDetails.rst
+.. include:: GetSalinityDetails.rst
+.. include:: GetWellYieldDetails.rst
+.. include:: GetWaterChemistryDetails.rst
+.. include:: GetElevationDetails.rst
+.. include:: GetLithologicalLogInformation.rst
+.. include:: GetStratigraphicLogsDetails.rst
+.. include:: GetDrillersLogInformation.rst
 
-- GetConstructionInformation - returns COMPLETION_NOs
-- GetElevationDetails - returns ELEVATION_NOs
-- GetDrillersLogInformation - returns LOG_NOs
-- GetLithologicalLogInformation
-- GetHydrostratInformation - returns HYDRO_INT_NOs
-- GetStratigraphicLogsDetails
+include:: GetHydrostratInformation.rst - returns HYDRO_INT_NOs
+include:: GetExtraHydrostratInformation.rst
 
-Query with COMPLETION_NO:
+include:: GetConstructionInformation - returns COMPLETION_NOs
+include:: GetElevationDetails.rst - returns ELEVATION_NOs
 
-- GetProductionZoneSummary
-- GetConstructionSummaryInformation
-- GetCasingSummary
-- GetDrillingSummary
-- GetConstructionWaterCut
-- GetExtraSummaryDetails
+Construction data - query by COMPLETION_NO
+------------------------------------------
 
-Query with LOG_NO:
-
-- GetDrillersLogSummary
-
-Query with HIN (equivalent to HYDRO_INT_NO):
-
-- GetExtraHydrostratInformation
+include:: GetProductionZoneSummary.rst
+include:: GetConstructionSummaryInformation.rst
+include:: GetCasingSummary.rst
+include:: GetDrillingSummary.rst
+include:: GetConstructionWaterCut.rst
+include:: GetExtraSummaryDetails.rst
 
 .. _webservice-metadata:
 
-Metadata 
-========
+Metadata - GetAdvancedListsData
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Lists of names and codes to be used in requests can be obtained through the `GetAdvancedListsData <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetAdvancedListsData>`__ GET request. The sample below shows only the first and last entries in each list. Follow the link for all the data.
 
 .. code-block:: json
 
     {
-        "LGA": [
-            {
-                "V": "ADELAIDE"
-            },
-            {
-                "V": "YORKE PENINSULA"
-            }
-        ],
-        "Purpose": [
-            {
-                "V": "APN",
-                "T": "Anode Protection"
-            },
-            {
-                "V": "HOL",
-                "T": "Water Hole"
-            }
-        ],
-        "Status": [
-            {
-                "V": "ABD",
-                "T": "Abandoned"
-            },
-            {
-                "V": "UNW",
-                "T": "Unworked"
-            }
-        ],
-        "Aquifer": [
-            {
-                "V": "A",
-                "T": "A: Unnamed GIS Unit"
-            },
-            {
-                "V": "Tyw",
-                "T": "Tyw: Winnambool Formation"
-            }
-        ],
-        "PrescribedArea": [
-            {
-                "V": "Angas-Bremer",
-                "G": "South Australian Murray Darling Basin"
-            },
-            {
-                "V": "Tintinara-Coonalpyn",
-                "G": "South East"
-            }
-        ],
-        "PrescribedWRArea": [
-            {
-                "V": "Baroota"
-            },
-            {
-                "V": "Western Mount Lofty Ranges"
-            }
-        ],
-        "NRMRegion": [
-            {
-                "V": "Adelaide & Mt Lofty Ranges",
-                "T": "Adelaide & Mt Lofty Ranges"
-            },
-            {
-                "V": "South East",
-                "T": "South East"
-            }
-        ],
-        "Networks": [
-            {
-                "V": "AW_NP",
-                "T": "Alinytjara Wilurara Non-Prescribed Area"
-            },
-            {
-                "V": "WMLR",
-                "T": "Western Mount Lofty Ranges PWRA"
-            }
-        ],
-        "Suburb": [
-            {
-                "V": "ABERFOYLE PARK"
-            },
-            {
-                "V": "ZADOWS LANDING"
-            }
-        ],
-        "Chem_Name": [
-            {
-                "V": "2_4_5_T",
-                "T": "2,4,5 - T: 2_4_5_T",
-                "G": "P"
-            },
-            {
-                "V": "ZrO2",
-                "T": "Zirconium oxide: ZrO2",
-                "G": ""
-            }
-        ],
-        "Analyte_Group": [
-            {
-                "V": "B",
-                "T": "Biological / Bacteria"
-            },
-            {
-                "V": "S",
-                "T": "Standard Analysis"
-            }
-        ]
+      "LGA": [
+        {
+          "V": "ADELAIDE"
+        },
+        {
+          "V": "YORKE PENINSULA"
+        }
+      ],
+      "Purpose": [
+        {
+          "V": "APN",
+          "T": "Anode Protection"
+        },
+        {
+          "V": "HOL",
+          "T": "Water Hole"
+        }
+      ],
+      "Status": [
+        {
+          "V": "ABD",
+          "T": "Abandoned"
+        },
+        {
+          "V": "UNW",
+          "T": "Unworked"
+        }
+      ],
+      "Aquifer": [
+        {
+          "V": "A",
+          "T": "A: Unnamed GIS Unit"
+        },
+        {
+          "V": "Tyw",
+          "T": "Tyw: Winnambool Formation"
+        }
+      ],
+      "PrescribedArea": [
+        {
+          "V": "Angas-Bremer",
+          "G": "South Australian Murray Darling Basin"
+        },
+        {
+          "V": "Tintinara-Coonalpyn",
+          "G": "South East"
+        }
+      ],
+      "PrescribedWRArea": [
+        {
+          "V": "Baroota"
+        },
+        {
+          "V": "Western Mount Lofty Ranges"
+        }
+      ],
+      "NRMRegion": [
+        {
+          "V": "Adelaide & Mt Lofty Ranges",
+          "T": "Adelaide & Mt Lofty Ranges"
+        },
+        {
+          "V": "South East",
+          "T": "South East"
+        }
+      ],
+      "Networks": [
+        {
+          "V": "AW_NP",
+          "T": "Alinytjara Wilurara Non-Prescribed Area"
+        },
+        {
+          "V": "WMLR",
+          "T": "Western Mount Lofty Ranges PWRA"
+        }
+      ],
+      "Suburb": [
+        {
+          "V": "ABERFOYLE PARK"
+        },
+        {
+          "V": "ZADOWS LANDING"
+        }
+      ],
+      "Chem_Name": [
+        {
+          "V": "2_4_5_T",
+          "T": "2,4,5 - T: 2_4_5_T",
+          "G": "P"
+        },
+        {
+          "V": "ZrO2",
+          "T": "Zirconium oxide: ZrO2",
+          "G": ""
+        }
+      ],
+      "Analyte_Group": [
+        {
+          "V": "B",
+          "T": "Biological \/ Bacteria"
+        },
+        {
+          "V": "S",
+          "T": "Standard Analysis"
+        }
+      ]
     }
 
+    
 .. include:: footer.rst
