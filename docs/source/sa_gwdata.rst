@@ -1,4 +1,4 @@
-Docstrings for ``sa_gwdata`` package
+Python docstrings
 =======================================
 
 Submodules

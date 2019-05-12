@@ -9,9 +9,10 @@ This is an unofficial hobby project, use at your own risk. Or reward :-)
    :maxdepth: 1
    :caption: Contents:
 
-   webservices
    install
    sa_gwdata
+   webservices   
+   
 
 Indices and tables
 ==================
