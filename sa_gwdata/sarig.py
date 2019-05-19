@@ -1,4 +1,3 @@
-import attrdict
 import requests
 import lxml.html
 
@@ -19,4 +18,4 @@ def collect_sarig_images(self):
             '//*[@id="ctl00_formBody_TabContainer_tabHistoricalDocuments_udpHistoricalDocuments"]/div[1]/div[2]/a/@href'
         )
     ]
-    self.images = [attrdict.AttrDict({"url": path}) for path in image_urls]
+    self.images = [{"url": path} for path in image_urls]
