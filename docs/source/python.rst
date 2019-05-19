@@ -1,10 +1,16 @@
 sa_gwdata Python package
 ========================
 
+<<<<<<< HEAD
 The sa_gwdata package currently provides a helpful way to access the
 WaterConnect web services (see following page) and provide data as
 :class:`pandas.DataFrame` instances. Features under development will allow
 easier ways to find and use well IDs across the entire interface, and other
+=======
+The sa_gwdata package currently provides a helpful way to access the WaterConnect web services (see following page)
+and provide data as :class:`pandas.DataFrame` instances.
+Features under development will allow easier ways to find and use well IDs across the entire interface, and other
+>>>>>>> 13a00495c57ed2be15e1941c3d7bbae07d73bccc
 things.
 
 Install
