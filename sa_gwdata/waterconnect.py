@@ -60,7 +60,7 @@ class WaterConnectSession(requests.Session):
 
     Args:
         endpoint (str): url endpoint for API, optional
-        sleep (int): minimum interval between requests in seconds. 
+        sleep (int): minimum interval between requests in seconds.
             Keep things ethical -- do not reduce it.
         verify (bool): require valid SSL certificate
 
@@ -68,7 +68,8 @@ class WaterConnectSession(requests.Session):
 
     Usage:
 
-        >>> with sa_gwdata.WaterConnectSession() as s:
+        >>> from sa_gwdata import WaterConnectSession
+        >>> with WaterConnectSession() as s:
         ...     df = s.get("GetObswellNetworkData", params={"Network": "CENT_ADEL"})
 
     """
