@@ -1,9 +1,10 @@
 sa_gwdata Python package
 ========================
 
-The sa_gwdata package currently provides a helpful way to access the WaterConnect web services (see following page)
-and provide data as :class:`pandas.DataFrame` instances.
-Features under development will allow easier ways to find and use well IDs across the entire interface, and other
+The sa_gwdata package currently provides a helpful way to access the
+WaterConnect web services (see following page) and provide data as
+:class:`pandas.DataFrame` instances. Features under development will allow
+easier ways to find and use well IDs across the entire interface, and other
 things.
 
 Install
@@ -76,6 +77,17 @@ Then to access any of the web service calls:
            'PAG188', 'PAG189', 'KTR070', 'RMK392', 'KTR069', 'RMK395',
            'RMK394', 'RMK393', 'RMK390', 'RMK391'], dtype=object)
 
-For futher information, check out the `Jupyter Notebook tutorial <https://github.com/kinverarity1/python-sa-gwdata/blob/master/notebooks/tutorial1.ipynb>`__.
+For futher information, check out the `Jupyter Notebook tutorial
+<https://github.com/kinverarity1/python-sa-gwdata/blob/master/notebooks/tutorial1.ipynb>`__.
 
-More documentation to follow!
+Docstrings
+----------
+
+.. autoclass:: sa_gwdata.WaterConnectSession
+    :members:
+
+Any calls to :meth:`sa_gwdata.WaterConnectSession.get` return an
+:class:`sa_gwdata.Response` object:
+
+.. autoclass:: sa_gwdata.Response()
+    :members:
