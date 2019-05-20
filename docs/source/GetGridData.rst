@@ -1,14 +1,14 @@
-Rectangular shape
-=================
+GetGridData
+^^^^^^^^^^^
 
 `GetGridData?Box=-35.035057,138.801484,-35.024338,138.82174 <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetGridData?Box=-35.035057,138.801484,-35.024338,138.82174>`__
 
-Returns (this only shows 2 of the many returned "DHNO" records):
+Returns a JSON array of objects - only two are shown below:
 
 .. code-block:: json
 
     [
-    {
+      {
         "DHNO": 41267,
         "LAT": -35.0258564,
         "LON": 138.8098983,
@@ -30,8 +30,8 @@ Returns (this only shows 2 of the many returned "DHNO" records):
         "LATEST_SWL_DATE": "1978-07-07",
         "LATEST_SAL_DATE": "1978-07-07",
         "LATEST_OPEN_DATE": "1978-07-07"
-    },
-    {
+      },
+      {
         "DHNO": 285207,
         "LAT": -35.0255666,
         "LON": 138.8127263,
@@ -58,7 +58,5 @@ Returns (this only shows 2 of the many returned "DHNO" records):
         "LATEST_YIELD_DATE": "2015-04-14",
         "LATEST_OPEN_DEPTH": 77,
         "LATEST_OPEN_DATE": "2015-04-14"
-    }
+      }
     ]
-
-.. include:: footer.rst

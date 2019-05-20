@@ -1,8 +1,8 @@
 import json
 import logging
-import pandas as pd
 import time
 
+import pandas as pd
 import requests
 
 
@@ -13,14 +13,13 @@ logger = logging.getLogger(__name__)
 
 
 class Response(object):
-    """Groundwater Data HTTP response.
-
-    Args:
-        response (requests.Response object): the HTTP response to parse
-
-    """
-
     def __init__(self, response, **kwargs):
+        """Groundwater Data HTTP response.
+
+        Args:
+            response (requests.Response object): the HTTP response
+
+        """
         self.response = response
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -42,8 +41,7 @@ class Response(object):
         """If the response is a list, convert to a pandas DataFrame with
         columns converted into the lowercase."""
         if not hasattr(self, "_df"):
-            df = pd.DataFrame(self.json)
-            df.columns = [s.lower() for s in df.columns]
+            df = pd.DataFrame(self.json).rename(columns=str.lower)
             self._df = df
         return self._df
 
@@ -60,15 +58,16 @@ class WaterConnectSession(requests.Session):
 
     Args:
         endpoint (str): url endpoint for API, optional
-        sleep (int): minimum interval between requests in seconds. 
-            Keep things ethical -- do not reduce it.
+        sleep (int): minimum interval between requests in seconds.
+            Be nice, do not reduce it.
         verify (bool): require valid SSL certificate
 
     Other args and kwargs are passed to request.Session constructor.
 
     Usage:
 
-        >>> with sa_gwdata.WaterConnectSession() as s:
+        >>> from sa_gwdata import WaterConnectSession
+        >>> with WaterConnectSession() as s:
         ...     df = s.get("GetObswellNetworkData", params={"Network": "CENT_ADEL"})
 
     """

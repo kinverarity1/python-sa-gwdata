@@ -1,12 +1,12 @@
 # python-sa-gwdata
 
 ``sa_gwdata`` is a Python package to ease access to groundwater data in South Australia.
-It provides access to JSON data from the 
-[WaterConnect Groundwater Data](https://www.waterconnect.sa.gov.au/Systems/GD/Pages/Default.aspx) website, 
+It provides access to JSON data from the
+[WaterConnect Groundwater Data](https://www.waterconnect.sa.gov.au/Systems/GD/Pages/Default.aspx) website,
 and also provides some well data from [SARIG](https://minerals.sarig.sa.gov.au/QuickSearch.aspx).
 There are simple methods to easily turn this data into pandas DataFrames.
 
-This is an unofficial hobby project of mine. Use at your own risk... or perhaps reward? :-)
+This is an unofficial side-project done in my spare time.
 
 ## Install
 
@@ -16,7 +16,7 @@ This is an unofficial hobby project of mine. Use at your own risk... or perhaps 
 
 ## How to use
 
-Check out the [documentation](https://python-sa-gwdata.readthedocs.io/en/latest/index.html), and 
+Check out the [documentation](https://python-sa-gwdata.readthedocs.io/en/latest/index.html), and
 some tutorial Jupyter Notebooks in the [notebooks](notebooks) folder.
 
 Start a web session with Groundwater Data:

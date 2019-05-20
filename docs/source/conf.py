@@ -39,7 +39,6 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
-    'IPython.sphinxext.ipython_console_highlighting',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -119,22 +118,16 @@ todo_include_todos = True
 
 # -- Options for HTML output ----------------------------------------------
 
-import guzzle_sphinx_theme
-html_theme_path = guzzle_sphinx_theme.html_theme_path()
-html_theme = 'guzzle_sphinx_theme'
-extensions.append("guzzle_sphinx_theme")
-html_theme_options = {
-    # Set the name of the project to appear in the sidebar
-    "project_nav_name": "python-sa-gwdata",
-}
+html_theme = 'alabaster'
 
 # import sphinx_bootstrap_theme
 # html_theme = 'bootstrap'
 # html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 
 # html_theme = 'guzzle_sphinx_theme'
-# html_theme_options = {
-# }
+html_theme_options = {
+  "show_relbars": True
+}
 
 # html_sidebars = {
 #     '**': [
