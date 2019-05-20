@@ -13,8 +13,8 @@ This is an unofficial project, use at your own risk/reward.
 Changelog
 ---------
 
-Latest
-~~~~~~
+Version 0.5.0
+~~~~~~~~~~~~~
 
 - Add :func:`sa_gwdata.parse_well_ids` to parse well IDs from plain text
 - Add :class:`sa_gwdata.ObsNo` and :class:`sa_gwdata.UnitNo` classes for ID parsing
