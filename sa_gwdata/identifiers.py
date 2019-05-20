@@ -1,7 +1,4 @@
-import pprint
 import re
-
-import pandas as pd
 
 
 PATTERNS = {
@@ -326,7 +323,7 @@ def parse_well_ids_plaintext(
         [('unit_no', '5910-1'), ('obs_no', 'SLE015'), ('obs_no', 'SLE016'), ('obs_no', 'YBE591')]
 
     It has unfortunately matched "ybe 591" from the phrase "maybe 5910-1" as an
-    obs_no. Not perfect!
+    obs_no.
 
     """
     input_text = " " + input_text + " "
