@@ -11,5 +11,5 @@ setup(
     author="Kent Inverarity",
     author_email="kinverarity@hotmail.com",
     license="MIT",
-    install_requires=("requests", "lxml", "attrdict"),
+    install_requires=("requests", "lxml", "pandas"),
 )

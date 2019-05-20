@@ -1,14 +1,14 @@
-Well construction permit number
-===============================
+GetPermitNumberSearchData
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 `GetPermitNumberSearchData?PERMITNO=15947,95787,5928 <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetPermitNumberSearchData?PERMITNO=15947,95787,5928>`__
 
-Returns:
+Returns a JSON array of objects:
 
 .. code-block:: json
 
     [
-    {
+      {
         "DHNO": 4160,
         "LAT": -32.8590944,
         "LON": 134.4099006,
@@ -35,8 +35,8 @@ Returns:
         "LATEST_YIELD_DATE": "1985-03-20",
         "LATEST_OPEN_DEPTH": 19.3,
         "LATEST_OPEN_DATE": "1985-03-20"
-    },
-    {
+      },
+      {
         "DHNO": 5175,
         "LAT": -28.4466172,
         "LON": 134.2679997,
@@ -61,8 +61,8 @@ Returns:
         "HSTRATLOG": "Y",
         "LATEST_OPEN_DEPTH": 0,
         "LATEST_OPEN_DATE": "1991-06-04"
-    },
-    {
+      },
+      {
         "NAME": "LOWER YORKE PENINSULA",
         "DHNO": 18962,
         "LAT": -35.097168,
@@ -92,7 +92,5 @@ Returns:
         "LATEST_YIELD_DATE": "1979-11-01",
         "LATEST_OPEN_DEPTH": 83.5,
         "LATEST_OPEN_DATE": "1979-11-01"
-    }
+      }
     ]
-
-.. include:: footer.rst

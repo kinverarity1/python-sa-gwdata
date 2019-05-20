@@ -1,5 +1,5 @@
-Well yield
-===========================
+GetWellYieldDetails
+^^^^^^^^^^^^^^^^^^^
 
 You can request a single drillhole number (DHNO) (see search queries above for how to obtain this number).
 
@@ -10,14 +10,12 @@ You can request a single drillhole number (DHNO) (see search queries above for h
 .. code-block:: json
 
     [
-        {
-            "WELL_YIELD_MEAS_NO": 87257,
-            "OBS_DATE": "1968-08-09",
-            "WELL_YIELD": 5.0512,
-            "MEASURED_DURING": "D",
-            "DATA_SOURCE_CODE": "DEWNR",
-            "COMMENTS": "Hydat Angas Bremer upload"
-        }
+      {
+        "WELL_YIELD_MEAS_NO": 87257,
+        "OBS_DATE": "1968-08-09",
+        "WELL_YIELD": 5.0512,
+        "MEASURED_DURING": "D",
+        "DATA_SOURCE_CODE": "DEWNR",
+        "COMMENTS": "Hydat Angas Bremer upload"
+      }
     ]
-
-.. include:: footer.rst

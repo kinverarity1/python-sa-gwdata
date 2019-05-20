@@ -1,14 +1,14 @@
-Groundwater monitoring well (obswell) number
-============================================
+GetObswellNumberSearchData
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 `GetObswellNumberSearchData?OBSNUMBER=DAE005,CRB002,PWL012 <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetObswellNumberSearchData?OBSNUMBER=DAE005,CRB002,PWL012>`__
 
-Returns:
+Returns a JSON array of objects:
 
 .. code-block:: json
 
     [
-    {
+      {
         "DHNO": 19126,
         "LAT": -34.9971836,
         "LON": 137.0390329,
@@ -40,8 +40,8 @@ Returns:
         "SALSTATUS": "N",
         "LATEST_OPEN_DEPTH": 20.74,
         "LATEST_OPEN_DATE": "2010-12-06"
-    },
-    {
+      },
+      {
         "NAME": "WAROOKA TWS 4",
         "DHNO": 19237,
         "LAT": -34.979581,
@@ -75,8 +75,8 @@ Returns:
         "SALSTATUS": "C",
         "LATEST_OPEN_DEPTH": 21.34,
         "LATEST_OPEN_DATE": "1971-05-16"
-    },
-    {
+      },
+      {
         "NAME": "B 361",
         "DHNO": 28764,
         "LAT": -34.155353,
@@ -108,7 +108,5 @@ Returns:
         "SALSTATUS": "H",
         "LATEST_OPEN_DEPTH": 26.4,
         "LATEST_OPEN_DATE": "1995-06-29"
-    }
+      }
     ]
-
-.. include:: footer.rst
