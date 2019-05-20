@@ -7,7 +7,6 @@ This is an unofficial project, use at your own risk/reward.
 .. toctree::
     :maxdepth: 6
     :caption: Contents:
-
     python
     webservices
 
