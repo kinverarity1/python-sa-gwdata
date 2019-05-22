@@ -43,6 +43,7 @@ class UnitNo:
         self.set(*args)
 
     def set(self, *args):
+        '''See :class:`UnitNo` constructor for details of arguments.'''
         if len(args) == 1:
             if isinstance(args[0], list) or isinstance(args[0], tuple):
                 return self.set(*args[0])
@@ -64,6 +65,7 @@ class UnitNo:
 
     @property
     def hyphen(self):
+        '''Unit number in Groundwater Data format e.g. 6628-123.'''
         try:
             return "{:d}-{:d}".format(self.map, self.seq)
         except:
@@ -77,6 +79,7 @@ class UnitNo:
 
     @property
     def long(self):
+        '''Unit number in integer format e.g. "662800123".'''
         try:
             return "{:d}{:05d}".format(self.map, self.seq)
         except:
@@ -90,6 +93,7 @@ class UnitNo:
 
     @property
     def wilma(self):
+        '''Unit number in WILMA format e.g. "6628-00123".'''
         try:
             return "{:d}-{:05d}".format(self.map, self.seq)
         except:
@@ -141,6 +145,7 @@ class ObsNo:
         self.set(*args)
 
     def set(self, *args):
+        '''See :class:`ObsNo` constructor for details of arguments.'''
         if len(args) == 1:
             if isinstance(args[0], list) or isinstance(args[0], tuple):
                 return self.set(*args[0])
@@ -156,6 +161,7 @@ class ObsNo:
 
     @property
     def id(self):
+        '''Obswell ID in e.g. NOA002 format.'''
         try:
             return "{}{:03d}".format(self.plan.upper(), self.seq)
         except:
@@ -163,6 +169,7 @@ class ObsNo:
 
     @property
     def egis(self):
+        '''Obswell ID in spatial warehouse (ENVGIS) format e.g. NOA 2.'''
         try:
             return "{} {:.0f}".format(self.plan.upper(), self.seq)
         except:
@@ -194,6 +201,16 @@ class ObsNo:
 
 
 class Well:
+    '''Represents a well.
+
+    Args:
+            dh_no (int): drillhole number (required)
+            unit_no (str/int): unit number (optional)
+            obs_no (str/int): obs number (optional)
+
+    Other keyword arguments will be set as attributes.
+
+    '''
     def __init__(self, *args, **kwargs):
         self._well_attributes = []
         self.unit_no = UnitNo()
@@ -201,6 +218,7 @@ class Well:
         self.set(*args, **kwargs)
 
     def set(self, dh_no, unit_no="", obs_no="", **kwargs):
+        '''See :class:`Well` constructor for docstring.'''
         self.dh_no = dh_no
         self.set_unit_no(unit_no)
         self.set_obs_no(obs_no)
@@ -213,9 +231,19 @@ class Well:
         setattr(self, key, value)
 
     def set_obs_no(self, *args):
+        '''Set obswell number.
+
+        Args are passed to :class:`ObsNo` constructor.
+
+        '''
         self.obs_no.set(*args)
 
     def set_unit_no(self, *args):
+        '''Set unit number.
+
+        Args are passed to :class:`UnitNo` constructor.
+
+        '''
         self.unit_no.set(*args)
 
     def __eq__(self, other):
@@ -229,6 +257,7 @@ class Well:
 
     @property
     def id(self):
+        '''Obswell number or blank string.'''
         if self.obs_no:
             return self.obs_no
         elif self.unit_no:
@@ -238,6 +267,8 @@ class Well:
 
     @property
     def title(self):
+        '''Title containing the drillhole number, unit number,
+        obs number (if it exists) and name (if it exists).'''
         names = [self.unit_no.hyphen]
         if not names[0]:
             names[0] = "[dh_no={:d}]".format(self.drillhole)
@@ -256,6 +287,8 @@ class Well:
         return "<sa_gwdata.Well({}) {}>".format(self.drillhole, self.title)
 
     def path_safe_repr(self, remove_prefix=True):
+        '''Title containing only characters which are allowed in
+        Windows path names.'''
         r = str(self)
         r = r.replace(" /", ";")[1:-1]
         for char in ["\\", "/", "?", ":", "*", '"', "<", ">", "|"]:
