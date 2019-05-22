@@ -195,6 +195,7 @@ class ObsNo:
 
 class Well:
     def __init__(self, *args, **kwargs):
+        self._well_attributes = []
         self.unit_no = UnitNo()
         self.obs_no = ObsNo()
         self.set(*args, **kwargs)
@@ -204,7 +205,12 @@ class Well:
         self.set_unit_no(unit_no)
         self.set_obs_no(obs_no)
         for key, value in kwargs.items():
-            setattr(self, key.lower(), value)
+            self.set_well_attribute(key, value)
+
+    def set_well_attribute(self, key, value):
+        key = key.lower()
+        self._well_attributes.append(key)
+        setattr(self, key, value)
 
     def set_obs_no(self, *args):
         self.obs_no.set(*args)
