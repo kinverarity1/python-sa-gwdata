@@ -106,9 +106,15 @@ class UnitNo:
 
     @property
     def wilma(self):
-        '''Unit number in WILMA format e.g. "6628-00123".'''
         try:
             return "{:d}-{:05d}".format(self.map, self.seq)
+        except:
+            return ""
+
+    @property
+    def hydstra(self):
+        try:
+            return "G{:d}{:05d}".format(self.map, self.seq)
         except:
             return ""
 
