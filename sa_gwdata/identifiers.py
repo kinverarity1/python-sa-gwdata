@@ -69,7 +69,7 @@ class UnitNo:
     def hyphen(self):
         try:
             return "{:d}-{:d}".format(self.map, self.seq)
-        except:
+        except TypeError:
             return ""
 
     @hyphen.setter
@@ -82,7 +82,7 @@ class UnitNo:
     def long(self):
         try:
             return "{:d}{:05d}".format(self.map, self.seq)
-        except:
+        except TypeError:
             return ""
 
     @long.setter
@@ -106,14 +106,14 @@ class UnitNo:
     def wilma(self):
         try:
             return "{:d}-{:05d}".format(self.map, self.seq)
-        except:
+        except TypeError:
             return ""
 
     @property
     def hydstra(self):
         try:
             return "G{:d}{:05d}".format(self.map, self.seq)
-        except:
+        except TypeError:
             return ""
 
     def __str__(self):
@@ -180,14 +180,14 @@ class ObsNo:
     def id(self):
         try:
             return "{}{:03d}".format(self.plan.upper(), self.seq)
-        except:
+        except TypeError:
             return ""
 
     @property
     def egis(self):
         try:
             return "{} {:.0f}".format(self.plan.upper(), self.seq)
-        except:
+        except TypeError:
             return ""
 
     @id.setter
@@ -320,7 +320,7 @@ class Well:
         return r
 
 
-def parse_well_ids(input, **kwargs):
+def parse_well_ids(input_text, **kwargs):
     """Specify well identifiers in free text and have them parsed.
 
     Example of acceptable formats:
@@ -337,8 +337,8 @@ def parse_well_ids(input, **kwargs):
     then it will be split by line, instead preserving whitespace.
 
     """
-    input = input.replace("\r", "")
-    return parse_well_ids_plaintext(input, **kwargs)
+    input_text = input_text.replace("\r", "")
+    return parse_well_ids_plaintext(input_text, **kwargs)
 
 
 def parse_well_ids_plaintext(

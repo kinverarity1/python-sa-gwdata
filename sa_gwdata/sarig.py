@@ -1,21 +1,27 @@
+import re
+
 import requests
-import lxml.html
 
 
 SARIG_QUERY = "https://minerals.sarig.sa.gov.au/Details.aspx?DRILLHOLE_NO={drillhole}"
+SARIG_IMAGE_URL = "https://minerals.sarig.sa.gov.au/{match}"
+IMAGE_NO_RE = re.compile(
+    r"DisplayHistoricalDocument\.aspx\?image_no=\d*&is_thumbnail=N"
+)
+
+__all__ = ("fetch_dh_doc_image_urls",)
 
 
-__all__ = ("collect_sarig_images",)
+def fetch_dh_doc_image_urls(dh_no):
+    """Fetch drillhole document image URLs from SARIG.
 
+    Args:
+        dh_no (int): drillhole number.
 
-def collect_sarig_images(self):
-    query = SARIG_QUERY.format(drillhole=str(int(self.drillhole)))
+    Returns: a list of URLs to images.
+
+    """
+    query = SARIG_QUERY.format(drillhole="{:.0f}".format(dh_no))
     response = requests.get(query)
-    tree = lxml.html.fromstring(response.content)
-    image_urls = [
-        "https://minerals.sarig.sa.gov.au" + path[2:]
-        for path in tree.xpath(
-            '//*[@id="ctl00_formBody_TabContainer_tabHistoricalDocuments_udpHistoricalDocuments"]/div[1]/div[2]/a/@href'
-        )
-    ]
-    self.images = [{"url": path} for path in image_urls]
+    return [SARIG_IMAGE_URL.format(match=m) for m in IMAGE_NO_RE.findall(response.text)]
+
