@@ -64,6 +64,7 @@ def test_obs_no_parsing(test_input, expected):
         ("G662800123", "6628-123"),
         (("6628", "00123"), "6628-123"),
         ((6628, 123), "6628-123"),
+        (662800123, "6628-123"),
     ],
 )
 def test_unit_no_parsing(test_input, expected):
@@ -85,6 +86,21 @@ def test_empty_obs_no(attr_name, expected_value):
     assert (
         getattr(ObsNo(), attr_name) == expected_value
     )  # against PEP8 for None but should work
+
+
+def test_unit_no_long_int():
+    unit_no = UnitNo("6628-123")
+    assert unit_no.long_int == 662800123
+
+
+def test_unit_no_iter():
+    unit_no = UnitNo("6628-123")
+    assert [x for x in unit_no] == [6628, 123]
+
+
+def test_obs_no_iter():
+    obs_no = ObsNo("NOA-2")
+    assert [x for x in obs_no] == ["NOA", 2]
 
 
 def test_well_missing_dh_no():
@@ -139,18 +155,46 @@ def test_well_name_in_title():
     well = Well(207050, unit_no="6627-11246", name="OVAL BORE")
     assert well.title == "6627-11246 / OVAL BORE"
 
+
 def test_well_unit_no_id():
     well = Well(203536, unit_no="6627-11249")
     assert well.id == "6627-11249"
+
 
 def test_well_hash():
     well = Well(203536, unit_no="6627-11249")
     assert {well: "value"}[well] == "value"
 
+
 def test_unit_no_hash():
     unit_no = UnitNo("6628-1527")
     assert {unit_no: "value"}[unit_no] == "value"
 
+
 def test_obs_no_hash():
     obs_no = ObsNo("NOA 2")
     assert {obs_no: "value"}[obs_no] == "value"
+
+
+def test_well_equality():
+    well1 = Well(203536, unit_no="6627-11249")
+    well2 = Well(203536)
+    assert well1 == well2
+
+
+def test_well_equality_2():
+    well1 = Well(203536, unit_no="6627-11249")
+    well2 = Well(203537)
+    assert well1 != well2
+
+
+def test_well_one_is_not_like_another():
+    well1 = Well(203536, unit_no="6627-11249")
+    dh_no = 203536
+    assert well1 != dh_no
+
+
+def test_well_bool():
+    well = Well(203536, unit_no="6627-11249")
+    assert well
+

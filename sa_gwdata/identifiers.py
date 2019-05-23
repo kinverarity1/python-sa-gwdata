@@ -296,11 +296,6 @@ class Well:
         return " / ".join(names)
 
     def __repr__(self):
-        names = [self.unit_no.hyphen]
-        if self.obs_no:
-            names.append(self.obs_no.id)
-        if self.name:
-            names.append(self.name)
         return "<sa_gwdata.Well({}) {}>".format(self.dh_no, self.title)
 
     def path_safe_repr(self, remove_prefix=True):
@@ -319,6 +314,11 @@ class Well:
 def parse_well_ids(input_text, **kwargs):
     """Specify well identifiers in free text and have them parsed.
 
+    Args:
+        input_text (str): the text to parse
+
+    Other keyword arguments are passed to :func:`parse_well_ids_plaintext`.
+
     Example of acceptable formats:
 
         662800125
@@ -328,9 +328,6 @@ def parse_well_ids(input_text, **kwargs):
         SLE 15
         SLE015
         SLE15
-
-    The input text will be split on whitespace, unless there are new-line characters present,
-    then it will be split by line, instead preserving whitespace.
 
     """
     input_text = input_text.replace("\r", "")
@@ -342,8 +339,7 @@ def parse_well_ids_plaintext(
     types=("unit_no", "obs_no"),
     unit_no_prefix="",
     obs_no_prefix="",
-    dh_re_prefix=r"\A",
-    dh_split_whitespace=True,
+    dh_re_prefix=r"\A"
 ):
     """Parse possible well identifiers out of plain text.
 
@@ -354,8 +350,6 @@ def parse_well_ids_plaintext(
             supported: "unit_no", "obs_no", "dh_no"
         dh_re_prefix (str): regexp pattern required before a dh_no
             regexp will match
-        dh_split_whitespace (str): when matching dh_no regexps,
-            split the input_text by whitespace.
 
     Returns: a list of tuples e.g.
 
@@ -396,18 +390,12 @@ def parse_well_ids_plaintext(
     if "dh_no" in types:
         for id_type in ("dh_no",):
             for pattern in PATTERNS[id_type]:
-                if dh_split_whitespace:
-                    items = input_text.split()
-                    for item in items:
-                        match = re.search(dh_re_prefix + pattern, item)
-                        if match:
-                            match_counts[id_type] += 1
-                            well_ids.append((id_type, match.group()))
-                else:
-                    matches = re.findall(dh_re_prefix + pattern, input_text)
-                    for match in matches:
+                items = input_text.split()
+                for item in items:
+                    match = re.search(dh_re_prefix + pattern, item)
+                    if match:
                         match_counts[id_type] += 1
-                        well_ids.append((id_type, match))
+                        well_ids.append((id_type, match.group()))
     if "obs_no" in types:
         for pattern in PATTERNS["obs_no"]:
             matches = re.findall(obs_no_prefix + pattern, input_text)
