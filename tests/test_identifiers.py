@@ -138,3 +138,19 @@ def test_well_name():
 def test_well_name_in_title():
     well = Well(207050, unit_no="6627-11246", name="OVAL BORE")
     assert well.title == "6627-11246 / OVAL BORE"
+
+def test_well_unit_no_id():
+    well = Well(203536, unit_no="6627-11249")
+    assert well.id == "6627-11249"
+
+def test_well_hash():
+    well = Well(203536, unit_no="6627-11249")
+    assert {well: "value"}[well] == "value"
+
+def test_unit_no_hash():
+    unit_no = UnitNo("6628-1527")
+    assert {unit_no: "value"}[unit_no] == "value"
+
+def test_obs_no_hash():
+    obs_no = ObsNo("NOA 2")
+    assert {obs_no: "value"}[obs_no] == "value"

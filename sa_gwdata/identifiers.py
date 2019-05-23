@@ -63,14 +63,8 @@ class UnitNo:
                     )
                 )
         elif len(args) == 2:
-            try:
-                self.map = int(args[0])
-            except TypeError:
-                self.map = None
-            try:
-                self.seq = int(args[1])
-            except TypeError:
-                self.seq = None
+            self.map = int(args[0])
+            self.seq = int(args[1])
 
     @property
     def hyphen(self):
