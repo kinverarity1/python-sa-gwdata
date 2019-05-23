@@ -36,3 +36,20 @@ def test_obs_no_parsing(test_input, expected):
 def test_unit_no_parsing(test_input, expected):
     assert UnitNo(test_input) == expected
 
+
+@pytest.mark.parametrize(
+    "attr_name,expected_value",
+    [("hyphen", ""), ("long", ""), ("long_int", None), ("wilma", ""), ("hydstra", "")],
+)
+def test_empty_unit_no(attr_name, expected_value):
+    assert (
+        getattr(UnitNo(), attr_name) == expected_value
+    )  # against PEP8 for None but should work
+
+
+@pytest.mark.parametrize("attr_name,expected_value", [("id", ""), ("egis", "")])
+def test_empty_obs_no(attr_name, expected_value):
+    assert (
+        getattr(ObsNo(), attr_name) == expected_value
+    )  # against PEP8 for None but should work
+
