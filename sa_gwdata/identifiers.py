@@ -13,7 +13,7 @@ class UnitNo:
 
     Arguments:
         *args (str or int): either the complete unit number or the map sheet and
-        drillhole sequence numbers
+            drillhole sequence numbers
 
     Example::
 
