@@ -128,6 +128,9 @@ class UnitNo:
     def __iter__(self):
         return iter((self.map, self.seq))
 
+    def __bool__(self):
+        return bool(self.map) and bool(self.seq)
+
 
 class ObsNo:
     """Parse an observation well identifier.
@@ -214,6 +217,9 @@ class ObsNo:
     def __iter__(self):
         return iter((self.plan, self.seq))
 
+    def __bool__(self):
+        return bool(self.plan) and bool(self.seq)
+
 
 class Well:
     '''Represents a well.
@@ -239,6 +245,7 @@ class Well:
         self._well_attributes = []
         self.unit_no = UnitNo()
         self.obs_no = ObsNo()
+        self.name = ""
         self.set(*args, **kwargs)
 
     def set(self, dh_no, unit_no="", obs_no="", **kwargs):
@@ -279,6 +286,9 @@ class Well:
     def __hash__(self):
         return hash(self.dh_no)
 
+    def __bool__(self):
+        return bool(self.dh_no)
+
     @property
     def id(self):
         if self.obs_no:
@@ -292,7 +302,7 @@ class Well:
     def title(self):
         names = [self.unit_no.hyphen]
         if not names[0]:
-            names[0] = "[dh_no={:d}]".format(self.drillhole)
+            names[0] = "[dh_no={:d}]".format(self.dh_no)
         if self.obs_no:
             names.append(self.obs_no.id)
         if self.name:
@@ -305,7 +315,7 @@ class Well:
             names.append(self.obs_no.id)
         if self.name:
             names.append(self.name)
-        return "<sa_gwdata.Well({}) {}>".format(self.drillhole, self.title)
+        return "<sa_gwdata.Well({}) {}>".format(self.dh_no, self.title)
 
     def path_safe_repr(self, remove_prefix=True):
         '''Return title containing only characters which are allowed in
