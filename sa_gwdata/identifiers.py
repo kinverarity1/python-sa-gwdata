@@ -13,7 +13,7 @@ class UnitNo:
 
     Arguments:
         *args (str or int): either the complete unit number or the map sheet and
-        drillhole sequence numbers
+            drillhole sequence numbers
 
     Example::
 
@@ -32,6 +32,8 @@ class UnitNo:
         seq (int): sequence number
         hyphen (str): hyphenated format e.g. "6628-123"
         long (str): zero-filled format e.g. "662800123"
+        long_int (int/None): zero-filled format as integer e.g. 662800123 or
+            None if missing
         wilma (str): WILMA style e.g. "6628-00123"
         hydstra (str): Hydstra style e.g. "G662800123"
 
@@ -43,6 +45,7 @@ class UnitNo:
         self.set(*args)
 
     def set(self, *args):
+        '''See :class:`UnitNo` constructor for details of arguments.'''
         if len(args) == 1:
             if isinstance(args[0], list) or isinstance(args[0], tuple):
                 return self.set(*args[0])
@@ -89,9 +92,27 @@ class UnitNo:
         self.seq = int(match.group(2))
 
     @property
+    def long_int(self):
+        if self.long:
+            return int(self.long)
+        else:
+            return None
+
+    @long_int.setter
+    def long_int(self, value):
+        self.long = "{:.0f}".format(value)
+
+    @property
     def wilma(self):
         try:
             return "{:d}-{:05d}".format(self.map, self.seq)
+        except:
+            return ""
+
+    @property
+    def hydstra(self):
+        try:
+            return "G{:d}{:05d}".format(self.map, self.seq)
         except:
             return ""
 
@@ -141,6 +162,7 @@ class ObsNo:
         self.set(*args)
 
     def set(self, *args):
+        '''See :class:`ObsNo` constructor for details of arguments.'''
         if len(args) == 1:
             if isinstance(args[0], list) or isinstance(args[0], tuple):
                 return self.set(*args[0])
@@ -194,22 +216,58 @@ class ObsNo:
 
 
 class Well:
+    '''Represents a well.
+
+    Args:
+            dh_no (int): drillhole number (required)
+            unit_no (str/int): unit number (optional)
+            obs_no (str/int): obs number (optional)
+
+    Other keyword arguments will be set as attributes.
+
+    Attributes:
+
+        id (str): obs number if it exists, e.g. "NOA002", if not,
+            unit number e.g. "6628-123", and in the rare case that
+            a unit number does not exist, then drillhole no. e.g.
+            "200135".
+        title (str): available attributes including name, e.g.
+            "7025-3985 / WRG038 / WESTERN LAGOON".
+
+    '''
     def __init__(self, *args, **kwargs):
+        self._well_attributes = []
         self.unit_no = UnitNo()
         self.obs_no = ObsNo()
         self.set(*args, **kwargs)
 
     def set(self, dh_no, unit_no="", obs_no="", **kwargs):
+        '''See :class:`Well` constructor for docstring.'''
         self.dh_no = dh_no
         self.set_unit_no(unit_no)
         self.set_obs_no(obs_no)
         for key, value in kwargs.items():
-            setattr(self, key.lower(), value)
+            self.set_well_attribute(key, value)
+
+    def set_well_attribute(self, key, value):
+        key = key.lower()
+        self._well_attributes.append(key)
+        setattr(self, key, value)
 
     def set_obs_no(self, *args):
+        '''Set obswell number.
+
+        Args are passed to :class:`ObsNo` constructor.
+
+        '''
         self.obs_no.set(*args)
 
     def set_unit_no(self, *args):
+        '''Set unit number.
+
+        Args are passed to :class:`UnitNo` constructor.
+
+        '''
         self.unit_no.set(*args)
 
     def __eq__(self, other):
@@ -250,6 +308,8 @@ class Well:
         return "<sa_gwdata.Well({}) {}>".format(self.drillhole, self.title)
 
     def path_safe_repr(self, remove_prefix=True):
+        '''Return title containing only characters which are allowed in
+        Windows path names.'''
         r = str(self)
         r = r.replace(" /", ";")[1:-1]
         for char in ["\\", "/", "?", ":", "*", '"', "<", ">", "|"]:
