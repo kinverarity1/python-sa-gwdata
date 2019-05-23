@@ -1,6 +1,13 @@
 # python-sa-gwdata
 
+[![Open Source Love svg2](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/kinverarity1/python-sa-gwdata/blob/master/LICENSE)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/python-sa-gwdata.svg)](https://pypi.python.org/pypi/python-sa-gwdata/)
+[![PyPI version shields.io](https://img.shields.io/pypi/v/python-sa-gwdata.svg)](https://pypi.python.org/pypi/python-sa-gwdata/)
+[![Build Status](https://travis-ci.com/kinverarity1/python-sa-gwdata.svg?branch=master)](https://travis-ci.com/kinverarity1/python-sa-gwdata)
+[![Documentation Status](https://readthedocs.org/projects/python-sa-gwdata/badge/?version=latest)](http://python-sa-gwdata.readthedocs.io/?badge=latest)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9128405aea4948a8b695946e31e2c02e)](https://app.codacy.com/app/kinverarity/python-sa-gwdata?utm_source=github.com&utm_medium=referral&utm_content=kinverarity1/python-sa-gwdata&utm_campaign=Badge_Grade_Settings)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/f078242bcd8545bea4325ce723b568d9)](https://www.codacy.com/app/kinverarity/python-sa-gwdata?utm_source=github.com&utm_medium=referral&utm_content=kinverarity1/python-sa-gwdata&utm_campaign=Badge_Coverage)
+
 
 ``sa_gwdata`` is a Python package to ease access to groundwater data in South Australia.
 It provides access to JSON data from the
