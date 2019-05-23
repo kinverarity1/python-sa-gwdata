@@ -167,14 +167,13 @@ class ObsNo:
                 )
             )
         elif len(args) == 2:
-            try:
-                assert isinstance(args[0], str)
-            except AssertionError:
+            if isinstance(args[0], str):
+                self.plan = args[0]
+                self.seq = int(args[1])
+            else:
                 raise ValueError(
                     "first argument should be a str e.g. 'YAT', 'ADE', etc."
                 )
-            self.plan = args[0]
-            self.seq = int(args[1])
 
     @property
     def id(self):
