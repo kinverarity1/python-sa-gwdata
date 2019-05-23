@@ -7,6 +7,39 @@ import pytest
 from sa_gwdata.identifiers import ObsNo, UnitNo, Well
 
 
+def test_accept_empty_unit_no():
+    UnitNo()
+
+
+def test_accept_empty_obs_no():
+    ObsNo()
+
+
+def test_dodgy_unit_no():
+    with pytest.raises(ValueError):
+        UnitNo("yat", 124)
+
+
+def test_dodgy_unit_no_1():
+    with pytest.raises(ValueError):
+        UnitNo(615)
+
+
+def test_dodgy_obs_no():
+    with pytest.raises(ValueError):
+        ObsNo(6628, 142)
+
+
+def test_dodgy_obs_no_2():
+    with pytest.raises(TypeError):
+        ObsNo(662800142)
+
+
+def test_dodgy_obs_no_3():
+    with pytest.raises(ValueError):
+        ObsNo("662800142")
+
+
 @pytest.mark.parametrize(
     "test_input,expected",
     [
@@ -77,3 +110,31 @@ def test_well_dh_no_missing_attrs(attr_name, expected_value):
 def test_well_manual(attr_name, expected_value):
     well = Well(28255, unit_no="6528-1127", obs_no="YAT124")
     assert getattr(well, attr_name) == expected_value
+
+
+def test_well_repr():
+    well = Well(28255, unit_no="6528-1127", obs_no="YAT124")
+    assert str(well) == "<sa_gwdata.Well(28255) 6528-1127 / YAT124>"
+
+
+def test_well_path_safe_repr():
+    well = Well(28255, unit_no="6528-1127", obs_no="YAT124")
+    assert well.path_safe_repr() == "6528-1127; YAT124"
+
+
+def test_well_path_safe_repr_keep_prefix():
+    well = Well(28255, unit_no="6528-1127", obs_no="YAT124")
+    assert (
+        well.path_safe_repr(remove_prefix=False)
+        == "sa_gwdata.Well(28255) 6528-1127; YAT124"
+    )
+
+
+def test_well_name():
+    well = Well(207050, unit_no="6627-11246", name="OVAL BORE")
+    assert well.name == "OVAL BORE"
+
+
+def test_well_name_in_title():
+    well = Well(207050, unit_no="6627-11246", name="OVAL BORE")
+    assert well.title == "6627-11246 / OVAL BORE"

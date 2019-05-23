@@ -45,16 +45,23 @@ class UnitNo:
         self.set(*args)
 
     def set(self, *args):
-        '''See :class:`UnitNo` constructor for details of arguments.'''
+        """See :class:`UnitNo` constructor for details of arguments."""
         if len(args) == 1:
-            if isinstance(args[0], list) or isinstance(args[0], tuple):
-                return self.set(*args[0])
-            for pattern in PATTERNS["unit_no"]:
-                match = re.match(pattern, str(args[0]))
-                if match:
-                    self.map = int(match.group(1))
-                    self.seq = int(match.group(2))
-                    return
+            if args[0]:
+                if isinstance(args[0], list) or isinstance(args[0], tuple):
+                    return self.set(*args[0])
+                for pattern in PATTERNS["unit_no"]:
+                    match = re.match(pattern, str(args[0]))
+                    if match:
+                        self.map = int(match.group(1))
+                        self.seq = int(match.group(2))
+                        return
+                raise ValueError(
+                    "no identifier found in {}, "
+                    "check docs for accepted formats".format(
+                        args[0]
+                    )
+                )
         elif len(args) == 2:
             try:
                 self.map = int(args[0])
@@ -72,12 +79,6 @@ class UnitNo:
         except TypeError:
             return ""
 
-    @hyphen.setter
-    def hyphen(self, value):
-        match = re.match(PATTERNS["unit_no"][1], value)
-        self.map = int(match.group(1))
-        self.seq = int(match.group(2))
-
     @property
     def long(self):
         try:
@@ -85,22 +86,12 @@ class UnitNo:
         except TypeError:
             return ""
 
-    @long.setter
-    def long(self, value):
-        match = re.match(PATTERNS["unit_no"][0], value)
-        self.map = int(match.group(1))
-        self.seq = int(match.group(2))
-
     @property
     def long_int(self):
         if self.long:
             return int(self.long)
         else:
             return None
-
-    @long_int.setter
-    def long_int(self, value):
-        self.long = "{:.0f}".format(value)
 
     @property
     def wilma(self):
@@ -165,8 +156,8 @@ class ObsNo:
         self.set(*args)
 
     def set(self, *args):
-        '''See :class:`ObsNo` constructor for details of arguments.'''
-        if len(args) == 1:
+        """See :class:`ObsNo` constructor for details of arguments."""
+        if len(args) == 1 and args[0]:
             if isinstance(args[0], list) or isinstance(args[0], tuple):
                 return self.set(*args[0])
             for pattern in PATTERNS["obs_no"]:
@@ -175,7 +166,19 @@ class ObsNo:
                     self.plan = match.group(1)
                     self.seq = int(match.group(2))
                     return
+            raise ValueError(
+                "no identifier found in {}, "
+                "check docs for accepted formats".format(
+                    args[0]
+                )
+            )
         elif len(args) == 2:
+            try:
+                assert isinstance(args[0], str)
+            except AssertionError:
+                raise ValueError(
+                    "first argument should be a str e.g. 'YAT', 'ADE', etc."
+                )
             self.plan = args[0]
             self.seq = int(args[1])
 
@@ -192,18 +195,6 @@ class ObsNo:
             return "{} {:.0f}".format(self.plan.upper(), self.seq)
         except TypeError:
             return ""
-
-    @id.setter
-    def id(self, value):
-        match = re.match(PATTERNS["obs_no"][0], value)
-        self.plan = match.group(1)
-        self.seq = int(match.group(2))
-
-    @egis.setter
-    def egis(self, value):
-        match = re.match(PATTERNS["obs_no"][0], value)
-        self.plan = match.group(1)
-        self.seq = int(match.group(2))
 
     def __str__(self):
         return self.id
@@ -222,7 +213,7 @@ class ObsNo:
 
 
 class Well:
-    '''Represents a well.
+    """Represents a well.
 
     Args:
             dh_no (int): drillhole number (required)
@@ -240,7 +231,8 @@ class Well:
         title (str): available attributes including name, e.g.
             "7025-3985 / WRG038 / WESTERN LAGOON".
 
-    '''
+    """
+
     def __init__(self, *args, **kwargs):
         self._well_attributes = []
         self.unit_no = UnitNo()
@@ -249,7 +241,7 @@ class Well:
         self.set(*args, **kwargs)
 
     def set(self, dh_no, unit_no="", obs_no="", **kwargs):
-        '''See :class:`Well` constructor for docstring.'''
+        """See :class:`Well` constructor for docstring."""
         self.dh_no = dh_no
         self.set_unit_no(unit_no)
         self.set_obs_no(obs_no)
@@ -262,19 +254,19 @@ class Well:
         setattr(self, key, value)
 
     def set_obs_no(self, *args):
-        '''Set obswell number.
+        """Set obswell number.
 
         Args are passed to :class:`ObsNo` constructor.
 
-        '''
+        """
         self.obs_no.set(*args)
 
     def set_unit_no(self, *args):
-        '''Set unit number.
+        """Set unit number.
 
         Args are passed to :class:`UnitNo` constructor.
 
-        '''
+        """
         self.unit_no.set(*args)
 
     def __eq__(self, other):
@@ -318,8 +310,8 @@ class Well:
         return "<sa_gwdata.Well({}) {}>".format(self.dh_no, self.title)
 
     def path_safe_repr(self, remove_prefix=True):
-        '''Return title containing only characters which are allowed in
-        Windows path names.'''
+        """Return title containing only characters which are allowed in
+        Windows path names."""
         r = str(self)
         r = r.replace(" /", ";")[1:-1]
         for char in ["\\", "/", "?", ":", "*", '"', "<", ">", "|"]:
