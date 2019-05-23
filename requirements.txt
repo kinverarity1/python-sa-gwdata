@@ -1,4 +1,5 @@
 requests
 pandas
 pytest
+pytest-cov
 codacy-coverage
