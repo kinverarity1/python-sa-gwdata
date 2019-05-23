@@ -45,25 +45,26 @@ class UnitNo:
         self.set(*args)
 
     def set(self, *args):
-        '''See :class:`UnitNo` constructor for details of arguments.'''
+        """See :class:`UnitNo` constructor for details of arguments."""
         if len(args) == 1:
-            if isinstance(args[0], list) or isinstance(args[0], tuple):
-                return self.set(*args[0])
-            for pattern in PATTERNS["unit_no"]:
-                match = re.match(pattern, str(args[0]))
-                if match:
-                    self.map = int(match.group(1))
-                    self.seq = int(match.group(2))
-                    return
+            if args[0]:
+                if isinstance(args[0], list) or isinstance(args[0], tuple):
+                    return self.set(*args[0])
+                for pattern in PATTERNS["unit_no"]:
+                    match = re.match(pattern, str(args[0]))
+                    if match:
+                        self.map = int(match.group(1))
+                        self.seq = int(match.group(2))
+                        return
+                raise ValueError(
+                    "no identifier found in {}, "
+                    "check docs for accepted formats".format(
+                        args[0]
+                    )
+                )
         elif len(args) == 2:
-            try:
-                self.map = int(args[0])
-            except TypeError:
-                self.map = None
-            try:
-                self.seq = int(args[1])
-            except TypeError:
-                self.seq = None
+            self.map = int(args[0])
+            self.seq = int(args[1])
 
     @property
     def hyphen(self):
@@ -72,12 +73,6 @@ class UnitNo:
         except TypeError:
             return ""
 
-    @hyphen.setter
-    def hyphen(self, value):
-        match = re.match(PATTERNS["unit_no"][1], value)
-        self.map = int(match.group(1))
-        self.seq = int(match.group(2))
-
     @property
     def long(self):
         try:
@@ -85,22 +80,12 @@ class UnitNo:
         except TypeError:
             return ""
 
-    @long.setter
-    def long(self, value):
-        match = re.match(PATTERNS["unit_no"][0], value)
-        self.map = int(match.group(1))
-        self.seq = int(match.group(2))
-
     @property
     def long_int(self):
         if self.long:
             return int(self.long)
         else:
             return None
-
-    @long_int.setter
-    def long_int(self, value):
-        self.long = "{:.0f}".format(value)
 
     @property
     def wilma(self):
@@ -127,6 +112,9 @@ class UnitNo:
 
     def __iter__(self):
         return iter((self.map, self.seq))
+
+    def __bool__(self):
+        return bool(self.map) and bool(self.seq)
 
 
 class ObsNo:
@@ -162,8 +150,8 @@ class ObsNo:
         self.set(*args)
 
     def set(self, *args):
-        '''See :class:`ObsNo` constructor for details of arguments.'''
-        if len(args) == 1:
+        """See :class:`ObsNo` constructor for details of arguments."""
+        if len(args) == 1 and args[0]:
             if isinstance(args[0], list) or isinstance(args[0], tuple):
                 return self.set(*args[0])
             for pattern in PATTERNS["obs_no"]:
@@ -172,9 +160,20 @@ class ObsNo:
                     self.plan = match.group(1)
                     self.seq = int(match.group(2))
                     return
+            raise ValueError(
+                "no identifier found in {}, "
+                "check docs for accepted formats".format(
+                    args[0]
+                )
+            )
         elif len(args) == 2:
-            self.plan = args[0]
-            self.seq = int(args[1])
+            if isinstance(args[0], str):
+                self.plan = args[0]
+                self.seq = int(args[1])
+            else:
+                raise ValueError(
+                    "first argument should be a str e.g. 'YAT', 'ADE', etc."
+                )
 
     @property
     def id(self):
@@ -190,18 +189,6 @@ class ObsNo:
         except TypeError:
             return ""
 
-    @id.setter
-    def id(self, value):
-        match = re.match(PATTERNS["obs_no"][0], value)
-        self.plan = match.group(1)
-        self.seq = int(match.group(2))
-
-    @egis.setter
-    def egis(self, value):
-        match = re.match(PATTERNS["obs_no"][0], value)
-        self.plan = match.group(1)
-        self.seq = int(match.group(2))
-
     def __str__(self):
         return self.id
 
@@ -214,9 +201,12 @@ class ObsNo:
     def __iter__(self):
         return iter((self.plan, self.seq))
 
+    def __bool__(self):
+        return bool(self.plan) and bool(self.seq)
+
 
 class Well:
-    '''Represents a well.
+    """Represents a well.
 
     Args:
             dh_no (int): drillhole number (required)
@@ -234,15 +224,17 @@ class Well:
         title (str): available attributes including name, e.g.
             "7025-3985 / WRG038 / WESTERN LAGOON".
 
-    '''
+    """
+
     def __init__(self, *args, **kwargs):
         self._well_attributes = []
         self.unit_no = UnitNo()
         self.obs_no = ObsNo()
+        self.name = ""
         self.set(*args, **kwargs)
 
     def set(self, dh_no, unit_no="", obs_no="", **kwargs):
-        '''See :class:`Well` constructor for docstring.'''
+        """See :class:`Well` constructor for docstring."""
         self.dh_no = dh_no
         self.set_unit_no(unit_no)
         self.set_obs_no(obs_no)
@@ -255,19 +247,19 @@ class Well:
         setattr(self, key, value)
 
     def set_obs_no(self, *args):
-        '''Set obswell number.
+        """Set obswell number.
 
         Args are passed to :class:`ObsNo` constructor.
 
-        '''
+        """
         self.obs_no.set(*args)
 
     def set_unit_no(self, *args):
-        '''Set unit number.
+        """Set unit number.
 
         Args are passed to :class:`UnitNo` constructor.
 
-        '''
+        """
         self.unit_no.set(*args)
 
     def __eq__(self, other):
@@ -278,6 +270,9 @@ class Well:
 
     def __hash__(self):
         return hash(self.dh_no)
+
+    def __bool__(self):
+        return bool(self.dh_no)
 
     @property
     def id(self):
@@ -292,7 +287,7 @@ class Well:
     def title(self):
         names = [self.unit_no.hyphen]
         if not names[0]:
-            names[0] = "[dh_no={:d}]".format(self.drillhole)
+            names[0] = "[dh_no={:d}]".format(self.dh_no)
         if self.obs_no:
             names.append(self.obs_no.id)
         if self.name:
@@ -300,16 +295,11 @@ class Well:
         return " / ".join(names)
 
     def __repr__(self):
-        names = [self.unit_no.hyphen]
-        if self.obs_no:
-            names.append(self.obs_no.id)
-        if self.name:
-            names.append(self.name)
-        return "<sa_gwdata.Well({}) {}>".format(self.drillhole, self.title)
+        return "<sa_gwdata.Well({}) {}>".format(self.dh_no, self.title)
 
     def path_safe_repr(self, remove_prefix=True):
-        '''Return title containing only characters which are allowed in
-        Windows path names.'''
+        """Return title containing only characters which are allowed in
+        Windows path names."""
         r = str(self)
         r = r.replace(" /", ";")[1:-1]
         for char in ["\\", "/", "?", ":", "*", '"', "<", ">", "|"]:
@@ -323,6 +313,11 @@ class Well:
 def parse_well_ids(input_text, **kwargs):
     """Specify well identifiers in free text and have them parsed.
 
+    Args:
+        input_text (str): the text to parse
+
+    Other keyword arguments are passed to :func:`parse_well_ids_plaintext`.
+
     Example of acceptable formats:
 
         662800125
@@ -332,9 +327,6 @@ def parse_well_ids(input_text, **kwargs):
         SLE 15
         SLE015
         SLE15
-
-    The input text will be split on whitespace, unless there are new-line characters present,
-    then it will be split by line, instead preserving whitespace.
 
     """
     input_text = input_text.replace("\r", "")
@@ -346,8 +338,7 @@ def parse_well_ids_plaintext(
     types=("unit_no", "obs_no"),
     unit_no_prefix="",
     obs_no_prefix="",
-    dh_re_prefix=r"\A",
-    dh_split_whitespace=True,
+    dh_re_prefix=r"\A"
 ):
     """Parse possible well identifiers out of plain text.
 
@@ -358,8 +349,6 @@ def parse_well_ids_plaintext(
             supported: "unit_no", "obs_no", "dh_no"
         dh_re_prefix (str): regexp pattern required before a dh_no
             regexp will match
-        dh_split_whitespace (str): when matching dh_no regexps,
-            split the input_text by whitespace.
 
     Returns: a list of tuples e.g.
 
@@ -400,18 +389,12 @@ def parse_well_ids_plaintext(
     if "dh_no" in types:
         for id_type in ("dh_no",):
             for pattern in PATTERNS[id_type]:
-                if dh_split_whitespace:
-                    items = input_text.split()
-                    for item in items:
-                        match = re.search(dh_re_prefix + pattern, item)
-                        if match:
-                            match_counts[id_type] += 1
-                            well_ids.append((id_type, match.group()))
-                else:
-                    matches = re.findall(dh_re_prefix + pattern, input_text)
-                    for match in matches:
+                items = input_text.split()
+                for item in items:
+                    match = re.search(dh_re_prefix + pattern, item)
+                    if match:
                         match_counts[id_type] += 1
-                        well_ids.append((id_type, match))
+                        well_ids.append((id_type, match.group()))
     if "obs_no" in types:
         for pattern in PATTERNS["obs_no"]:
             matches = re.findall(obs_no_prefix + pattern, input_text)
