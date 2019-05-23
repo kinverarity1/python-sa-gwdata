@@ -320,7 +320,7 @@ class Well:
         return r
 
 
-def parse_well_ids(input, **kwargs):
+def parse_well_ids(input_text, **kwargs):
     """Specify well identifiers in free text and have them parsed.
 
     Example of acceptable formats:
@@ -337,8 +337,8 @@ def parse_well_ids(input, **kwargs):
     then it will be split by line, instead preserving whitespace.
 
     """
-    input = input.replace("\r", "")
-    return parse_well_ids_plaintext(input, **kwargs)
+    input_text = input_text.replace("\r", "")
+    return parse_well_ids_plaintext(input_text, **kwargs)
 
 
 def parse_well_ids_plaintext(
