@@ -1,4 +1,4 @@
 requests
-lxml
 pandas
 pytest
+codacy-coverage
