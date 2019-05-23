@@ -32,6 +32,8 @@ class UnitNo:
         seq (int): sequence number
         hyphen (str): hyphenated format e.g. "6628-123"
         long (str): zero-filled format e.g. "662800123"
+        long_int (int/None): zero-filled format as integer e.g. 662800123 or
+            None if missing
         wilma (str): WILMA style e.g. "6628-00123"
         hydstra (str): Hydstra style e.g. "G662800123"
 
@@ -90,6 +92,17 @@ class UnitNo:
         match = re.match(PATTERNS["unit_no"][0], value)
         self.map = int(match.group(1))
         self.seq = int(match.group(2))
+
+    @property
+    def long_int(self):
+        if self.long:
+            return int(self.long)
+        else:
+            return None
+
+    @long_int.setter
+    def long_int(self, value):
+        self.long = "{:.0f}".format(value)
 
     @property
     def wilma(self):
