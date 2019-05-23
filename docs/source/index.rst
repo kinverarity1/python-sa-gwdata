@@ -14,11 +14,17 @@ This is an unofficial project, use at your own risk/reward.
 Changelog
 ---------
 
+Version 0.5.1
+~~~~~~~~~~~~~
+
+- Add ``Well`` class for ID parsing
+- Add ``UnitNo.hydstra`` and ``UnitNo.wilma`` attributes
+
 Version 0.5.0
 ~~~~~~~~~~~~~
 
-- Add :func:`sa_gwdata.parse_well_ids` to parse well IDs from plain text
-- Add :class:`sa_gwdata.ObsNo` and :class:`sa_gwdata.UnitNo` classes for ID parsing
+- Add ``parse_well_ids()`` to parse well IDs from plain text
+- Add ``ObsNo`` and ``UnitNo`` classes for ID parsing
 
 Version 0.4.1
 ~~~~~~~~~~~~~
