@@ -8,7 +8,6 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9128405aea4948a8b695946e31e2c02e)](https://app.codacy.com/app/kinverarity/python-sa-gwdata?utm_source=github.com&utm_medium=referral&utm_content=kinverarity1/python-sa-gwdata&utm_campaign=Badge_Grade_Settings)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/f078242bcd8545bea4325ce723b568d9)](https://www.codacy.com/app/kinverarity/python-sa-gwdata?utm_source=github.com&utm_medium=referral&utm_content=kinverarity1/python-sa-gwdata&utm_campaign=Badge_Coverage)
 
-
 ``sa_gwdata`` is a Python package to ease access to groundwater data in South Australia.
 It provides access to JSON data from the
 [WaterConnect Groundwater Data](https://www.waterconnect.sa.gov.au/Systems/GD/Pages/Default.aspx) website,
