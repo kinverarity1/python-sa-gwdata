@@ -1,0 +1,4 @@
+- [ ] Run black to format code
+- [ ] Add docstrings for all functions, classes, methods, and attributes
+- [ ] Update Sphinx docs and test build
+- [ ] 100% test coverage (```pytest```)
