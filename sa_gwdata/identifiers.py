@@ -223,6 +223,8 @@ class Well:
             "200135".
         title (str): available attributes including name, e.g.
             "7025-3985 / WRG038 / WESTERN LAGOON".
+        obs_no (ObsNo): obs number
+        unit_no (UnitNo): unit number
 
     """
 
