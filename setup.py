@@ -10,7 +10,7 @@ setup(
     url="https://github.com/kinverarity1/python-sa-gwdata",
     author="Kent Inverarity",
     author_email="kinverarity@hotmail.com",
-    license="Apache License version 2.0",
+    license="MIT",
     install_requires=("requests", "pandas"),
     classifiers=(
         "Programming Language :: Python :: 3.5",
