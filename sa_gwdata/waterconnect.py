@@ -1,3 +1,4 @@
+import io
 import json
 import logging
 import time
@@ -5,6 +6,7 @@ import time
 import pandas as pd
 import requests
 
+from sa_gwdata.identifiers import parse_well_ids, UnitNo, ObsNo, Well, Wells
 
 __all__ = ("WaterConnectSession", "Response")
 
@@ -78,20 +80,19 @@ class WaterConnectSession(requests.Session):
         "mapnum": "unit_long",
     }
 
-    def __init__(self, *args, endpoint=None, sleep=2, verify=True, **kwargs):
+    def __init__(
+        self, *args, endpoint=None, sleep=2, verify=True, load_list_data=True, **kwargs
+    ):
         super().__init__(*args, **kwargs)
         self.well_cache = pd.DataFrame(columns=set(self.well_id_cols.values()))
         self.verify = verify
         if not endpoint:
-            endpoint = (
-                "https://www.waterconnect.sa.gov.au"
-                "/_layouts/15"
-                "/dfw.sharepoint.wdd/WDDDMS.ashx/"
-            )
+            endpoint = "https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/"
         self.endpoint = endpoint
         self.last_request = time.time() - sleep
         self.sleep = sleep
-        self.refresh_available_groupings()
+        if load_list_data:
+            self.refresh_available_groupings()
 
     def get(self, path, verify=None, **kwargs):
         """HTTP GET verb to Groundwater Data.
@@ -115,7 +116,33 @@ class WaterConnectSession(requests.Session):
         response = super().get(path, verify=verify, **kwargs)
         self.last_request = time.time()
         endpoint, name = path.rsplit("/", 1)
+        logger.debug("Response content = {}".format(response.content))
         return self._cache_data(Response(response, endpoint=endpoint, name=name))
+
+    def post(self, path, verify=None, **kwargs):
+        # TODO: Implement _cache_data for CSV bulk data formats... ?
+        if verify is None:
+            verify = self.verify
+        t_remain = self.sleep - (time.time() - self.last_request)
+        if t_remain > 0:
+            logger.debug("Waiting {} sec".format(t_remain))
+            time.sleep(t_remain)
+        if not path.startswith(self.endpoint):
+            path = self.endpoint + path
+        logger.debug("POST {} verify={}".format(path, verify))
+        response = super().post(path, verify=verify, **kwargs)
+        self.last_request = time.time()
+        endpoint, name = path.rsplit("/", 1)
+        return Response(response, endpoint=endpoint, name=name)
+
+    def bulk_download(self, service, json_data, format="CSV"):
+        r = self.post(
+            "{service}?bulkOutput={format}".format(service=service, format=format),
+            data={"exportdata": json.dumps(json_data)},
+        )
+        with io.BytesIO(r.response.content) as buffer:
+            df = pd.read_csv(buffer)
+        return df
 
     def _cache_data(self, response):
         if response.df_exists:
@@ -128,6 +155,41 @@ class WaterConnectSession(requests.Session):
                 .sort_values("unit_long")
             )
         return response
+
+    def find_wells(self, input_text, **kwargs):
+        """Find wells and retrieve some summary information.
+
+        Args:
+            input_text (str): any well identifiers to parse. See
+                :func:`sa_gwdata.parse_well_ids_plaintext` for details of
+                other keyword arguments you can pass here.
+
+        For example:
+
+            >>> from sa_gwdata import WaterConnectSession
+            >>> with WaterConnectSession() as s:
+            ...     wells = s.find_wells("yat99 5840-46 ULE205")
+            ...
+            >>> wells
+            [<sa_gwdata.Well(6916) 5840-46 / MLC008 / HIGHWAY BORE>, <sa_gwdata.Well(198752) 6028-2319 / ULE205 / US 1>, <sa_gwdata.Well(54354) 6628-7385 / YAT099 / ST MICHAELS COLLEGE>]
+
+        """
+        ids = parse_well_ids(input_text, **kwargs)
+        dh_nos = [x for id_type, x in ids if id_type == "dh_no"]
+        unit_nos = [x for id_type, x in ids if id_type == "unit_no"]
+        obs_nos = [x for id_type, x in ids if id_type == "obs_no"]
+        r1 = self.get("GetUnitNumberSearchData", params={"MAPNUM": ",".join(unit_nos)})
+        r2 = self.get(
+            "GetObswellNumberSearchData", params={"OBSNUMBER": ",".join(obs_nos)}
+        )
+        df = (
+            pd.concat([r1.df, r2.df], sort=False)
+            .drop_duplicates()
+            .rename(
+                columns={"dhno": "dh_no", "mapnum": "unit_no", "obsnumber": "obs_no"}
+            )
+        )
+        return Wells([Well(**r.to_dict()) for _, r in df.iterrows()])
 
     def refresh_available_groupings(self):
         """Load lists data from API. Stores them in the attributes

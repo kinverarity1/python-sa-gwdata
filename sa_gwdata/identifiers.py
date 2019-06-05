@@ -1,5 +1,7 @@
+import collections.abc
 import re
 
+import pandas as pd
 
 PATTERNS = {
     "unit_no": [r"G?(\d{4})-?(\d{5})", r"G?(\d{4})-(\d{1,5})"],
@@ -42,6 +44,15 @@ class UnitNo:
     def __init__(self, *args):
         self.map = None
         self.seq = None
+        self._attributes = [
+            "map",
+            "seq",
+            "hyphen",
+            "long",
+            "long_int",
+            "wilma",
+            "hydstra",
+        ]
         self.set(*args)
 
     def set(self, *args):
@@ -58,9 +69,7 @@ class UnitNo:
                         return
                 raise ValueError(
                     "no identifier found in {}, "
-                    "check docs for accepted formats".format(
-                        args[0]
-                    )
+                    "check docs for accepted formats".format(args[0])
                 )
         elif len(args) == 2:
             self.map = int(args[0])
@@ -116,6 +125,9 @@ class UnitNo:
     def __bool__(self):
         return bool(self.map) and bool(self.seq)
 
+    def to_scalar_dict(self):
+        return {attr: getattr(self) for attr in self._attributes}
+
 
 class ObsNo:
     """Parse an observation well identifier.
@@ -147,6 +159,7 @@ class ObsNo:
     def __init__(self, *args):
         self.plan = ""
         self.seq = None
+        self._attributes = ["plan", "seq", "id", "egis"]
         self.set(*args)
 
     def set(self, *args):
@@ -162,9 +175,7 @@ class ObsNo:
                     return
             raise ValueError(
                 "no identifier found in {}, "
-                "check docs for accepted formats".format(
-                    args[0]
-                )
+                "check docs for accepted formats".format(args[0])
             )
         elif len(args) == 2:
             if isinstance(args[0], str):
@@ -204,6 +215,9 @@ class ObsNo:
     def __bool__(self):
         return bool(self.plan) and bool(self.seq)
 
+    def to_scalar_dict(self):
+        return {attr: getattr(self) for attr in self._attributes}
+
 
 class Well:
     """Represents a well.
@@ -229,7 +243,7 @@ class Well:
     """
 
     def __init__(self, *args, **kwargs):
-        self._well_attributes = []
+        self._attributes = []
         self.unit_no = UnitNo()
         self.obs_no = ObsNo()
         self.name = ""
@@ -245,7 +259,7 @@ class Well:
 
     def set_well_attribute(self, key, value):
         key = key.lower()
-        self._well_attributes.append(key)
+        self._attributes.append(key)
         setattr(self, key, value)
 
     def set_obs_no(self, *args):
@@ -299,6 +313,25 @@ class Well:
     def __repr__(self):
         return "<sa_gwdata.Well({}) {}>".format(self.dh_no, self.title)
 
+    def to_scalar_dict(self):
+        """Convert Well to a dictionary containing scalar values.
+
+        Returns: dict.
+
+        Guaranteed keys are "dh_no", "id", "title" and "name".
+
+        The keys present in `well.unit_no.to_scalar_dict()` will
+        be added with the prefix "unit_no.". Same for `obs_no`.
+
+        Any additional attributes will also be present.
+
+        """
+        d = {"dh_no": self.dh_no, "id": self.id, "title": self.title, "name": self.name}
+        d.update({"unit_no." + k: v for k, v in self.unit_no.to_scalar_dict()})
+        d.update({"obs_no." + k: v for k, v in self.obs_no.to_scalar_dict()})
+        d.update({attr: getattr(self, attr) for attr in self._attributes})
+        return d
+
     def path_safe_repr(self, remove_prefix=True):
         """Return title containing only characters which are allowed in
         Windows path names."""
@@ -310,6 +343,74 @@ class Well:
             parts = r.split(")")
             r = " ".join(parts[1:])[1:]
         return r
+
+
+class Wells(collections.abc.MutableSequence):
+    """Represents a set of wells.
+
+    This is not meant to be instantiated here, but can be
+    accessed from methods of other objects, such as
+    :meth:`sa_gwdata.WaterConnectSession.find_wells`.
+
+    Attributes:
+        wells (list): list of :class:`sa_gwdata.Well` objects.
+
+    """
+    def __init__(self, wells=None):
+        if wells is None:
+            wells = []
+        self.wells = wells
+
+    def __repr__(self):
+        return repr(self.wells)
+
+    def __len__(self):
+        return len(self.wells)
+
+    def __getitem__(self, ix):
+        return self.wells[ix]
+
+    def __delitem__(self, ix):
+        del self.wells[ix]
+
+    def __setitem__(self, ix, value):
+        self.wells[ix] = value
+
+    def insert(self, ix, value):
+        self.wells.insert(ix, value)
+
+    def append(self, value):
+        self.wells.append(value)
+
+    def count(self, item):
+        return self.wells.count(item)
+
+    def index(self, *args):
+        return self.wells.index(*args)
+
+    def __iter__(self):
+        return iter(self.wells)
+
+    def df(self):
+        """Return information contained in each Well as a table.
+
+        Returns: pd.DataFrame
+
+        The columns of the returned DataFrame will always contain
+        the "dh_no", "id", "title" attributes from the contained
+        Well objects.
+
+        Additional columns in the form "unit_no." + key will exist
+        for all the keys in :meth:`UnitNo.to_scalar_dict`. Same for
+        :meth:`ObsNo.to_scalar_dict`.
+
+        Remaining columns depend on the additional attributes present
+        on the contained Well objects.
+
+        """
+        df = pd.DataFrame([w.to_scalar_dict() for w in self])
+        df.wells = self
+        return df
 
 
 def parse_well_ids(input_text, **kwargs):
@@ -340,7 +441,7 @@ def parse_well_ids_plaintext(
     types=("unit_no", "obs_no"),
     unit_no_prefix="",
     obs_no_prefix="",
-    dh_re_prefix=r"\A"
+    dh_re_prefix=r"\A",
 ):
     """Parse possible well identifiers out of plain text.
 
@@ -377,6 +478,7 @@ def parse_well_ids_plaintext(
     obs_no.
 
     """
+    # WARNING: make sure you update any keyword arguments in WaterConnectSession.find_wells()
     input_text = " " + input_text + " "
     match_counts = {"unit_no": 0, "dh_no": 0, "obs_no": 0}
     well_ids = []
