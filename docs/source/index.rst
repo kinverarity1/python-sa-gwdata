@@ -16,6 +16,11 @@ This is an unofficial project, use at your own risk/reward.
 Changelog
 ---------
 
+Version 0.5.3
+~~~~~~~~~~~~~
+
+- Add ``ObsNo.parse()`` class method  which ignores exceptions.
+
 Version 0.5.2
 ~~~~~~~~~~~~~
 
