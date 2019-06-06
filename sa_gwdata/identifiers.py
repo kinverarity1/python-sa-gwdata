@@ -162,6 +162,23 @@ class ObsNo:
         self._attributes = ["plan", "seq", "id", "egis"]
         self.set(*args)
 
+    @classmethod
+    def parse(cls, *args, **kwargs):
+        '''Parse an obs identifier, ignoring all parsing errors.
+
+        Arguments are the same as those for the class constructor, 
+        but all exceptions are ignored.
+
+        Returns: ObsNo.id if successful, a blank string if not.
+
+        '''
+        try:
+            obs_no = cls(*args, **kwargs)
+        except:
+            return ""
+        else:
+            return obs_no.id
+
     def set(self, *args):
         """See :class:`ObsNo` constructor for details of arguments."""
         if len(args) == 1 and args[0]:
