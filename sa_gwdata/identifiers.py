@@ -396,7 +396,13 @@ class Wells(collections.abc.MutableSequence):
         if isinstance(ix, int):
             if ix < len(self):
                 return self.wells[ix]
-        return self._map[ix]
+        key = ix
+        if not key in self._map:
+            for id_type, value in parse_well_ids_plaintext(str(key)):
+                if value in self._map:
+                    key = value
+                    break
+        return self._map[key]
 
     def __delitem__(self, ix):
         del self.wells[ix]
