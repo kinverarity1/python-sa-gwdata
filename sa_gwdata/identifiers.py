@@ -384,7 +384,7 @@ class Wells(collections.abc.MutableSequence):
         if wells is None:
             wells = []
         self.wells = wells
-        self._update_attribute_names()
+        self._refresh()
 
     def __repr__(self):
         return repr(self.wells)
@@ -393,22 +393,25 @@ class Wells(collections.abc.MutableSequence):
         return len(self.wells)
 
     def __getitem__(self, ix):
-        return self.wells[ix]
+        if isinstance(ix, int):
+            if ix < len(self):
+                return self.wells[ix]
+        return self._map[ix]
 
     def __delitem__(self, ix):
         del self.wells[ix]
-        self._update_attribute_names()
+        self._refresh()
 
     def __setitem__(self, ix, value):
         self.wells[ix] = value
 
     def insert(self, ix, value):
         self.wells.insert(ix, value)
-        self._update_attribute_names()
+        self._refresh()
 
     def append(self, value):
         self.wells.append(value)
-        self._update_attribute_names()
+        self._refresh()
 
     def count(self, item):
         return self.wells.count(item)
@@ -430,11 +433,16 @@ class Wells(collections.abc.MutableSequence):
                 "Wells object does not have an attribute named '{}'".format(name)
             )
 
-    def _update_attribute_names(self):
+    def _refresh(self):
         if len(self):
             self._attributes = list(self[0].to_scalar_dict().keys())
         else:
             self._attributes = []
+        self._map = {w.dh_no: w for w in self}
+        self._map.update({w.obs_no.id: w for w in self if w.obs_no.id})
+        self._map.update({w.unit_no.hyphen: w for w in self if w.unit_no.hyphen})
+        self._map.update({w.unit_no.long: w for w in self if w.unit_no.long})
+        self._map.update({w.unit_no.long_int: w for w in self if w.unit_no.long_int})
 
     def __dir__(self):
         return sorted(
