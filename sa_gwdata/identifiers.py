@@ -126,7 +126,7 @@ class UnitNo:
         return bool(self.map) and bool(self.seq)
 
     def to_scalar_dict(self):
-        return {attr: getattr(self) for attr in self._attributes}
+        return {attr: getattr(self, attr) for attr in self._attributes}
 
 
 class ObsNo:
@@ -161,6 +161,23 @@ class ObsNo:
         self.seq = None
         self._attributes = ["plan", "seq", "id", "egis"]
         self.set(*args)
+
+    @classmethod
+    def parse(cls, *args, **kwargs):
+        """Parse an obs identifier, ignoring all parsing errors.
+
+        Arguments are the same as those for the class constructor, 
+        but all exceptions are ignored.
+
+        Returns: ObsNo.id if successful, a blank string if not.
+
+        """
+        try:
+            obs_no = cls(*args, **kwargs)
+        except:
+            return ""
+        else:
+            return obs_no.id
 
     def set(self, *args):
         """See :class:`ObsNo` constructor for details of arguments."""
@@ -216,7 +233,7 @@ class ObsNo:
         return bool(self.plan) and bool(self.seq)
 
     def to_scalar_dict(self):
-        return {attr: getattr(self) for attr in self._attributes}
+        return {attr: getattr(self, attr) for attr in self._attributes}
 
 
 class Well:
@@ -327,8 +344,10 @@ class Well:
 
         """
         d = {"dh_no": self.dh_no, "id": self.id, "title": self.title, "name": self.name}
-        d.update({"unit_no." + k: v for k, v in self.unit_no.to_scalar_dict()})
-        d.update({"obs_no." + k: v for k, v in self.obs_no.to_scalar_dict()})
+        d.update(
+            {("unit_no." + k): v for k, v in self.unit_no.to_scalar_dict().items()}
+        )
+        d.update({("obs_no." + k): v for k, v in self.obs_no.to_scalar_dict().items()})
         d.update({attr: getattr(self, attr) for attr in self._attributes})
         return d
 
@@ -355,11 +374,19 @@ class Wells(collections.abc.MutableSequence):
     Attributes:
         wells (list): list of :class:`sa_gwdata.Well` objects.
 
+    All attributes of the contained Well objects will also be
+    present as attributes on this object, returning lists of the 
+    values from the Well objects contained here. It sounds more
+    complex than it is! Tab completion is enabled, so try it out
+    in IPython and you will quickly see how it works.
+
     """
+
     def __init__(self, wells=None):
         if wells is None:
             wells = []
         self.wells = wells
+        self._update_attribute_names()
 
     def __repr__(self):
         return repr(self.wells)
@@ -372,15 +399,18 @@ class Wells(collections.abc.MutableSequence):
 
     def __delitem__(self, ix):
         del self.wells[ix]
+        self._update_attribute_names()
 
     def __setitem__(self, ix, value):
         self.wells[ix] = value
 
     def insert(self, ix, value):
         self.wells.insert(ix, value)
+        self._update_attribute_names()
 
     def append(self, value):
         self.wells.append(value)
+        self._update_attribute_names()
 
     def count(self, item):
         return self.wells.count(item)
@@ -390,6 +420,28 @@ class Wells(collections.abc.MutableSequence):
 
     def __iter__(self):
         return iter(self.wells)
+
+    def __getattr__(self, name):
+        name = name.split(".")[0]
+        if name in self._attributes:
+            return self.df()[name].values.tolist()
+        elif name in ["unit_no", "obs_no"]:
+            return [getattr(w, name) for w in self]
+        else:
+            raise AttributeError(
+                "Wells object does not have an attribute named '{}'".format(name)
+            )
+
+    def _update_attribute_names(self):
+        if len(self):
+            self._attributes = list(self[0].to_scalar_dict().keys())
+        else:
+            self._attributes = []
+
+    def __dir__(self):
+        return sorted(
+            list(set([k.split(".")[0] for k in self._attributes])) + super().__dir__()
+        )
 
     def df(self):
         """Return information contained in each Well as a table.
@@ -409,7 +461,6 @@ class Wells(collections.abc.MutableSequence):
 
         """
         df = pd.DataFrame([w.to_scalar_dict() for w in self])
-        df.wells = self
         return df
 
 

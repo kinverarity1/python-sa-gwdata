@@ -16,6 +16,16 @@ This is an unofficial project, use at your own risk/reward.
 Changelog
 ---------
 
+Version 0.5.4
+~~~~~~~~~~~~~
+
+- Implement attribute access on ``Wells`` objects.
+
+Version 0.5.3
+~~~~~~~~~~~~~
+
+- Add ``ObsNo.parse()`` class method  which ignores exceptions.
+
 Version 0.5.2
 ~~~~~~~~~~~~~
 
