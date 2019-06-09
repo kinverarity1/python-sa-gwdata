@@ -447,8 +447,6 @@ class Wells(collections.abc.MutableSequence):
         self._map = {w.dh_no: w for w in self}
         self._map.update({w.obs_no.id: w for w in self if w.obs_no.id})
         self._map.update({w.unit_no.hyphen: w for w in self if w.unit_no.hyphen})
-        self._map.update({w.unit_no.long: w for w in self if w.unit_no.long})
-        self._map.update({w.unit_no.long_int: w for w in self if w.unit_no.long_int})
 
     def __dir__(self):
         return sorted(
