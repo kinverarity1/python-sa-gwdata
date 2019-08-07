@@ -11,7 +11,7 @@ setup(
     author="Kent Inverarity",
     author_email="kinverarity@hotmail.com",
     license="MIT",
-    install_requires=("requests", "pandas"),
+    install_requires=("requests", "pandas>=0.24.1"),
     classifiers=(
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",

@@ -58,6 +58,8 @@ class UnitNo:
     def set(self, *args):
         """See :class:`UnitNo` constructor for details of arguments."""
         if len(args) == 1:
+            if args[0] == "nan":
+                args[0] = None
             if args[0]:
                 if isinstance(args[0], list) or isinstance(args[0], tuple):
                     return self.set(*args[0])
@@ -181,19 +183,22 @@ class ObsNo:
 
     def set(self, *args):
         """See :class:`ObsNo` constructor for details of arguments."""
-        if len(args) == 1 and args[0]:
-            if isinstance(args[0], list) or isinstance(args[0], tuple):
-                return self.set(*args[0])
-            for pattern in PATTERNS["obs_no"]:
-                match = re.match(pattern, args[0])
-                if match:
-                    self.plan = match.group(1)
-                    self.seq = int(match.group(2))
-                    return
-            raise ValueError(
-                "no identifier found in {}, "
-                "check docs for accepted formats".format(args[0])
-            )
+        if len(args) == 1:
+            if args[0] == "nan":
+                args[0] = None
+            if args[0]:
+                if isinstance(args[0], list) or isinstance(args[0], tuple):
+                    return self.set(*args[0])
+                for pattern in PATTERNS["obs_no"]:
+                    match = re.match(pattern, args[0])
+                    if match:
+                        self.plan = match.group(1)
+                        self.seq = int(match.group(2))
+                        return
+                raise ValueError(
+                    "no identifier found in {}, "
+                    "check docs for accepted formats".format(args[0])
+                )
         elif len(args) == 2:
             if isinstance(args[0], str):
                 self.plan = args[0]

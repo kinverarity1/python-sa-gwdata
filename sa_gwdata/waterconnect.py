@@ -205,6 +205,29 @@ class WaterConnectSession(requests.Session):
                 columns={"dhno": "dh_no", "mapnum": "unit_no", "obsnumber": "obs_no"}
             )
         )
+        for key in ["obs_no", "name"]:
+            if not key in df:
+                df[key] = ""
+            df.loc[df[key].isnull(), key] = ""
+        return Wells([Well(**r.to_dict()) for _, r in df.iterrows()])
+
+    def find_wells_in_lat_lon(self, lats, lons):
+        lons = sorted(lons)
+        lats = sorted(lats)
+        dfs = []
+        
+        coords = [lats[0], lons[0], lats[1], lons[1]]
+        box = ",".join(["{:.4f}".format(c) for c in coords])
+        r = self.get(
+            "GetGridData?Box={box}".format(box=box),
+        )
+        df = r.df.drop_duplicates().rename(
+            columns={"dhno": "dh_no", "mapnum": "unit_no", "obsnumber": "obs_no"}
+        )
+        for key in ["obs_no", "name", "unit_no"]:
+            if not key in df:
+                df[key] = ""
+            df.loc[df[key].isnull(), key] = ""
         return Wells([Well(**r.to_dict()) for _, r in df.iterrows()])
 
     def refresh_available_groupings(self):
