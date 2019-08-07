@@ -16,6 +16,13 @@ This is an unofficial project, use at your own risk/reward.
 Changelog
 ---------
 
+Version 0.6.0
+~~~~~~~~~~~~~
+
+- Add ``find_wells_in_lat_lon()`` method
+- Fix ``"nan"`` bug for ``UnitNo``
+- Fix correct ``pandas`` dependency requirement
+
 Version 0.5.4
 ~~~~~~~~~~~~~
 
