@@ -328,7 +328,12 @@ class Well:
         return " / ".join(names)
 
     def __repr__(self):
-        return "<sa_gwdata.Well({}) {}>".format(self.dh_no, self.title)
+        if self.obs_no:
+            return f"'{str(self.obs_no)}'"
+        elif self.unit_hyphen:
+            return f"'{str(self.unit_hyphen)}'"
+        else:
+            return str(self.dh_no)
 
     def to_scalar_dict(self):
         """Convert Well to a dictionary containing scalar values.
