@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name="python-sa-gwdata",
     packages=("sa_gwdata",),
-    version="0.5.4",
+    version="0.6.0",
     description="Unofficial Python package to ease access to groundwater data in South Australia",
     long_description=open("README.md", "r").read(),
     long_description_content_type="text/markdown",
@@ -11,7 +11,7 @@ setup(
     author="Kent Inverarity",
     author_email="kinverarity@hotmail.com",
     license="MIT",
-    install_requires=("requests", "pandas"),
+    install_requires=("requests", "pandas>=0.24.1"),
     classifiers=(
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
