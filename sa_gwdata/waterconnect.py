@@ -8,7 +8,14 @@ import requests
 
 from sa_gwdata.identifiers import parse_well_ids, UnitNo, ObsNo, Well, Wells
 
-__all__ = ("WaterConnectSession", "Response")
+__all__ = (
+    "WaterConnectSession",
+    "Response",
+    "find_wells",
+    "water_levels",
+    "salinities",
+    "drillers_logs",
+)
 
 
 logger = logging.getLogger(__name__)
@@ -41,7 +48,7 @@ class Response(object):
     @property
     def df(self):
         """If the response is a list, convert to a pandas DataFrame with
-        columns converted into the lowercase."""
+        columns converted into lowercase."""
         if not hasattr(self, "_df"):
             df = pd.DataFrame(self.json).rename(columns=str.lower)
             self._df = df
@@ -53,6 +60,85 @@ class Response(object):
         if isinstance(self.json, list):
             return True
         return False
+
+
+def get_global_session(force_new=False):
+    if not "__waterconnect_session" in globals():
+        global __waterconnect_session
+        __waterconnect_session = WaterConnectSession()
+    else:
+        if force_new:
+            del globals()["__waterconnect_session"]
+            __waterconnect_session = WaterConnectSession()
+    return __waterconnect_session
+
+
+def find_wells(input_text, **kwargs):
+    """Find wells and retrieve some summary information.
+
+    Args:
+        input_text (str): any well identifiers to parse. See
+            :func:`sa_gwdata.parse_well_ids_plaintext` for details of
+            other keyword arguments you can pass here.
+
+    For example:
+
+        >>> import sa_gwdata
+        >>> wells = sa_gwdata.find_wells("yat99 5840-46 ULE205")
+        ...
+        >>> wells
+        [<sa_gwdata.Well(6916) 5840-46 / MLC008 / HIGHWAY BORE>, 
+         <sa_gwdata.Well(198752) 6028-2319 / ULE205 / US 1>, 
+         <sa_gwdata.Well(54354) 6628-7385 / YAT099 / ST MICHAELS COLLEGE>
+        ]
+
+    """
+    session = get_global_session()
+    return session.find_wells(input_text, **kwargs)
+
+
+def water_levels(wells, session=None, **kwargs):
+    """Get table of water level measurements for wells.
+
+    Args:
+        wells (list): list of drillhole numbers (ints)
+            or :class:`sa_gwdata.Well` objects
+    
+    Returns: pandas DataFrame.
+
+    """
+    session = get_global_session()
+    return session.bulk_water_levels(wells, **kwargs)
+
+
+def salinities(wells, session=None, **kwargs):
+    """Get table of salinity samples for wells.
+
+    Args:
+        wells (list): list of drillhole numbers (ints)
+            or :class:`sa_gwdata.Well` objects
+    
+    Returns: pandas DataFrame.
+    
+    """
+    if session is None:
+        session = get_global_session()
+    return session.bulk_salinities(wells, **kwargs)
+
+
+def drillers_logs(wells, session=None, **kwargs):
+    """Get table of lithological intervals from drillers logs for wells.
+
+    Args:
+        wells (list): list of drillhole numbers (ints)
+            or :class:`sa_gwdata.Well` objects
+    
+    Returns: pandas DataFrame.
+    
+    """
+    if session is None:
+        session = get_global_session()
+    return session.bulk_drillers_logs(wells, **kwargs)
 
 
 class WaterConnectSession(requests.Session):
@@ -87,7 +173,10 @@ class WaterConnectSession(requests.Session):
         self.well_cache = pd.DataFrame(columns=set(self.well_id_cols.values()))
         self.verify = verify
         if not endpoint:
-            endpoint = "https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/"
+            endpoint = (
+                "https://www.waterconnect.sa.gov.au/_layouts"
+                "/15/dfw.sharepoint.wdd/WDDDMS.ashx/"
+            )
         self.endpoint = endpoint
         self.last_request = time.time() - sleep
         self.sleep = sleep
@@ -100,7 +189,8 @@ class WaterConnectSession(requests.Session):
         Args:
             path (str): final portion of URL path off the end of self.endpoint
                 e.g. to GET
-                ``https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetAdvancedListsData``
+                ``https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd
+                /WDDDMS.ashx/GetAdvancedListsData``
                 then you would use ``path="GetAdvancedListsData"``.
 
         """
@@ -140,8 +230,33 @@ class WaterConnectSession(requests.Session):
             "{service}?bulkOutput={format}".format(service=service, format=format),
             data={"exportdata": json.dumps(json_data)},
         )
+        print(r.response.content)
         with io.BytesIO(r.response.content) as buffer:
             df = pd.read_csv(buffer)
+        return df
+
+    def bulk_water_levels(self, wells, **kwargs):
+        dh_nos = [w for w in wells]
+        if len(wells):
+            if hasattr(wells[0], "dh_no"):
+                dh_nos = [w.dh_no for w in wells]
+        df = self.bulk_download("GetWaterLevelDownload", {"DHNOs": dh_nos})
+        return df
+
+    def bulk_salinities(self, wells, **kwargs):
+        dh_nos = [w for w in wells]
+        if len(wells):
+            if hasattr(wells[0], "dh_no"):
+                dh_nos = [w.dh_no for w in wells]
+        df = self.bulk_download("GetSalinityDownload", {"DHNOs": dh_nos})
+        return df
+
+    def bulk_drillers_logs(self, wells, **kwargs):
+        dh_nos = [w for w in wells]
+        if len(wells):
+            if hasattr(wells[0], "dh_no"):
+                dh_nos = [w.dh_no for w in wells]
+        df = self.bulk_download("GetDrillersLogDownload", {"DHNOs": dh_nos})
         return df
 
     def _cache_data(self, response):
@@ -171,7 +286,10 @@ class WaterConnectSession(requests.Session):
             ...     wells = s.find_wells("yat99 5840-46 ULE205")
             ...
             >>> wells
-            [<sa_gwdata.Well(6916) 5840-46 / MLC008 / HIGHWAY BORE>, <sa_gwdata.Well(198752) 6028-2319 / ULE205 / US 1>, <sa_gwdata.Well(54354) 6628-7385 / YAT099 / ST MICHAELS COLLEGE>]
+            [<sa_gwdata.Well(6916) 5840-46 / MLC008 / HIGHWAY BORE>, 
+             <sa_gwdata.Well(198752) 6028-2319 / ULE205 / US 1>, 
+             <sa_gwdata.Well(54354) 6628-7385 / YAT099 / ST MICHAELS COLLEGE>
+            ]
 
         """
         ids = parse_well_ids(input_text, **kwargs)
@@ -197,6 +315,10 @@ class WaterConnectSession(requests.Session):
 
         """
         response = self.get("GetAdvancedListsData")
+        self.aquifers = {
+            item["V"]: item["T"].replace((item["V"] + ": "), "")
+            for item in response.json["Aquifer"]
+        }
         self.networks = {item["V"]: item["T"] for item in response.json["Networks"]}
         self.nrm_regions = {
             item["V"]: item["T"] + " NRM Region" for item in response.json["NRMRegion"]
