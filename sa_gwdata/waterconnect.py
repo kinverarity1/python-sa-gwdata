@@ -61,6 +61,15 @@ class Response(object):
             return True
         return False
 
+    def gdf(self, x_col="lon", y_col="lat"):
+        from shapely.geometry import Point
+        import geopandas as gpd
+
+        df = self.df
+        return gpd.GeoDataFrame(
+            df, geometry=df.apply(lambda x: Point(x[x_col], x[y_col]), axis=1)
+        )
+
 
 def get_global_session(force_new=False):
     if not "__waterconnect_session" in globals():
@@ -173,17 +182,14 @@ class WaterConnectSession(requests.Session):
         self.well_cache = pd.DataFrame(columns=set(self.well_id_cols.values()))
         self.verify = verify
         if not endpoint:
-            endpoint = (
-                "https://www.waterconnect.sa.gov.au/_layouts"
-                "/15/dfw.sharepoint.wdd/WDDDMS.ashx/"
-            )
+            endpoint = "https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/{app}.ashx/"
         self.endpoint = endpoint
         self.last_request = time.time() - sleep
         self.sleep = sleep
         if load_list_data:
             self.refresh_available_groupings()
 
-    def get(self, path, verify=None, **kwargs):
+    def get(self, path, app="WDDDMS", verify=None, **kwargs):
         """HTTP GET verb to Groundwater Data.
 
         Args:
@@ -202,6 +208,7 @@ class WaterConnectSession(requests.Session):
             time.sleep(t_remain)
         if not path.startswith(self.endpoint):
             path = self.endpoint + path
+        path = path.format(app=app)
         logger.debug("GET {} verify={}".format(path, verify))
         response = super().get(path, verify=verify, **kwargs)
         self.last_request = time.time()
@@ -209,7 +216,7 @@ class WaterConnectSession(requests.Session):
         logger.debug("Response content = {}".format(response.content))
         return self._cache_data(Response(response, endpoint=endpoint, name=name))
 
-    def post(self, path, verify=None, **kwargs):
+    def post(self, path, app="WDDDMS", verify=None, **kwargs):
         # TODO: Implement _cache_data for CSV bulk data formats... ?
         if verify is None:
             verify = self.verify
@@ -219,11 +226,15 @@ class WaterConnectSession(requests.Session):
             time.sleep(t_remain)
         if not path.startswith(self.endpoint):
             path = self.endpoint + path
+        path = path.format(app=app)
         logger.debug("POST {} verify={}".format(path, verify))
         response = super().post(path, verify=verify, **kwargs)
         self.last_request = time.time()
         endpoint, name = path.rsplit("/", 1)
         return Response(response, endpoint=endpoint, name=name)
+
+    def bulk_download_wells(self, service, wells, **kwargs):
+        return bulk_download(service, {"DHNOs": wells.dh_no}, **kwargs)
 
     def bulk_download(self, service, json_data, format="CSV"):
         r = self.post(
@@ -262,10 +273,12 @@ class WaterConnectSession(requests.Session):
     def _cache_data(self, response):
         if response.df_exists:
             rdf = response.df
-            cols_present = set(self.well_id_cols.keys()).intersection(set(rdf.columns))
+            cols_present = list(
+                set(self.well_id_cols.keys()).intersection(set(rdf.columns))
+            )
             rdf2 = rdf[cols_present].rename(columns=self.well_id_cols)
             self.well_cache = (
-                pd.concat([self.well_cache, rdf2], sort=False)
+                pd.concat([self.well_cache, rdf2])
                 .drop_duplicates()
                 .sort_values("unit_long")
             )
@@ -307,6 +320,29 @@ class WaterConnectSession(requests.Session):
                 columns={"dhno": "dh_no", "mapnum": "unit_no", "obsnumber": "obs_no"}
             )
         )
+        for key in ["obs_no", "name"]:
+            if not key in df:
+                df[key] = ""
+            df.loc[df[key].isnull(), key] = ""
+        return Wells([Well(**r.to_dict()) for _, r in df.iterrows()])
+
+    def find_wells_in_lat_lon(self, lats, lons):
+        lons = sorted(lons)
+        lats = sorted(lats)
+        dfs = []
+        
+        coords = [lats[0], lons[0], lats[1], lons[1]]
+        box = ",".join(["{:.4f}".format(c) for c in coords])
+        r = self.get(
+            "GetGridData?Box={box}".format(box=box),
+        )
+        df = r.df.drop_duplicates().rename(
+            columns={"dhno": "dh_no", "mapnum": "unit_no", "obsnumber": "obs_no"}
+        )
+        for key in ["obs_no", "name", "unit_no"]:
+            if not key in df:
+                df[key] = ""
+            df.loc[df[key].isnull(), key] = ""
         return Wells([Well(**r.to_dict()) for _, r in df.iterrows()])
 
     def refresh_available_groupings(self):
