@@ -138,6 +138,66 @@ def wells_summary(wells, session=None, **kwargs):
     
     Returns: pandas DataFrame with these columns:
 
+        - dh_no (int64)
+        - unit_hyphen (str)
+        - unit_long (int64)
+        - dh_name (str)
+        - network (str)
+        - obs_no (str)
+        - drillhole_class (str)
+        - aquifer (str)
+        - orig_drilled_depth (float64)
+        - orig_drilled_date (datetime64[ns])
+        - max_drilled_depth (float64)
+        - max_drilled_date (datetime64[ns])
+        - latest_open_depth (float64)
+        - latest_open_date (datetime64[ns])
+        - latest_permit_no (float64)
+        - cased_to (float64)
+        - casing_min_diam (float64)
+        - purpose (str)
+        - latest_status (str)
+        - latest_status_date (datetime64[ns])
+        - latest_dtw (float64)
+        - latest_swl (float64)
+        - latest_rswl (float64)
+        - latest_wl_date (datetime64[ns])
+        - latest_tds (float64)
+        - latest_ec (float64)
+        - latest_sal_date (datetime64[ns])
+        - latest_ph (float64)
+        - latest_ph_date (datetime64[ns])
+        - latest_yield (float64)
+        - latest_yield_date (datetime64[ns])
+        - easting (float64)
+        - northing (float64)
+        - zone (int64)
+        - lon_deg (int64)
+        - lon_min (int64)
+        - lon_sec (float64)
+        - lat_deg (int64)
+        - lat_min (int64)
+        - lat_sec (float64)
+        - longitude (float64)
+        - latitude_positive (float64)
+        - latitude (float64)
+        - hundred (str)
+        - plan (str)
+        - parcel (str)
+        - cert_title (str)
+        - map_250k (str)
+        - map_100k (int64)
+        - map_50k (int64)
+        - map_10k (int64)
+        - map_2_5k (str)
+        - map_1k (int64)
+        - water_info_exists (str)
+        - salinity_exists (str)
+        - water_chem_exists (str)
+        - geophys_log_exists (str)
+        - drillers_log_exists (str)
+        - lith_log_exists (str)
+
     """
     session = get_global_session()
     return session.bulk_wells_summary(wells, **kwargs)
@@ -150,7 +210,29 @@ def water_levels(wells, session=None, **kwargs):
         wells (list): list of drillhole numbers (ints)
             or :class:`sa_gwdata.Well` objects
     
-    Returns: pandas DataFrame.
+    Returns: pandas DataFrame with these columns:
+
+        - dh_no (int64)
+        - network (str)
+        - unit_long (int64)
+        - aquifer (str)
+        - easting (float64)
+        - northing (float64)
+        - zone (int64)
+        - unit_hyphen (str)
+        - obs_no (str)
+        - obs_date (datetime64[ns])
+        - dtw (float64)
+        - swl (float64)
+        - rswl (float64)
+        - pressure (float64)
+        - temperature (float64)
+        - dry_ind (str)
+        - anomalous_ind (str)
+        - pump_ind (str)
+        - measured_during (str)
+        - data_source (str)
+        - comments (str)
 
     """
     session = get_global_session()
@@ -164,7 +246,28 @@ def salinities(wells, session=None, **kwargs):
         wells (list): list of drillhole numbers (ints)
             or :class:`sa_gwdata.Well` objects
     
-    Returns: pandas DataFrame.
+    Returns: pandas DataFrame with these columns:
+
+        - dh_no (int64)
+        - network (str)
+        - aquifer (str)
+        - unit_hyphen (str)
+        - unit_long (int64)
+        - obs_no (str)
+        - collected_date (datetime64[ns])
+        - collected_time (str)
+        - tds (int64)
+        - ec (int64)
+        - ph (float64)
+        - sample_type (str)
+        - anomalous_ind (str)
+        - test_place (str)
+        - extract_method (str)
+        - measured_during (str)
+        - data_source (str)
+        - easting (float64)
+        - northing (float64)
+        - zone (int64)
     
     """
     if session is None:
@@ -179,7 +282,17 @@ def water_chem(wells, session=None, **kwargs):
         wells (list): list of drillhole numbers (ints)
             or :class:`sa_gwdata.Well` objects
     
-    Returns: pandas DataFrame.
+    Returns: pandas DataFrame with these columns:
+
+        - dh_no (int64)
+        - unit_hyphen (str)
+        - obs_no (str)
+        - sample_no (int64)
+        - collected_date (datetime64[ns])
+        - analysis_code (str)
+        - analysis_name (str)
+        - value (float64)
+        - unit (str)
     
     """
     if session is None:
@@ -194,7 +307,20 @@ def elevation_surveys(wells, session=None, **kwargs):
         wells (list): list of drillhole numbers (ints)
             or :class:`sa_gwdata.Well` objects
     
-    Returns: pandas DataFrame.
+    Returns: pandas DataFrame with these columns:
+
+        - dh_no (int64)
+        - unit_hyphen (str)
+        - obs_no (str)
+        - network (str)
+        - elev_date (datetime64[ns])
+        - ground_elev (float64)
+        - ref_elev (float64)
+        - survey_meth (str)
+        - vert_accuracy (float64)
+        - ref_point_type (str)
+        - applied_date (datetime64[ns])
+        - comments (str)
     
     """
     if session is None:
@@ -209,7 +335,37 @@ def construction_events(wells, session=None, **kwargs):
         wells (list): list of drillhole numbers (ints)
             or :class:`sa_gwdata.Well` objects
     
-    Returns: pandas DataFrame.
+    Returns: pandas DataFrame with these columns:
+
+        - dh_no (int64)
+        - unit_hyphen (str)
+        - obs_no (str)
+        - completion_date (datetime64[ns])
+        - total_depth (float64)
+        - final_depth (float64)
+        - current_depth (float64)
+        - permit_no (float64)
+        - backfilled (str)
+        - casing_from (float64)
+        - casing_to (float64)
+        - casing_min_diam (float64)
+        - casing_material (str)
+        - pcemented (str)
+        - pcement_from (float64)
+        - pcement_to (float64)
+        - pzone_from (float64)
+        - pzone_to (float64)
+        - pzone_min_diam (float64)
+        - pzone_type (str)
+        - pzone_material (str)
+        - pzone_aperture (float64)
+        - drill_from (float64)
+        - drill_to (float64)
+        - drill_diam (float64)
+        - drill_method (str)
+        - development_method (str)
+        - development_duration (float64)
+        - comments (str)
     
     """
     if session is None:
@@ -224,7 +380,54 @@ def construction_details(wells, session=None, **kwargs):
         wells (list): list of drillhole numbers (ints)
             or :class:`sa_gwdata.Well` objects
     
-    Returns: dict with four pandas DataFrames.
+    Returns: dict with four pandas DataFrames. The keys, and the
+        columns of the DataFrames are below:
+
+        * "water_cuts":
+            - dh_no (int64)
+            - unit_hyphen (str)
+            - water_cut_date (datetime64[ns])
+            - depth_from (float64)
+            - depth_to (float64)
+            - swl (float64)
+            - yield (float64)
+            - test_method (str)
+            - tds (float64)
+            - ec (float64)
+            - sample_type (str)
+
+        * "drilling":
+            - dh_no (int64)
+            - unit_hyphen (str)
+            - depth_from (float64)
+            - depth_to (float64)
+            - hole_diam (float64)
+            - drill_method (str)
+            - comments (str)
+
+        * "casing":
+            - dh_no (int64)
+            - unit_hyphen (str)
+            - depth_from (float64)
+            - depth_to (float64)
+            - casing_diam (int64)
+            - casing_material (str)
+            - cement_method (str)
+            - cement_from (float64)
+            - cement_to (float64)
+            - comments (str)
+
+        * "prod_zones":
+            - dh_no (int64)
+            - unit_hyphen (str)
+            - pzone_type (str)
+            - depth_from (float64)
+            - depth_to (float64)
+            - pzone_diam (float64)
+            - pzone_material (str)
+            - pzone_aperture (float64)
+            - comments (str)
+
     
     """
     if session is None:
@@ -239,7 +442,17 @@ def drillers_logs(wells, session=None, **kwargs):
         wells (list): list of drillhole numbers (ints)
             or :class:`sa_gwdata.Well` objects
     
-    Returns: pandas DataFrame.
+    Returns: pandas DataFrame with these columns:
+
+        - dh_no (int64)
+        - unit_hyphen (str)
+        - obs_no (str)
+        - log_date (datetime64[ns])
+        - logger_name (str)
+        - depth_from (float64)
+        - depth_to (float64)
+        - lith_code (str)
+        - description (str)
     
     """
     if session is None:
@@ -254,7 +467,14 @@ def strat_logs(wells, session=None, **kwargs):
         wells (list): list of drillhole numbers (ints)
             or :class:`sa_gwdata.Well` objects
     
-    Returns: pandas DataFrame.
+    Returns: pandas DataFrame with these columns:
+
+        - dh_no (int64)
+        - unit_hyphen (str)
+        - depth_from (float64)
+        - depth_to (float64)
+        - strat_name (str)
+        - gis_code (str)
     
     """
     if session is None:
@@ -269,7 +489,22 @@ def hydrostrat_logs(wells, session=None, **kwargs):
         wells (list): list of drillhole numbers (ints)
             or :class:`sa_gwdata.Well` objects
     
-    Returns: pandas DataFrame.
+    Returns: pandas DataFrame with these columns:
+
+        - dh_no (int64)
+        - unit_hyphen (str)
+        - unit_depth_from (float64)
+        - unit_depth_to (float64)
+        - subunit_depth_from (float64)
+        - subunit_depth_to (float64)
+        - hydro_type (float64)
+        - hydro_depth_to_greater_flag (str)
+        - comments (str)
+        - map_symbol (str)
+        - strat_name (str)
+        - subunit_comments (float64)
+        - subunit_code (float64)
+        - subunit_desc (float64)
     
     """
     if session is None:
@@ -284,7 +519,16 @@ def lith_logs(wells, session=None, **kwargs):
         wells (list): list of drillhole numbers (ints)
             or :class:`sa_gwdata.Well` objects
     
-    Returns: pandas DataFrame.
+    Returns: pandas DataFrame with these columns:
+
+        - dh_no (int64)
+        - unit_hyphen (str)
+        - obs_no (str)
+        - depth_from (float64)
+        - depth_to (float64)
+        - major_lith_code (str)
+        - minor_lith_code (str)
+        - descr (str)
     
     """
     if session is None:
@@ -292,7 +536,7 @@ def lith_logs(wells, session=None, **kwargs):
     return session.bulk_lith_logs(wells, **kwargs)
 
 
-class WaterConnectSession(requests.Session):
+class WaterConnectSession:
     """Wrapper around repeated requests to Groundwater Data.
 
     Args:
@@ -320,7 +564,6 @@ class WaterConnectSession(requests.Session):
     def __init__(
         self, *args, endpoint=None, sleep=2, verify=True, load_list_data=True, **kwargs
     ):
-        super().__init__(*args, **kwargs)
         self.well_cache = pd.DataFrame(columns=set(self.well_id_cols.values()))
         self.verify = verify
         if not endpoint:
@@ -352,7 +595,7 @@ class WaterConnectSession(requests.Session):
             path = self.endpoint + path
         path = path.format(app=app)
         logger.debug("GET {} verify={}".format(path, verify))
-        response = super().get(path, verify=verify, **kwargs)
+        response = requests.get(path, verify=verify, **kwargs)
         self.last_request = time.time()
         endpoint, name = path.rsplit("/", 1)
         logger.debug("Response content = {}".format(response.content))
@@ -370,7 +613,7 @@ class WaterConnectSession(requests.Session):
             path = self.endpoint + path
         path = path.format(app=app)
         logger.debug("POST {} verify={}".format(path, verify))
-        response = super().post(path, verify=verify, **kwargs)
+        response = requests.post(path, verify=verify, **kwargs)
         self.last_request = time.time()
         endpoint, name = path.rsplit("/", 1)
         return Response(response, endpoint=endpoint, name=name)
