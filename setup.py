@@ -12,9 +12,10 @@ setup(
     author_email="kinverarity@hotmail.com",
     license="MIT",
     install_requires=("requests", "pandas>=0.24.1"),
+    python_requires=">=3.6",
     classifiers=(
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
     ),
     keywords="groundwater data",
 )
