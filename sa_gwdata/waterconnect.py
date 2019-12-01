@@ -136,7 +136,7 @@ def wells_summary(wells, session=None, **kwargs):
         wells (list): list of drillhole numbers (ints)
             or :class:`sa_gwdata.Well` objects
     
-    Returns: pandas DataFrame.
+    Returns: pandas DataFrame with these columns:
 
     """
     session = get_global_session()
@@ -224,7 +224,7 @@ def construction_details(wells, session=None, **kwargs):
         wells (list): list of drillhole numbers (ints)
             or :class:`sa_gwdata.Well` objects
     
-    Returns: pandas DataFrame.
+    Returns: dict with four pandas DataFrames.
     
     """
     if session is None:
