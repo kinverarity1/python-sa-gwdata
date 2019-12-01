@@ -265,6 +265,22 @@ class WaterConnectSession(requests.Session):
             if hasattr(wells[0], "dh_no"):
                 dh_nos = [w.dh_no for w in wells]
         df = self.bulk_download("GetWaterLevelDownload", {"DHNOs": dh_nos})
+        df["obs_date"] = pd.to_datetime(df.obs_date, format="%d/%m/%Y")
+        df = df.rename(
+            columns={
+                "DHNO": "dh_no",
+                "Unit_Number": "unit_long",
+                "Aquifer": "aquifer",
+                "Easting": "easting",
+                "Northing": "northing",
+                "Zone": "zone",
+                "Unit_No": "unit_hyphen",
+                "Obs_No": "obs_no",
+                "anom_ind": "anomalous_ind",
+                "Comments": "comments",
+            },
+            errors="ignore",
+        )
         return df
 
     def bulk_salinities(self, wells, **kwargs):
@@ -273,6 +289,29 @@ class WaterConnectSession(requests.Session):
             if hasattr(wells[0], "dh_no"):
                 dh_nos = [w.dh_no for w in wells]
         df = self.bulk_download("GetSalinityDownload", {"DHNOs": dh_nos})
+        df["Collected_date"] = pd.to_datetime(df["Collected_date"], format="%d/%m/%Y")
+        df = df.rename(
+            columns={
+                "DHNO": "dh_no",
+                "Unit_Number": "unit_long",
+                "Aquifer": "aquifer",
+                "Easting": "easting",
+                "Northing": "northing",
+                "Zone": "zone",
+                "Unit_No": "unit_hyphen",
+                "Obs_No": "obs_no",
+                "Collected_date": "collected_date",
+                "Collected_time": "collected_time",
+                "Anomalous_ind": "anomalous_ind",
+                "TDS": "tds",
+                "EC": "ec",
+                "pH": "ph",
+                "Test_Place": "test_place",
+                "Measured_during": "measured_during",
+                "Sample_type": "sample_type",
+            },
+            errors="ignore",
+        )
         return df
 
     def bulk_drillers_logs(self, wells, **kwargs):
@@ -281,6 +320,15 @@ class WaterConnectSession(requests.Session):
             if hasattr(wells[0], "dh_no"):
                 dh_nos = [w.dh_no for w in wells]
         df = self.bulk_download("GetDrillersLogDownload", {"DHNOs": dh_nos})
+        df["log_date"] = pd.to_datetime(df["log_date"], format="%d/%m/%Y")
+        df = df.rename(
+            columns={
+                "DHNO": "dh_no",
+                "Unit_No": "unit_hyphen",
+                "Obs_No": "obs_no",
+            },
+            errors="ignore",
+        )
         return df
 
     def _cache_data(self, response):
@@ -291,7 +339,7 @@ class WaterConnectSession(requests.Session):
             )
             rdf2 = rdf[cols_present].rename(columns=self.well_id_cols)
             self.well_cache = (
-                pd.concat([self.well_cache, rdf2])
+                pd.concat([self.well_cache, rdf2], sort=True)
                 .drop_duplicates()
                 .sort_values("unit_long")
             )
