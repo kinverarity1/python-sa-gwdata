@@ -602,7 +602,6 @@ class WaterConnectSession:
         return self._cache_data(Response(response, endpoint=endpoint, name=name))
 
     def post(self, path, app="WDDDMS", verify=None, **kwargs):
-        # TODO: Implement _cache_data for CSV bulk data formats... ?
         if verify is None:
             verify = self.verify
         t_remain = self.sleep - (time.time() - self.last_request)
@@ -1025,23 +1024,6 @@ class WaterConnectSession:
         return response
 
     def find_wells(self, input_text, **kwargs):
-        """Find wells and retrieve some summary information.
-
-        Args:
-            input_text (str): any well identifiers to parse. See
-                :func:`sa_gwdata.parse_well_ids_plaintext` for details of
-                other keyword arguments you can pass here.
-
-        For example:
-
-            >>> from sa_gwdata import WaterConnectSession
-            >>> with WaterConnectSession() as s:
-            ...     wells = s.find_wells("yat99 5840-46 ULE205")
-            ...
-            >>> wells
-            ['MLC008', 'ULE205', 'YAT099']
-
-        """
         ids = parse_well_ids(input_text, **kwargs)
         dh_nos = [x for id_type, x in ids if id_type == "dh_no"]
         unit_nos = [x for id_type, x in ids if id_type == "unit_no"]
@@ -1064,17 +1046,6 @@ class WaterConnectSession:
         return Wells([Well(**r.to_dict()) for _, r in df.iterrows()])
 
     def find_wells_in_lat_lon(self, lats, lons):
-        """Find wells within a geographic area.
-
-        Args:
-            lats (tuple): two decimal latitudes
-            lons (tuple): two decimal longitudes
-
-        Returns: a list of :class:`sa_gwdata.Well` objects (actually
-            a :class:`sa_gwdata.Wells` object which very closely
-            resembles a list).
-
-        """
         lons = sorted(lons)
         lats = sorted(lats)
         dfs = []
