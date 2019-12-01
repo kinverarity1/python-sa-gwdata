@@ -38,7 +38,6 @@ Version 0.5.3
 ~~~~~~~~~~~~~
 
 - Add ``ObsNo.parse()`` class method  which ignores exceptions.
->>>>>>> b7b3ac7ecb3c651b27a76deef61e76841be1feca
 
 Version 0.5.2
 ~~~~~~~~~~~~~
