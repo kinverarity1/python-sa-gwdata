@@ -16,8 +16,9 @@ This is an unofficial project, use at your own risk/reward.
 Changelog
 ---------
 
-Development version
-~~~~~~~~~~~~~~~~~~~
+Version 0.7.0
+~~~~~~~~~~~~~
+
 - Add ``find_wells``, ``water_levels``, ``salinities`` and `drillers_logs`` functions
 - Complete documentation of JSON webservices
 
