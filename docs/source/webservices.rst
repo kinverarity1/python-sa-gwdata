@@ -22,7 +22,7 @@ These services all take a comma-delimited list and return a list of drillhole nu
 .. include:: GetUnitNumberSearchData.rst
 .. include:: GetObswellNumberSearchData.rst
 .. include:: GetPermitNumberSearchData.rst
-    
+
 Spatially (by rectangle or circle)
 ----------------------------------
 
@@ -59,8 +59,8 @@ Data for a single well
 
 Most groundwater information is obtained through these queries. All these requests are for a single drillhole at a time; see the pages for more details.
 
-Query by DRILLHOLE_NO
----------------------
+Query by drillhole number
+-------------------------
 
 .. include:: GetSummaryDetails.rst
 .. include:: GetWaterLevelDetails.rst
@@ -71,22 +71,8 @@ Query by DRILLHOLE_NO
 .. include:: GetLithologicalLogInformation.rst
 .. include:: GetStratigraphicLogsDetails.rst
 .. include:: GetDrillersLogInformation.rst
-
-include:: GetHydrostratInformation.rst - returns HYDRO_INT_NOs
-include:: GetExtraHydrostratInformation.rst
-
-include:: GetConstructionInformation - returns COMPLETION_NOs
-include:: GetElevationDetails.rst - returns ELEVATION_NOs
-
-Construction data - query by COMPLETION_NO
-------------------------------------------
-
-include:: GetProductionZoneSummary.rst
-include:: GetConstructionSummaryInformation.rst
-include:: GetCasingSummary.rst
-include:: GetDrillingSummary.rst
-include:: GetConstructionWaterCut.rst
-include:: GetExtraSummaryDetails.rst
+.. include:: GetHydrostratInformation.rst
+.. include:: GetConstructionInformation.rst
 
 .. _webservice-metadata:
 
@@ -206,5 +192,5 @@ Lists of names and codes to be used in requests can be obtained through the `Get
       ]
     }
 
-    
+
 .. include:: footer.rst
