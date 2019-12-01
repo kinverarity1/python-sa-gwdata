@@ -12,6 +12,7 @@ __all__ = (
     "WaterConnectSession",
     "Response",
     "find_wells",
+    "find_wells_in_lat_lon",
     "water_levels",
     "salinities",
     "drillers_logs",
@@ -101,6 +102,22 @@ def find_wells(input_text, **kwargs):
     """
     session = get_global_session()
     return session.find_wells(input_text, **kwargs)
+
+
+def find_wells_in_lat_lon(lats, lons, **kwargs):
+    """Find wells within a geographic area.
+
+        Args:
+            lats (tuple): two decimal latitudes
+            lons (tuple): two decimal longitudes
+
+        Returns: a list of :class:`sa_gwdata.Well` objects (actually
+            a :class:`sa_gwdata.Wells` object which very closely
+            resembles a list).
+
+        """
+    session = get_global_session()
+    return session.find_wells_in_lat_lon(lats, lons, **kwargs)
 
 
 def water_levels(wells, session=None, **kwargs):
@@ -238,7 +255,6 @@ class WaterConnectSession(requests.Session):
             "{service}?bulkOutput={format}".format(service=service, format=format),
             data={"exportdata": json.dumps(json_data)},
         )
-        print(r.response.content)
         with io.BytesIO(r.response.content) as buffer:
             df = pd.read_csv(buffer)
         return df
@@ -321,15 +337,24 @@ class WaterConnectSession(requests.Session):
         return Wells([Well(**r.to_dict()) for _, r in df.iterrows()])
 
     def find_wells_in_lat_lon(self, lats, lons):
+        """Find wells within a geographic area.
+
+        Args:
+            lats (tuple): two decimal latitudes
+            lons (tuple): two decimal longitudes
+
+        Returns: a list of :class:`sa_gwdata.Well` objects (actually
+            a :class:`sa_gwdata.Wells` object which very closely
+            resembles a list).
+
+        """
         lons = sorted(lons)
         lats = sorted(lats)
         dfs = []
-        
+
         coords = [lats[0], lons[0], lats[1], lons[1]]
         box = ",".join(["{:.4f}".format(c) for c in coords])
-        r = self.get(
-            "GetGridData?Box={box}".format(box=box),
-        )
+        r = self.get("GetGridData?Box={box}".format(box=box))
         df = r.df.drop_duplicates().rename(
             columns={"dhno": "dh_no", "mapnum": "unit_no", "obsnumber": "obs_no"}
         )
