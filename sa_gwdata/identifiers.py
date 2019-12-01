@@ -300,6 +300,14 @@ class Well:
         """
         self.unit_no.set(*args)
 
+    @property
+    def unit_hyphen(self):
+        return self.unit_no.hyphen
+
+    @property
+    def unit_long(self):
+        return self.unit_no.long
+
     def __eq__(self, other):
         if hasattr(other, "dh_no"):
             return self.dh_no == other.dh_no
