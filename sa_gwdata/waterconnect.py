@@ -96,10 +96,7 @@ def find_wells(input_text, **kwargs):
         >>> wells = sa_gwdata.find_wells("yat99 5840-46 ULE205")
         ...
         >>> wells
-        [<sa_gwdata.Well(6916) 5840-46 / MLC008 / HIGHWAY BORE>, 
-         <sa_gwdata.Well(198752) 6028-2319 / ULE205 / US 1>, 
-         <sa_gwdata.Well(54354) 6628-7385 / YAT099 / ST MICHAELS COLLEGE>
-        ]
+        ['MLC008', 'ULE205', 'YAT099']
 
     """
     session = get_global_session()
@@ -299,10 +296,7 @@ class WaterConnectSession(requests.Session):
             ...     wells = s.find_wells("yat99 5840-46 ULE205")
             ...
             >>> wells
-            [<sa_gwdata.Well(6916) 5840-46 / MLC008 / HIGHWAY BORE>, 
-             <sa_gwdata.Well(198752) 6028-2319 / ULE205 / US 1>, 
-             <sa_gwdata.Well(54354) 6628-7385 / YAT099 / ST MICHAELS COLLEGE>
-            ]
+            ['MLC008', 'ULE205', 'YAT099']
 
         """
         ids = parse_well_ids(input_text, **kwargs)
@@ -347,7 +341,7 @@ class WaterConnectSession(requests.Session):
 
     def refresh_available_groupings(self):
         """Load lists data from API. Stores them in the attributes
-        networks, nrm_regions, pwas, pwras.
+        aquifers, networks, nrm_regions, pwas, pwras.
 
         """
         response = self.get("GetAdvancedListsData")

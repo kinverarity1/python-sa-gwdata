@@ -365,12 +365,13 @@ class Well:
         """Return title containing only characters which are allowed in
         Windows path names."""
         r = str(self)
-        r = r.replace(" /", ";")[1:-1]
         for char in ["\\", "/", "?", ":", "*", '"', "<", ">", "|"]:
             r = r.replace(char, "")
-        if remove_prefix:
-            parts = r.split(")")
-            r = " ".join(parts[1:])[1:]
+
+        # This keyword argument now has no function.
+        # if remove_prefix:
+        #     parts = r.split(")")
+        #     r = " ".join(parts[1:])[1:]
         return r
 
 
