@@ -550,8 +550,8 @@ class WaterConnectSession:
     Usage:
 
         >>> from sa_gwdata import WaterConnectSession
-        >>> with WaterConnectSession() as s:
-        ...     df = s.get("GetObswellNetworkData", params={"Network": "CENT_ADEL"})
+        >>> s = WaterConnectSession()
+        >>> df = s.get("GetObswellNetworkData", params={"Network": "CENT_ADEL"})
 
     """
 
