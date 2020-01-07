@@ -1,6 +1,8 @@
 GetStratigraphicLogsDetails
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+You can request a single drillhole number (DHNO) (see search queries above for how to obtain this number).
+
 `GetStratigraphicLogsDetails?DHNO=28083 <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetStratigraphicLogsDetails?DHNO=28083>`__
 
 .. code-block:: json

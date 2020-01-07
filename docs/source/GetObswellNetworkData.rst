@@ -7,7 +7,7 @@ Note you can request more than one network at a time.
 
 The :ref:`webservice-metadata` section shows how to retrieve the codes for all the different monitoring networks.
 
-Returns a JSON arary of objects (a list of wells) - only 2 are shown below:
+Returns a JSON array of objects (a list of wells) - only 2 are shown below:
 
 .. code-block:: json
 

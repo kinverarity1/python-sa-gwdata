@@ -300,6 +300,14 @@ class Well:
         """
         self.unit_no.set(*args)
 
+    @property
+    def unit_hyphen(self):
+        return self.unit_no.hyphen
+
+    @property
+    def unit_long(self):
+        return self.unit_no.long
+
     def __eq__(self, other):
         if hasattr(other, "dh_no"):
             return self.dh_no == other.dh_no
@@ -333,7 +341,12 @@ class Well:
         return " / ".join(names)
 
     def __repr__(self):
-        return "<sa_gwdata.Well({}) {}>".format(self.dh_no, self.title)
+        if self.obs_no:
+            return f"'{str(self.obs_no)}'"
+        elif self.unit_hyphen:
+            return f"'{str(self.unit_hyphen)}'"
+        else:
+            return str(self.dh_no)
 
     def to_scalar_dict(self):
         """Convert Well to a dictionary containing scalar values.
@@ -360,12 +373,13 @@ class Well:
         """Return title containing only characters which are allowed in
         Windows path names."""
         r = str(self)
-        r = r.replace(" /", ";")[1:-1]
         for char in ["\\", "/", "?", ":", "*", '"', "<", ">", "|"]:
             r = r.replace(char, "")
-        if remove_prefix:
-            parts = r.split(")")
-            r = " ".join(parts[1:])[1:]
+
+        # This keyword argument now has no function.
+        # if remove_prefix:
+        #     parts = r.split(")")
+        #     r = " ".join(parts[1:])[1:]
         return r
 
 

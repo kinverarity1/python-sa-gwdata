@@ -1,36 +1,48 @@
 # python-sa-gwdata
 
-[![Open Source Love svg2](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/kinverarity1/python-sa-gwdata/blob/master/LICENSE)
-[![PyPI pyversions](https://img.shields.io/pypi/pyversions/python-sa-gwdata.svg)](https://pypi.python.org/pypi/python-sa-gwdata/)
-[![PyPI version shields.io](https://img.shields.io/pypi/v/python-sa-gwdata.svg)](https://pypi.python.org/pypi/python-sa-gwdata/)
-[![Build Status](https://travis-ci.com/kinverarity1/python-sa-gwdata.svg?branch=master)](https://travis-ci.com/kinverarity1/python-sa-gwdata)
-[![Documentation Status](https://readthedocs.org/projects/python-sa-gwdata/badge/?version=latest)](http://python-sa-gwdata.readthedocs.io/?badge=latest)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9128405aea4948a8b695946e31e2c02e)](https://app.codacy.com/app/kinverarity/python-sa-gwdata?utm_source=github.com&utm_medium=referral&utm_content=kinverarity1/python-sa-gwdata&utm_campaign=Badge_Grade_Settings)
-[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/f078242bcd8545bea4325ce723b568d9)](https://www.codacy.com/app/kinverarity/python-sa-gwdata?utm_source=github.com&utm_medium=referral&utm_content=kinverarity1/python-sa-gwdata&utm_campaign=Badge_Coverage)
+[![License](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/kinverarity1/aseg_gdf2/blob/master/LICENSE)
 
-``sa_gwdata`` is a Python package to ease access to groundwater data in South Australia.
-It provides access to JSON data from the
-[WaterConnect Groundwater Data](https://www.waterconnect.sa.gov.au/Systems/GD/Pages/Default.aspx) website,
-and also provides some well data from [SARIG](https://minerals.sarig.sa.gov.au/QuickSearch.aspx).
-There are simple methods to easily turn this data into pandas DataFrames.
+Python code to get groundwater data for South Australia
+
+This code provides the Python package ``sa_gwdata`` to make it easier to download and access groundwater data from the South Australian Department for Environment and Water's [Groundwater Data website](https://www.waterconnect.sa.gov.au/Systems/GD/Pages/Default.aspx). It also provides some help for getting related data from the Department for Energy and Mining's [South Australian Resources Information Gateway (SARIG) website](https://minerals.sarig.sa.gov.au/QuickSearch.aspx). 
 
 This is an unofficial side-project done in my spare time.
-
-## Install
-
-```posh
-> pip install python-sa-gwdata
-```
 
 ## How to use
 
 Check out the [documentation](https://python-sa-gwdata.readthedocs.io/en/latest/index.html), and
 some tutorial Jupyter Notebooks in the [notebooks](notebooks) folder.
 
-Start a web session with Groundwater Data:
+Define the wells you are interested in manually:
 
 ```python
 >>> import sa_gwdata
+>>> wells = sa_gwdata.find_wells("5928-203", "ule 96")
+>>> wells
+["LKW042", "ULE096"]
+```
+
+(It has recognised automatically that [5928-203](https://www.waterconnect.sa.gov.au/Systems/GD/Pages/Details.aspx?DHNO=7207&PN=1421712654109#Summary) is also known as LKW042).
+
+Or search for wells by geographic area:
+
+```python
+>>> wells = sa_gwdata.find_wells_in_lat_lon([-34.65, -34.62], [135.47, 135.51])
+```
+
+Then you can download data as pandas DataFrames:
+
+```python
+>>> wls = sa_gwdata.water_levels(wells)
+>>> tds = sa_gwdata.salinities(wells)
+>>> dlogs = sa_gwdata.drillers_logs(wells)
+```
+
+There is also full access to the underlying [set of web services](https://python-sa-gwdata.readthedocs.io/en/latest/webservices.html) which provide a variety of data in JSON format.
+
+Start a session with Groundwater Data:
+
+```python
 >>> session = sa_gwdata.WaterConnectSession()
 ```
 
@@ -56,6 +68,9 @@ With this information we can make some direct REST calls:
 ```python
 >>> r = session.get("GetObswellNetworkData", params={"Network": "CENT_ADEL"})
 >>> r.df.head(5)
+```
+
+```
 	aq_mon	chem	class	dhno	drill_date	lat	latest_open_date	latest_open_depth	latest_sal_date	latest_swl_date	...	pwa	replaceunitnum	sal	salstatus	stat_desc	swl	swlstatus	tds	water	yield
 0	Tomw(T2)	Y	WW	27382	1968-02-07	-34.764662	1992-02-20	225.00	2013-09-02	2018-09-18	...	Central Adelaide	NaN	Y	C	OPR	3.47	C	3620.0	Y	2.00
 1	Qhcks	N	WW	27437	1963-01-01	-34.800905	1963-01-01	6.40	1984-02-01	1986-03-05	...	Central Adelaide	NaN	Y	H	NaN	5.86	H	1121.0	Y	NaN
@@ -64,15 +79,22 @@ With this information we can make some direct REST calls:
 4	Tomw(T1)	Y	WW	27569	1975-01-01	-34.891250	1975-07-09	131.10	1986-11-13	1988-09-21	...	Central Adelaide	NaN	Y	H	BKF	9.90	H	42070.0	Y	12.50
 ```
 
-Get water levels:
+## Install
 
-```python
->>> wl = session.get("GetWaterLevelDetails", params={"DHNO": 188444}).df
->>> wl.head(5)
-	anomalous_ind	data_source_code	measured_during	obs_date	pumping_ind	rswl	standing_water_level
-0	N	DEWNR	D	2002-01-28	N	-8.12	15.08
-1	N	DEWNR	M	2002-03-06	N	-12.50	19.46
-2	N	DEWNR	M	2002-10-02	N	-3.43	10.39
-3	N	DEWNR	M	2003-03-04	N	-11.69	18.65
-4	N	DEWNR	M	2003-09-27	N	-1.93	8.89
+You will need Python 3.6 or a more recent version.
+
+```bash
+$ pip install python-sa-gwdata
 ```
+
+This installs the latest [release](https://github.com/kinverarity1/python-sa-gwdata/releases) of the Python package ``sa_gwdata``.
+
+To install the latest code from GitHub, make sure you the dependencies ``pandas`` and ``requests`` installed, then use:
+
+```bash
+$ pip install https://github.com/kinverarity1/python-sa-gwdata/archive/master.zip
+```
+
+## License
+
+MIT

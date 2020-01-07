@@ -130,19 +130,19 @@ def test_well_manual(attr_name, expected_value):
 
 def test_well_repr():
     well = Well(28255, unit_no="6528-1127", obs_no="YAT124")
-    assert str(well) == "<sa_gwdata.Well(28255) 6528-1127 / YAT124>"
+    assert str(well) == "'YAT124'"
 
 
 def test_well_path_safe_repr():
     well = Well(28255, unit_no="6528-1127", obs_no="YAT124")
-    assert well.path_safe_repr() == "6528-1127; YAT124"
+    assert well.path_safe_repr() == "'YAT124'"
 
 
 def test_well_path_safe_repr_keep_prefix():
     well = Well(28255, unit_no="6528-1127", obs_no="YAT124")
     assert (
         well.path_safe_repr(remove_prefix=False)
-        == "sa_gwdata.Well(28255) 6528-1127; YAT124"
+        == "'YAT124'"
     )
 
 

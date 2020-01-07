@@ -21,7 +21,54 @@ This will install and/or update the Python package ``sa_gwdata``.
 Usage
 ~~~~~
 
-To create the Groundwater Data wrapper:
+You can locate any wells by plain-text search for well identifiers:
+
+.. code-block:: python
+
+    >>> import sa_gwdata
+    >>> wells = sa_gwdata.find_wells("ADE206 ADE207")
+    >>> wells
+    [<sa_gwdata.Well(259424) 6628-25427 / ADE206 / DFW T2>, 
+     <sa_gwdata.Well(259425) 6628-25428 / ADE207 / DFW T1>
+    ]
+
+And then get pandas DataFrames with data in them:
+
+.. code-block:: python
+
+    >>> wls = sa_gwdata.water_levels(wells)
+    >>> wls.info()
+    <class 'pandas.core.frame.DataFrame'>
+    RangeIndex: 55 entries, 0 to 54
+    Data columns (total 21 columns):
+    DHNO               55 non-null int64
+    network            55 non-null object
+    Unit_Number        55 non-null int64
+    Aquifer            55 non-null object
+    Easting            55 non-null float64
+    Northing           55 non-null float64
+    Zone               55 non-null int64
+    Unit_No            55 non-null object
+    Obs_No             55 non-null object
+    obs_date           55 non-null object
+    dtw                48 non-null float64
+    swl                48 non-null float64
+    rswl               48 non-null float64
+    pressure           8 non-null float64
+    temperature        2 non-null float64
+    dry_ind            0 non-null float64
+    anom_ind           55 non-null object
+    pump_ind           55 non-null object
+    measured_during    55 non-null object
+    data_source        55 non-null object
+    Comments           18 non-null object
+    dtypes: float64(8), int64(3), object(10)
+    memory usage: 9.1+ KB
+
+Access to WaterConnect webservices
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To create the Groundwater Data session wrapper:
 
 .. code-block:: python
 
@@ -83,6 +130,39 @@ For futher information, check out the `Jupyter Notebook tutorial
 Docstrings
 ~~~~~~~~~~
 
+Find wells
+----------
+
+.. autofunction:: sa_gwdata.find_wells
+.. autofunction:: sa_gwdata.parse_well_ids_plaintext
+.. autofunction:: sa_gwdata.find_wells_in_lat_lon
+
+Download data
+-------------
+
+.. autofunction:: sa_gwdata.wells_summary
+.. autofunction:: sa_gwdata.water_levels
+.. autofunction:: sa_gwdata.salinities
+.. autofunction:: sa_gwdata.water_chem
+.. autofunction:: sa_gwdata.elevation_surveys
+.. autofunction:: sa_gwdata.construction_events
+.. autofunction:: sa_gwdata.construction_details
+.. autofunction:: sa_gwdata.drillers_logs
+.. autofunction:: sa_gwdata.strat_logs
+.. autofunction:: sa_gwdata.hydrostrat_logs
+.. autofunction:: sa_gwdata.lith_logs
+
+
+Well identifiers
+----------------
+
+.. autoclass:: sa_gwdata.Well
+    :members:
+.. autoclass:: sa_gwdata.UnitNo
+    :members:
+.. autoclass:: sa_gwdata.ObsNo
+    :members:
+
 WaterConnect web service utilities
 ----------------------------------
 
@@ -93,14 +173,4 @@ Any calls to :meth:`sa_gwdata.WaterConnectSession.get` return an
 :class:`sa_gwdata.Response` object:
 
 .. autoclass:: sa_gwdata.Response()
-    :members:
-
-Well identifiers
-----------------
-
-.. autoclass:: sa_gwdata.Well
-    :members:
-.. autoclass:: sa_gwdata.UnitNo
-    :members:
-.. autoclass:: sa_gwdata.ObsNo
     :members:

@@ -1,6 +1,8 @@
 GetLithologicalLogInformation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+You can request a single drillhole number (DHNO) (see search queries above for how to obtain this number).
+
 `GetLithologicalLogInformation?DHNO=27773 <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetLithologicalLogInformation?DHNO=27773>`__
 
 .. code-block:: json
