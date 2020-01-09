@@ -198,3 +198,5 @@ def test_well_bool():
     well = Well(203536, unit_no="6627-11249")
     assert well
 
+def test_well_with_property_kwarg():
+    well = Well(203536, unit_no=662711249, unit_hyphen="6627-11249")
