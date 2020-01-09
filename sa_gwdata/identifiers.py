@@ -168,7 +168,7 @@ class ObsNo:
     def parse(cls, *args, **kwargs):
         """Parse an obs identifier, ignoring all parsing errors.
 
-        Arguments are the same as those for the class constructor, 
+        Arguments are the same as those for the class constructor,
         but all exceptions are ignored.
 
         Returns: ObsNo.id if successful, a blank string if not.
@@ -277,7 +277,11 @@ class Well:
         self.set_unit_no(unit_no)
         self.set_obs_no(obs_no)
         for key, value in kwargs.items():
-            self.set_well_attribute(key, value)
+            if not key in ("unit_long", "unit_hyphen", "id", "title"):
+                try:
+                    self.set_well_attribute(key, value)
+                except AttributeError:
+                    print(f"Error setting {key} to {value}")
 
     def set_well_attribute(self, key, value):
         key = key.lower()
@@ -394,7 +398,7 @@ class Wells(collections.abc.MutableSequence):
         wells (list): list of :class:`sa_gwdata.Well` objects.
 
     All attributes of the contained Well objects will also be
-    present as attributes on this object, returning lists of the 
+    present as attributes on this object, returning lists of the
     values from the Well objects contained here. It sounds more
     complex than it is! Tab completion is enabled, so try it out
     in IPython and you will quickly see how it works.
