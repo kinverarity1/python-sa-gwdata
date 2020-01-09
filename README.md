@@ -4,13 +4,13 @@
 
 Python code to get groundwater data for South Australia
 
-This code provides the Python package ``sa_gwdata`` to make it easier to download and access groundwater data from the South Australian Department for Environment and Water's [Groundwater Data website](https://www.waterconnect.sa.gov.au/Systems/GD/Pages/Default.aspx). It also provides some help for getting related data from the Department for Energy and Mining's [South Australian Resources Information Gateway (SARIG) website](https://minerals.sarig.sa.gov.au/QuickSearch.aspx). 
+This code provides the Python package ``sa_gwdata`` to make it easier to download and access groundwater data from the South Australian Department for Environment and Water's [Groundwater Data website](https://www.waterconnect.sa.gov.au/Systems/GD/Pages/Default.aspx). It also provides some help for getting related data from the Department for Energy and Mining's [South Australian Resources Information Gateway (SARIG) website](https://minerals.sarig.sa.gov.au/QuickSearch.aspx).
 
 This is an unofficial side-project done in my spare time.
 
 ## How to use
 
-Check out the [documentation](https://python-sa-gwdata.readthedocs.io/en/latest/index.html), and
+Check out the [complete package documentation](https://python-sa-gwdata.readthedocs.io/en/latest/index.html), and
 some tutorial Jupyter Notebooks in the [notebooks](notebooks) folder.
 
 Define the wells you are interested in manually:
@@ -84,7 +84,7 @@ With this information we can make some direct REST calls:
 You will need Python 3.6 or a more recent version.
 
 ```bash
-$ pip install python-sa-gwdata
+$ pip install -U python-sa-gwdata
 ```
 
 This installs the latest [release](https://github.com/kinverarity1/python-sa-gwdata/releases) of the Python package ``sa_gwdata``.

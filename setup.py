@@ -3,7 +3,8 @@ from setuptools import setup
 setup(
     name="python-sa-gwdata",
     packages=("sa_gwdata",),
-    version="0.9.0",
+    use_scm_version=True,
+    setup_requires=["setuptools_scm"],
     description="Unofficial Python package to ease access to groundwater data in South Australia",
     long_description=open("README.md", "r").read(),
     long_description_content_type="text/markdown",
