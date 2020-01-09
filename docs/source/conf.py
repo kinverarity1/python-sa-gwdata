@@ -118,7 +118,8 @@ todo_include_todos = True
 
 # -- Options for HTML output ----------------------------------------------
 
-html_theme = 'alabaster'
+# html_theme = 'alabaster'
+html_theme = 'sphinx_rtd_theme'
 
 # import sphinx_bootstrap_theme
 # html_theme = 'bootstrap'

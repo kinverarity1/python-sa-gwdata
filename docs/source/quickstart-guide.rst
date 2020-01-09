@@ -1,4 +1,4 @@
-sa_gwdata Python package
+Quickstart guide
 ========================
 
 The sa_gwdata package currently provides a helpful way to access the
@@ -28,7 +28,7 @@ You can locate any wells by plain-text search for well identifiers:
     >>> import sa_gwdata
     >>> wells = sa_gwdata.find_wells("ADE206 ADE207")
     >>> wells
-    [<sa_gwdata.Well(259424) 6628-25427 / ADE206 / DFW T2>, 
+    [<sa_gwdata.Well(259424) 6628-25427 / ADE206 / DFW T2>,
      <sa_gwdata.Well(259425) 6628-25428 / ADE207 / DFW T1>
     ]
 
@@ -125,52 +125,4 @@ Then to access any of the web service calls:
            'RMK394', 'RMK393', 'RMK390', 'RMK391'], dtype=object)
 
 For futher information, check out the `Jupyter Notebook tutorial
-<https://github.com/kinverarity1/python-sa-gwdata/blob/master/notebooks/tutorial1.ipynb>`__.
-
-Docstrings
-~~~~~~~~~~
-
-Find wells
-----------
-
-.. autofunction:: sa_gwdata.find_wells
-.. autofunction:: sa_gwdata.parse_well_ids_plaintext
-.. autofunction:: sa_gwdata.find_wells_in_lat_lon
-
-Download data
--------------
-
-.. autofunction:: sa_gwdata.wells_summary
-.. autofunction:: sa_gwdata.water_levels
-.. autofunction:: sa_gwdata.salinities
-.. autofunction:: sa_gwdata.water_chem
-.. autofunction:: sa_gwdata.elevation_surveys
-.. autofunction:: sa_gwdata.construction_events
-.. autofunction:: sa_gwdata.construction_details
-.. autofunction:: sa_gwdata.drillers_logs
-.. autofunction:: sa_gwdata.strat_logs
-.. autofunction:: sa_gwdata.hydrostrat_logs
-.. autofunction:: sa_gwdata.lith_logs
-
-
-Well identifiers
-----------------
-
-.. autoclass:: sa_gwdata.Well
-    :members:
-.. autoclass:: sa_gwdata.UnitNo
-    :members:
-.. autoclass:: sa_gwdata.ObsNo
-    :members:
-
-WaterConnect web service utilities
-----------------------------------
-
-.. autoclass:: sa_gwdata.WaterConnectSession
-    :members:
-
-Any calls to :meth:`sa_gwdata.WaterConnectSession.get` return an
-:class:`sa_gwdata.Response` object:
-
-.. autoclass:: sa_gwdata.Response()
-    :members:
+<https://github.com/kinverarity1/python-sa-gwdata/blob/master/notebooks/Tutorial%201%20-%20Use%20JSON%20calls%20to%20get%20data.ipynb>`__.
