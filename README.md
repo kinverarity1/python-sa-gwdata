@@ -17,7 +17,7 @@ Define the wells you are interested in manually:
 
 ```python
 >>> import sa_gwdata
->>> wells = sa_gwdata.find_wells("5928-203", "ule 96")
+>>> wells = sa_gwdata.find_wells("5928-203 and also ULE 96")
 >>> wells
 ["LKW042", "ULE096"]
 ```
