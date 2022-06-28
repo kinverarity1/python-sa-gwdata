@@ -116,15 +116,15 @@ def find_wells(input_text, **kwargs):
 def find_wells_in_lat_lon(lats, lons, **kwargs):
     """Find wells within a geographic area.
 
-        Args:
-            lats (tuple): two decimal latitudes
-            lons (tuple): two decimal longitudes
+    Args:
+        lats (tuple): two decimal latitudes
+        lons (tuple): two decimal longitudes
 
-        Returns: a list of :class:`sa_gwdata.Well` objects (actually
-            a :class:`sa_gwdata.Wells` object which very closely
-            resembles a list).
+    Returns: a list of :class:`sa_gwdata.Well` objects (actually
+        a :class:`sa_gwdata.Wells` object which very closely
+        resembles a list).
 
-        """
+    """
     session = get_global_session()
     return session.find_wells_in_lat_lon(lats, lons, **kwargs)
 
@@ -646,54 +646,58 @@ class WaterConnectSession:
             "yield_date",
         ):
             df[date_col] = pd.to_datetime(df[date_col], format="%d/%m/%Y")
+        remapper = {
+            "DHNO": "dh_no",
+            "Unit_Number": "unit_long",
+            "Aquifer": "aquifer",
+            "mga_easting": "easting",
+            "mga_northing": "northing",
+            "mga_zone": "zone",
+            "Unit_No": "unit_hyphen",
+            "Obs_No": "obs_no",
+            "Orig_drilled_depth": "orig_drilled_depth",
+            "Orig_drilled_date": "orig_drilled_date",
+            "max_drill_depth": "max_drilled_depth",
+            "max_drill_date": "max_drilled_date",
+            "late_open_depth": "latest_open_depth",
+            "late_open_date": "latest_open_date",
+            "late_permit_no": "latest_permit_no",
+            "case_min_diam": "casing_min_diam",
+            "dtw": "latest_dtw",
+            "swl": "latest_swl",
+            "rswl": "latest_rswl",
+            "water_level_date": "latest_wl_date",
+            "TDS": "latest_tds",
+            "EC": "latest_ec",
+            "salinity_date": "latest_sal_date",
+            "pH": "latest_ph",
+            "pH_date": "latest_ph_date",
+            "yield": "latest_yield",
+            "yield_date": "latest_yield_date",
+            "long_degrees": "lon_deg",
+            "long_minutes": "lon_min",
+            "long_seconds": "lon_sec",
+            "lat_degrees": "lat_deg",
+            "lat_minutes": "lat_min",
+            "lat_seconds": "lat_sec",
+            "decimal_long": "longitude",
+            "neg_decimal_lat": "latitude",
+            "decimal_lat": "latitude_positive",
+            "Title": "cert_title",
+            "water_info": "water_info_exists",
+            "salinity": "salinity_exists",
+            "water_chemistry": "water_chem_exists",
+            "geophys_log": "geophys_log_exists",
+            "drill_log": "drillers_log_exists",
+            "lith_log": "lith_log_exists",
+        }
         df = df.rename(
-            columns={
-                "DHNO": "dh_no",
-                "Unit_Number": "unit_long",
-                "Aquifer": "aquifer",
-                "mga_easting": "easting",
-                "mga_northing": "northing",
-                "mga_zone": "zone",
-                "Unit_No": "unit_hyphen",
-                "Obs_No": "obs_no",
-                "Orig_drilled_depth": "orig_drilled_depth",
-                "Orig_drilled_date": "orig_drilled_date",
-                "max_drill_depth": "max_drilled_depth",
-                "max_drill_date": "max_drilled_date",
-                "late_open_depth": "latest_open_depth",
-                "late_open_date": "latest_open_date",
-                "late_permit_no": "latest_permit_no",
-                "case_min_diam": "casing_min_diam",
-                "dtw": "latest_dtw",
-                "swl": "latest_swl",
-                "rswl": "latest_rswl",
-                "water_level_date": "latest_wl_date",
-                "TDS": "latest_tds",
-                "EC": "latest_ec",
-                "salinity_date": "latest_sal_date",
-                "pH": "latest_ph",
-                "pH_date": "latest_ph_date",
-                "yield": "latest_yield",
-                "yield_date": "latest_yield_date",
-                "long_degrees": "lon_deg",
-                "long_minutes": "lon_min",
-                "long_seconds": "lon_sec",
-                "lat_degrees": "lat_deg",
-                "lat_minutes": "lat_min",
-                "lat_seconds": "lat_sec",
-                "decimal_long": "longitude",
-                "neg_decimal_lat": "latitude",
-                "decimal_lat": "latitude_positive",
-                "Title": "cert_title",
-                "water_info": "water_info_exists",
-                "salinity": "salinity_exists",
-                "water_chemistry": "water_chem_exists",
-                "geophys_log": "geophys_log_exists",
-                "drill_log": "drillers_log_exists",
-                "lith_log": "lith_log_exists",
-            },
+            columns=remapper,
             errors="ignore",
         )
+        for col in remapper.values():
+            if not col in df:
+                df = df.assign(**{col: ""})
         return df
 
     def bulk_water_levels(self, wells, **kwargs):
@@ -703,21 +707,25 @@ class WaterConnectSession:
                 dh_nos = [w.dh_no for w in wells]
         df = self.bulk_download("GetWaterLevelDownload", {"DHNOs": dh_nos})
         df["obs_date"] = pd.to_datetime(df.obs_date, format="%d/%m/%Y")
+        remapper = {
+            "DHNO": "dh_no",
+            "Unit_Number": "unit_long",
+            "Aquifer": "aquifer",
+            "Easting": "easting",
+            "Northing": "northing",
+            "Zone": "zone",
+            "Unit_No": "unit_hyphen",
+            "Obs_No": "obs_no",
+            "anom_ind": "anomalous_ind",
+            "Comments": "comments",
+        }
         df = df.rename(
-            columns={
-                "DHNO": "dh_no",
-                "Unit_Number": "unit_long",
-                "Aquifer": "aquifer",
-                "Easting": "easting",
-                "Northing": "northing",
-                "Zone": "zone",
-                "Unit_No": "unit_hyphen",
-                "Obs_No": "obs_no",
-                "anom_ind": "anomalous_ind",
-                "Comments": "comments",
-            },
+            columns=remapper,
             errors="ignore",
         )
+        for col in remapper.values():
+            if not col in df.columns:
+                df = df.assign(**{col: ""})
         return df
 
     def bulk_salinities(self, wells, **kwargs):
@@ -727,28 +735,32 @@ class WaterConnectSession:
                 dh_nos = [w.dh_no for w in wells]
         df = self.bulk_download("GetSalinityDownload", {"DHNOs": dh_nos})
         df["Collected_date"] = pd.to_datetime(df["Collected_date"], format="%d/%m/%Y")
+        remapper = {
+            "DHNO": "dh_no",
+            "Unit_Number": "unit_long",
+            "Aquifer": "aquifer",
+            "Easting": "easting",
+            "Northing": "northing",
+            "Zone": "zone",
+            "Unit_No": "unit_hyphen",
+            "Obs_No": "obs_no",
+            "Collected_date": "collected_date",
+            "Collected_time": "collected_time",
+            "Anomalous_ind": "anomalous_ind",
+            "TDS": "tds",
+            "EC": "ec",
+            "pH": "ph",
+            "Test_Place": "test_place",
+            "Measured_during": "measured_during",
+            "Sample_type": "sample_type",
+        }
         df = df.rename(
-            columns={
-                "DHNO": "dh_no",
-                "Unit_Number": "unit_long",
-                "Aquifer": "aquifer",
-                "Easting": "easting",
-                "Northing": "northing",
-                "Zone": "zone",
-                "Unit_No": "unit_hyphen",
-                "Obs_No": "obs_no",
-                "Collected_date": "collected_date",
-                "Collected_time": "collected_time",
-                "Anomalous_ind": "anomalous_ind",
-                "TDS": "tds",
-                "EC": "ec",
-                "pH": "ph",
-                "Test_Place": "test_place",
-                "Measured_during": "measured_during",
-                "Sample_type": "sample_type",
-            },
+            columns=remapper,
             errors="ignore",
         )
+        for col in remapper.values():
+            if not col in df.columns:
+                df = df.assign(**{col: ""})
         return df
 
     def bulk_water_chem(self, wells, **kwargs):
@@ -758,20 +770,24 @@ class WaterConnectSession:
                 dh_nos = [w.dh_no for w in wells]
         df = self.bulk_download("GetWaterChemistryDownloadAllData", {"DHNOs": dh_nos})
         df["collected_date"] = pd.to_datetime(df["collected_date"], format="%d/%m/%Y")
+        remapper = {
+            "DHNO": "dh_no",
+            "SAMPLE_NO": "sample_no",
+            "Unit_No": "unit_hyphen",
+            "Obs_No": "obs_no",
+            "Collected_date": "collected_date",
+            "Chem_Code": "analysis_code",
+            "Chem_Name": "analysis_name",
+            "Chem_Value": "value",
+            "Chem_Unit_Code": "unit",
+        }
         df = df.rename(
-            columns={
-                "DHNO": "dh_no",
-                "SAMPLE_NO": "sample_no",
-                "Unit_No": "unit_hyphen",
-                "Obs_No": "obs_no",
-                "Collected_date": "collected_date",
-                "Chem_Code": "analysis_code",
-                "Chem_Name": "analysis_name",
-                "Chem_Value": "value",
-                "Chem_Unit_Code": "unit",
-            },
+            columns=remapper,
             errors="ignore",
         )
+        for col in remapper.values():
+            if not col in df.columns:
+                df = df.assign(**{col: ""})
         return df
 
     def bulk_elevation_surveys(self, wells, **kwargs):
@@ -782,23 +798,27 @@ class WaterConnectSession:
         df = self.bulk_download("GetElevationDownload", {"DHNOs": dh_nos})
         for date_col in ("ElevationDate", "AppliedDate"):
             df[date_col] = pd.to_datetime(df[date_col], format="%Y-%m-%d")
+        remapper = {
+            "DHNO": "dh_no",
+            "UnitNumber": "unit_hyphen",
+            "Network": "network",
+            "ObsNo": "obs_no",
+            "ElevationDate": "elev_date",
+            "AppliedDate": "applied_date",
+            "GroundElevation": "ground_elev",
+            "ReferenceElevation": "ref_elev",
+            "SurveyMethod": "survey_meth",
+            "VerticalAccuracy": "vert_accuracy",
+            "ReferencePointType": "ref_point_type",
+            "Comments": "comments",
+        }
         df = df.rename(
-            columns={
-                "DHNO": "dh_no",
-                "UnitNumber": "unit_hyphen",
-                "Network": "network",
-                "ObsNo": "obs_no",
-                "ElevationDate": "elev_date",
-                "AppliedDate": "applied_date",
-                "GroundElevation": "ground_elev",
-                "ReferenceElevation": "ref_elev",
-                "SurveyMethod": "survey_meth",
-                "VerticalAccuracy": "vert_accuracy",
-                "ReferencePointType": "ref_point_type",
-                "Comments": "comments",
-            },
+            columns=remapper,
             errors="ignore",
         )
+        for col in remapper.values():
+            if not col in df.columns:
+                df = df.assign(**{col: ""})
         return df
 
     def bulk_construction_events(self, wells, **kwargs):
@@ -809,32 +829,36 @@ class WaterConnectSession:
         df = self.bulk_download("GetConstructionDownload", {"DHNOs": dh_nos})
         for date_col in ("completion_date",):
             df[date_col] = pd.to_datetime(df[date_col], format="%d/%m/%Y")
+        remapper = {
+            "DHNO": "dh_no",
+            "Unit_No": "unit_hyphen",
+            "Obs_No": "obs_no",
+            "Bkf_ind": "backfilled",
+            "case_from": "casing_from",
+            "case_to": "casing_to",
+            "case_min_diameter": "casing_min_diam",
+            "case_material": "casing_material",
+            "pcem": "pcemented",
+            "pcem_from": "pcement_from",
+            "pcem_to": "pcement_to",
+            "pz_from": "pzone_from",
+            "pz_to": "pzone_to",
+            "pz_min_diameter": "pzone_min_diam",
+            "pz_type": "pzone_type",
+            "pz_material": "pzone_material",
+            "pz_aperture": "pzone_aperture",
+            "drill_meth": "drill_method",
+            "well_dev_method": "development_method",
+            "well_dev_duration": "development_duration",
+            "Comments": "comments",
+        }
         df = df.rename(
-            columns={
-                "DHNO": "dh_no",
-                "Unit_No": "unit_hyphen",
-                "Obs_No": "obs_no",
-                "Bkf_ind": "backfilled",
-                "case_from": "casing_from",
-                "case_to": "casing_to",
-                "case_min_diameter": "casing_min_diam",
-                "case_material": "casing_material",
-                "pcem": "pcemented",
-                "pcem_from": "pcement_from",
-                "pcem_to": "pcement_to",
-                "pz_from": "pzone_from",
-                "pz_to": "pzone_to",
-                "pz_min_diameter": "pzone_min_diam",
-                "pz_type": "pzone_type",
-                "pz_material": "pzone_material",
-                "pz_aperture": "pzone_aperture",
-                "drill_meth": "drill_method",
-                "well_dev_method": "development_method",
-                "well_dev_duration": "development_duration",
-                "Comments": "comments",
-            },
+            columns=remapper,
             errors="ignore",
         )
+        for col in remapper.values():
+            if not col in df.columns:
+                df = df.assign(**{col: ""})
         return df
 
     def bulk_construction_details(self, wells, **kwargs):
@@ -866,70 +890,84 @@ class WaterConnectSession:
                 dfs["water_cuts"][date_col] = pd.to_datetime(
                     dfs["water_cuts"][date_col], format="%Y-%m-%d"
                 )
+            remapper = {
+                "DHNO": "dh_no",
+                "UnitNumber": "unit_hyphen",
+                "WaterCutDate": "water_cut_date",
+                "DepthFrom_m": "depth_from",
+                "DepthTo_m": "depth_to",
+                "WaterLevel_m": "swl",
+                "EstYeld_L_Sec": "yield",
+                "TestMethod": "test_method",
+                "TDS_mg_L": "tds",
+                "EC_us_cm": "ec",
+                "SampleType": "sample_type",
+            }
             dfs["water_cuts"] = dfs["water_cuts"].rename(
-                columns={
-                    "DHNO": "dh_no",
-                    "UnitNumber": "unit_hyphen",
-                    "WaterCutDate": "water_cut_date",
-                    "DepthFrom_m": "depth_from",
-                    "DepthTo_m": "depth_to",
-                    "WaterLevel_m": "swl",
-                    "EstYeld_L_Sec": "yield",
-                    "TestMethod": "test_method",
-                    "TDS_mg_L": "tds",
-                    "EC_us_cm": "ec",
-                    "SampleType": "sample_type",
-                },
+                columns=remapper,
                 errors="ignore",
             )
+            for col in remapper.values():
+                if not col in df.columns:
+                    df = df.assign(**{col: ""})
 
         # drilling
         if "drilling" in dfs:
+            remapper = {
+                "DHNO": "dh_no",
+                "UnitNumber": "unit_hyphen",
+                "From_m": "depth_from",
+                "To_m": "depth_to",
+                "Diammeter_mm": "hole_diam",
+                "Method": "drill_method",
+                "COMMENTS": "comments",
+            }
             dfs["drilling"] = dfs["drilling"].rename(
-                columns={
-                    "DHNO": "dh_no",
-                    "UnitNumber": "unit_hyphen",
-                    "From_m": "depth_from",
-                    "To_m": "depth_to",
-                    "Diammeter_mm": "hole_diam",
-                    "Method": "drill_method",
-                    "COMMENTS": "comments",
-                },
+                columns=remapper,
                 errors="ignore",
             )
+            for col in remapper.values():
+                if not col in df.columns:
+                    df = df.assign(**{col: ""})
 
         # casing
         if "casing" in dfs:
-            dfs["casing"] = dfs["casing"].rename(
-                columns={
-                    "DHNO": "dh_no",
-                    "UnitNumber": "unit_hyphen",
-                    "DepthFrom_m": "depth_from",
-                    "DepthTo_m": "depth_to",
-                    "Diameter_mm": "casing_diam",
-                    "Material": "casing_material",
-                    "CementType": "cement_method",
-                    "CementFrom_m": "cement_from",
-                    "CementTo_m": "cement_to",
-                    "COMMENTS": "comments",
-                }
-            )
+            remapper = {
+                "DHNO": "dh_no",
+                "UnitNumber": "unit_hyphen",
+                "DepthFrom_m": "depth_from",
+                "DepthTo_m": "depth_to",
+                "Diameter_mm": "casing_diam",
+                "Material": "casing_material",
+                "CementType": "cement_method",
+                "CementFrom_m": "cement_from",
+                "CementTo_m": "cement_to",
+                "COMMENTS": "comments",
+            }
+            dfs["casing"] = dfs["casing"].rename(columns=remapper, errors="ignore")
+            for col in remapper.values():
+                if not col in df.columns:
+                    df = df.assign(**{col: ""})
 
         # prod_zones
         if "prod_zones" in dfs:
+            remapper = {
+                "DHNO": "dh_no",
+                "UnitNumber": "unit_hyphen",
+                "Type": "pzone_type",
+                "DepthFrom_m": "depth_from",
+                "DepthTo_m": "depth_to",
+                "Diameter_mm": "pzone_diam",
+                "Material": "pzone_material",
+                "Aperture_mm": "pzone_aperture",
+                "COMMENTS": "comments",
+            }
             dfs["prod_zones"] = dfs["prod_zones"].rename(
-                columns={
-                    "DHNO": "dh_no",
-                    "UnitNumber": "unit_hyphen",
-                    "Type": "pzone_type",
-                    "DepthFrom_m": "depth_from",
-                    "DepthTo_m": "depth_to",
-                    "Diameter_mm": "pzone_diam",
-                    "Material": "pzone_material",
-                    "Aperture_mm": "pzone_aperture",
-                    "COMMENTS": "comments",
-                }
+                columns=remapper, errors="ignore"
             )
+            for col in remapper.values():
+                if not col in df.columns:
+                    df = df.assign(**{col: ""})
         return dfs
 
     def bulk_drillers_logs(self, wells, **kwargs):
@@ -939,10 +977,14 @@ class WaterConnectSession:
                 dh_nos = [w.dh_no for w in wells]
         df = self.bulk_download("GetDrillersLogDownload", {"DHNOs": dh_nos})
         df["log_date"] = pd.to_datetime(df["log_date"], format="%d/%m/%Y")
+        remapper = {"DHNO": "dh_no", "Unit_No": "unit_hyphen", "Obs_No": "obs_no"}
         df = df.rename(
-            columns={"DHNO": "dh_no", "Unit_No": "unit_hyphen", "Obs_No": "obs_no"},
+            columns=remapper,
             errors="ignore",
         )
+        for col in remapper.values():
+            if not col in df.columns:
+                df = df.assign(**{col: ""})
         return df
 
     def bulk_strat_logs(self, wells, **kwargs):
@@ -951,17 +993,21 @@ class WaterConnectSession:
             if hasattr(wells[0], "dh_no"):
                 dh_nos = [w.dh_no for w in wells]
         df = self.bulk_download("GetStratLogDownload", {"DHNOs": dh_nos})
+        remapper = {
+            "DHNO": "dh_no",
+            "UNITNUMBER": "unit_hyphen",
+            "STRAT_DEPTH_FROM": "depth_from",
+            "STRAT_DEPTH_TO": "depth_to",
+            "STRAT_NAME": "strat_name",
+            "GIS_CODE": "gis_code",
+        }
         df = df.rename(
-            columns={
-                "DHNO": "dh_no",
-                "UNITNUMBER": "unit_hyphen",
-                "STRAT_DEPTH_FROM": "depth_from",
-                "STRAT_DEPTH_TO": "depth_to",
-                "STRAT_NAME": "strat_name",
-                "GIS_CODE": "gis_code",
-            },
+            columns=remapper,
             errors="ignore",
         )
+        for col in remapper.values():
+            if not col in df.columns:
+                df = df.assign(**{col: ""})
         return df
 
     def bulk_hydrostrat_logs(self, wells, **kwargs):
@@ -970,26 +1016,30 @@ class WaterConnectSession:
             if hasattr(wells[0], "dh_no"):
                 dh_nos = [w.dh_no for w in wells]
         df = self.bulk_download("GetHydroStratLogDownload", {"DHNOs": dh_nos})
+        remapper = {
+            "DHNO": "dh_no",
+            "UNITNUMBER": "unit_hyphen",
+            "HYDRO_DEPTH_FROM": "unit_depth_from",
+            "HYDRO_DEPTH_TO": "unit_depth_to",
+            "HYDRO_SUBUNIT_DEPTH_FROM": "subunit_depth_from",
+            "HYDRO_SUBUNIT_DEPTH_TO": "subunit_depth_to",
+            "HYDRO_TYPE": "hydro_type",
+            "HYDRO_DEPTH_TO_GREATER_FLAG": "hydro_depth_to_greater_flag",
+            "COMMENTS": "comments",
+            "MAP_SYMBOL": "map_symbol",
+            "STRAT_NAME": "strat_name",
+            "GIS_CODE": "gis_code",
+            "HYDRO_SUBUNIT_COMMENTS": "subunit_comments",
+            "HYDRO_SUBUNIT_CODE": "subunit_code",
+            "HYDRO_SUBUNIT_DESC": "subunit_desc",
+        }
         df = df.rename(
-            columns={
-                "DHNO": "dh_no",
-                "UNITNUMBER": "unit_hyphen",
-                "HYDRO_DEPTH_FROM": "unit_depth_from",
-                "HYDRO_DEPTH_TO": "unit_depth_to",
-                "HYDRO_SUBUNIT_DEPTH_FROM": "subunit_depth_from",
-                "HYDRO_SUBUNIT_DEPTH_TO": "subunit_depth_to",
-                "HYDRO_TYPE": "hydro_type",
-                "HYDRO_DEPTH_TO_GREATER_FLAG": "hydro_depth_to_greater_flag",
-                "COMMENTS": "comments",
-                "MAP_SYMBOL": "map_symbol",
-                "STRAT_NAME": "strat_name",
-                "GIS_CODE": "gis_code",
-                "HYDRO_SUBUNIT_COMMENTS": "subunit_comments",
-                "HYDRO_SUBUNIT_CODE": "subunit_code",
-                "HYDRO_SUBUNIT_DESC": "subunit_desc",
-            },
+            columns=remapper,
             errors="ignore",
         )
+        for col in remapper.values():
+            if not col in df.columns:
+                df = df.assign(**{col: ""})
         return df
 
     def bulk_lith_logs(self, wells, **kwargs):
@@ -998,15 +1048,19 @@ class WaterConnectSession:
             if hasattr(wells[0], "dh_no"):
                 dh_nos = [w.dh_no for w in wells]
         df = self.bulk_download("GetLithologicalLogDownload", {"DHNOs": dh_nos})
+        remapper = {
+            "DHNO": "dh_no",
+            "Unit_No": "unit_hyphen",
+            "Obs_No": "obs_no",
+            "Description": "descr",
+        }
         df = df.rename(
-            columns={
-                "DHNO": "dh_no",
-                "Unit_No": "unit_hyphen",
-                "Obs_No": "obs_no",
-                "Description": "descr",
-            },
+            columns=remapper,
             errors="ignore",
         )
+        for col in remapper.values():
+            if not col in df.columns:
+                df = df.assign(**{col: ""})
         return df
 
     def _cache_data(self, response):
