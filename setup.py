@@ -1,5 +1,14 @@
 from setuptools import setup
 
+TEST_REQS = (
+    "pytest>=3.6",
+    "pytest-cov",
+    "coverage",
+    "codecov",
+    "pytest-benchmark",
+    "black",
+)
+
 setup(
     name="python-sa-gwdata",
     packages=("sa_gwdata",),
@@ -13,6 +22,8 @@ setup(
     author_email="kinverarity@hotmail.com",
     license="MIT",
     install_requires=("requests", "pandas>=0.24.1"),
+    # extras_require={"all": EXTRA_REQS, "test": (EXTRA_REQS, TEST_REQS)},
+    tests_require=(TEST_REQS),
     python_requires=">=3.6",
     classifiers=(
         "Programming Language :: Python :: 3.6",
