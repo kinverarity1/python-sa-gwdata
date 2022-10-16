@@ -11,6 +11,7 @@ This is an unofficial project, use at your own risk/reward.
     :caption: Contents:
 
     quickstart-guide
+    background
     apidocs
     webservices
     changelog

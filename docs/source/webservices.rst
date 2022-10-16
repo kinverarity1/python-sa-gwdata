@@ -41,6 +41,7 @@ You can search by general-purpose geographic information:
 .. include:: GetSuburbFromName.rst
 .. include:: GetLGAFromName.rst
 .. include:: GetNRMRegionSearchData.rst
+.. include:: GetLBSearchData.rst
 .. include:: GetHundredParcelData.rst
 
 Spatially (by observation network, PWA, or PWRA)

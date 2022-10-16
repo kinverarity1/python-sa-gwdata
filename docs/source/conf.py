@@ -127,7 +127,7 @@ html_theme = 'sphinx_rtd_theme'
 
 # html_theme = 'guzzle_sphinx_theme'
 html_theme_options = {
-  "show_relbars": True
+  # "show_relbars": True
 }
 
 # html_sidebars = {
