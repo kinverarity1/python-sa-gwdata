@@ -9,6 +9,11 @@ TEST_REQS = (
     "black",
 )
 
+DOC_REQS = (
+    "sphinx",
+    "sphinx_rtd_theme",
+)
+
 setup(
     name="python-sa-gwdata",
     packages=("sa_gwdata",),
@@ -22,7 +27,7 @@ setup(
     author_email="kinverarity@hotmail.com",
     license="MIT",
     install_requires=("requests", "pandas>=0.24.1"),
-    # extras_require={"all": EXTRA_REQS, "test": (EXTRA_REQS, TEST_REQS)},
+    extras_require={"test": (TEST_REQS, ), "doc": (DOC_REQS, )},
     tests_require=(TEST_REQS),
     python_requires=">=3.6",
     classifiers=(
