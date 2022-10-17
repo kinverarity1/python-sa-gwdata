@@ -14,6 +14,8 @@ This is an unofficial project, use at your own risk/reward.
     background
     available-data
     tutorial-finding-wells
+    tutorial-monitoring-networks
+    tutorial-water-monitoring-data
     apidocs
     webservices
     changelog

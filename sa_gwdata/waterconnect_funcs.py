@@ -8,6 +8,7 @@ import pandas as pd
 import requests
 
 from sa_gwdata.identifiers import *
+from sa_gwdata.waterconnect import *
 
 
 logger = logging.getLogger(__name__)
@@ -124,12 +125,16 @@ def wells_summary(wells, session=None, **kwargs):
     return session.bulk_wells_summary(wells, **kwargs)
 
 
-def water_levels(wells, session=None, **kwargs):
+def water_levels(wells, pumping=False, anomalous=True, session=None, **kwargs):
     """Get table of water level measurements for wells.
 
     Args:
         wells (list): list of drillhole numbers (ints)
             or :class:`sa_gwdata.Well` objects
+        pumping (bool): include measurements flagged as "well being subject
+            to the influence of local pumping" - default False
+        anomalous (bool): include measurements flagged as being anomalous
+            default True, as this can be subjective.
 
     Returns: pandas DataFrame with these columns:
 
@@ -157,7 +162,7 @@ def water_levels(wells, session=None, **kwargs):
 
     """
     session = get_global_session()
-    return session.bulk_water_levels(wells, **kwargs)
+    return session.bulk_water_levels(wells, pumping=pumping, anomalous=anomalous, **kwargs)
 
 
 def salinities(wells, session=None, **kwargs):
@@ -458,7 +463,7 @@ def lith_logs(wells, session=None, **kwargs):
     return session.bulk_lith_logs(wells, **kwargs)
 
 
-def search_by_suburb(self, suburb, session=None, **kwargs):
+def search_by_suburb(suburb, session=None, **kwargs):
     """Find wells by suburb name.
 
     Args:
@@ -473,10 +478,10 @@ def search_by_suburb(self, suburb, session=None, **kwargs):
     suburb = suburb.upper()
     if session is None:
         session = get_global_session()
-    return session.search_by_suburb(wells, **kwargs)
+    return session.search_by_suburb(suburb, **kwargs).gdf()
 
 
-def search_by_radius(self, lat, lon, radius, session=None, **kwargs):
+def search_by_radius(lat, lon, radius, session=None, **kwargs):
     """Find wells by radius around a geographic point.
 
     Args:
@@ -499,10 +504,10 @@ def search_by_radius(self, lat, lon, radius, session=None, **kwargs):
     assert lat > -50
     if session is None:
         session = get_global_session()
-    return session.search_by_radius(lat, lon, radius, **kwargs)
+    return session.search_by_radius(lat, lon, radius, **kwargs).gdf()
 
 
-def search_by_rect(self, sw_corner, ne_corner, session=None, **kwargs):
+def search_by_rect(sw_corner, ne_corner, session=None, **kwargs):
     """Find wells within a rectangle.
 
     Args:
@@ -521,4 +526,27 @@ def search_by_rect(self, sw_corner, ne_corner, session=None, **kwargs):
     """
     if session is None:
         session = get_global_session()
-    return session.search_by_rect(sw_corner, ne_corner, **kwargs)
+    return session.search_by_rect(sw_corner, ne_corner, **kwargs).gdf()
+
+def search_by_network(*network_codes, session=None, **kwargs):
+    """Find wells within observation well networks (one or more network).
+
+    Args:
+        network_codes (str): network codes e.g. KAT_FP, NAP, STHNBASINS, LLC_STH
+
+    Returns:
+        pandas DataFrame with these columns:
+
+        - xxx
+
+    Example:
+
+    .. code-block:: python
+
+        >>> import sa_gwdata
+        >>> wells = sa_gwdata.search_by_network("WMLR", "MCL_VALE")
+    
+    """
+    if session is None:
+        session = get_global_session()
+    return session.search_by_network(*network_codes, **kwargs).gdf()

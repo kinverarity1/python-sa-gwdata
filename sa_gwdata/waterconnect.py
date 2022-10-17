@@ -43,25 +43,30 @@ class Response(object):
         """If the response is a list, convert to a pandas DataFrame with
         columns converted into lowercase."""
         if not hasattr(self, "_df"):
-            if "DHNO" in self.json[0]:
-                if isinstance(self.json[0]["DHNO"], list):
-                    # e.g. GetSuburbFromName
-                    convert_object = self.json[0]["DHNO"]
+            if len(self.json) > 0:
+                if "DHNO" in self.json[0]:
+                    if isinstance(self.json[0]["DHNO"], list):
+                        # e.g. GetSuburbFromName
+                        convert_object = self.json[0]["DHNO"]
+                    else:
+                        convert_object = self.json
                 else:
+                    # e.g. GetPWASearchData
                     convert_object = self.json
-            else:
-                # e.g. GetPWASearchData
-                convert_object = self.json
 
-            df = pd.DataFrame(convert_object).rename(columns=str.lower)
-            self._df = df
+                df = pd.DataFrame(convert_object).rename(columns=str.lower)
+                self._df = df
+                logger.debug(f"Response has length={len(df)}")
+            else:
+                logger.debug("Response is empty")
         return self._df
 
     @property
     def df_exists(self):
         """Check if JSON can be converted to a DataFrame. Returns bool."""
         if isinstance(self.json, list):
-            return True
+            if len(self.json) > 0:
+                return True
         return False
 
     def gdf(self, x_col="lon", y_col="lat"):
@@ -259,12 +264,12 @@ class WaterConnectSession:
         )
         return df
 
-    def bulk_water_levels(self, wells, **kwargs):
+    def bulk_water_levels(self, wells, pumping=True, anomalous=True, **kwargs):
         dh_nos = [w for w in wells]
         if len(wells):
             if hasattr(wells[0], "dh_no"):
                 dh_nos = [w.dh_no for w in wells]
-        df = self.bulk_download("GetWaterLevelDownload", {"DHNOs": dh_nos})
+        df = self.bulk_download("GetWaterLevelDownload", {"DHNOs": dh_nos, "Pumping": pumping, "Anomalous": anomalous})
         df["obs_date"] = pd.to_datetime(df.obs_date, format="%d/%m/%Y")
         df = df.rename(
             columns={
@@ -595,8 +600,9 @@ class WaterConnectSession:
         r2 = self.get(
             "GetObswellNumberSearchData", params={"OBSNUMBER": ",".join(obs_nos)}
         )
+        dfs = [r.df for r in [r1, r2] if r.df_exists]
         df = (
-            pd.concat([r1.df, r2.df], sort=False)
+            pd.concat(dfs, sort=False)
             .drop_duplicates()
             .rename(
                 columns={"dhno": "dh_no", "mapnum": "unit_no", "obsnumber": "obs_no"}
@@ -677,3 +683,11 @@ class WaterConnectSession:
             "GetGridData",
             params="Box=" + ",".join([str(c) for c in [lat1, lon0, lat0, lon1]]),
         )
+
+    def search_by_network(self, *network):
+        network_codes = [n for n in network if n in self.networks.keys()]
+        networks_inverted = {v: k for k, v in self.networks.items()}
+        network_codes += [networks_inverted[n] for n in network if n in self.networks.values()]
+        logger.debug(f"Querying for validated network codes: {network_codes}")
+        return self.get("GetObswellNetworkData", params="Network=" + ",".join(network_codes))
+
