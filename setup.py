@@ -9,12 +9,6 @@ TEST_REQS = (
     "black",
 )
 
-DOC_REQS = (
-    "sphinx",
-    "sphinx_rtd_theme",
-    "nbsphinx",
-)
-
 EXTRA_REQS = (
     "shapely",
     "contextily",
@@ -36,8 +30,7 @@ setup(
     install_requires=("requests", "pandas>=0.24.1"),
     extras_require={
         "test": (TEST_REQS,),
-        "doc": (DOC_REQS,),
-        "all": (TEST_REQS, DOC_REQS, EXTRA_REQS),
+        "all": (TEST_REQS, EXTRA_REQS),
     },
     tests_require=(TEST_REQS),
     python_requires=">=3.6",
