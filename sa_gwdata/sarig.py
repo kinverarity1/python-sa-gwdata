@@ -24,4 +24,3 @@ def fetch_dh_doc_image_urls(dh_no):
     query = SARIG_QUERY.format(drillhole="{:.0f}".format(dh_no))
     response = requests.get(query)
     return [SARIG_IMAGE_URL.format(match=m) for m in IMAGE_NO_RE.findall(response.text)]
-

@@ -12,6 +12,8 @@ This is an unofficial project, use at your own risk/reward.
 
     quickstart-guide
     background
+    available-data
+    tutorial-finding-wells
     apidocs
     webservices
     changelog

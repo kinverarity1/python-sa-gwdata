@@ -19,4 +19,3 @@ def test_dh_doc_images():
         "https://minerals.sarig.sa.gov.au/DisplayHistoricalDocument.aspx?image_no=399203&is_thumbnail=N",
         "https://minerals.sarig.sa.gov.au/DisplayHistoricalDocument.aspx?image_no=399204&is_thumbnail=N",
     ]
-

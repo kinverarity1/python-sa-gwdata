@@ -594,4 +594,3 @@ def parse_well_ids_plaintext(
                     ("obs_no", "{}{:03.0f}".format(match[0].upper(), int(match[1])))
                 )
     return well_ids
-

@@ -7,8 +7,23 @@ WaterConnect web services (see following page) and provide data as
 easier ways to find and use well IDs across the entire interface, and other
 things.
 
+Requirements
+~~~~~~~~~~~~~
+
+Strictly, the only dependencies needed to run this package are 
+requests and pandas, and they will install automatically with ``python-sa-gwdata``
+if needed.
+
+However, if you want to use the spatial data returned
+more easily (and e.g. run the included tutorials), you will need geopandas
+installed. If you are using conda you can easily install geopandas with
+
+.. code-block:: powershell
+
+    > conda install -c conda-forge geopandas
+
 Install
-~~~~~~~
+~~~~~~~~~~
 
 You can install sa_gwdata the usual way:
 

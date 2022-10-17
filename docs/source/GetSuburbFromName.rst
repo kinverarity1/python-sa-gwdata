@@ -1,7 +1,7 @@
 GetSuburbFromName
 ^^^^^^^^^^^^^^^^^
 
-`GetSuburbFromName?Suburb=ALBERT%20PARK <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetSuburbFromName?Suburb=ALBERT%20PARK>`__
+`GetSuburbFromName?Suburb=ALBERT%20PARK <https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDWFS.ashx/GetSuburbFromName?Suburb=ALBERT%20PARK>`__
 
 .. include:: polyline-explainer.rst
 
