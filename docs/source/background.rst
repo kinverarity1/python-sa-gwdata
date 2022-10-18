@@ -15,11 +15,14 @@ only on the data point of view.
 
 - **Drillhole number**: Drillholes are uniquely identified by this. It is 
   strictly an integer which ranges from one up to six digits. e.g. 53925. 
-  Note that it forms part of the unique URL to both Groundwater Data 
+  Note that it forms part of the unique URL to both Groundwater Data:
+
   https://www.waterconnect.sa.gov.au/Systems/GD/Pages/Details.aspx?DHNO=53925
-  and 
-  the SARIG drillhole database
+  
+  and to the SARIG drillhole database:
+
   https://minerals.sarig.sa.gov.au/Details.aspx?DRILLHOLE_NO=53925
+
 - **Unit number**: this is a set of two numbers: a four digit mapsheet number
   e.g. 6628, and an integer as sequence number, e.g. 6956. The mapsheet and
   sequence numbers, when presented together, form a "unit number". It can be 
@@ -28,7 +31,8 @@ only on the data point of view.
   five digits) and "6628-06956" (seen in contexts relating to water licensing).
   Unit numbers are available for all drillholes visible on Groundwater Data.
   Although they are generally used only for water wells, they do exist for 
-  all wells.
+  all wells. 
+  
 - **Observation well ID** (also known as **obsnumber**): this is a similar 
   concept to the unit number, but utilises abbreviated observation well "hundreds"
   for the mapsheet e.g. "YAT" (referring to the hundred of Yatala), and 
@@ -45,24 +49,35 @@ together (e.g. a multi-tail exploration or petroleum well) or located together
 bore. Unfortunately the database doesn't link these together (!) other than 
 that they are likely to have exactly the same spatial coordinates.
 
-Spatial concepts
-~~~~~~~~~~~~~~~~
+Spatial groupings
+~~~~~~~~~~~~~~~~~~~
 
 Groundwater is managed in SA in a variety of ways, and some of these are
 available through Groundwater Data:
 
-- **Landscape Regions** / **NRM Regions** (NRM = Natural Resource Management)
+- **Landscape region** / **Natural resource management (NRM) region** 
   These are large-scale areas which have responsibility for management of 
-  water resources. See this page for more info: https://www.landscape.sa.gov.au/
-- **Prescribed Wells Areas** (PWAs) - these are smaller scale areas which are
-  used to manage groundwater resources via water allocation plans (WAPs) - https://location.sa.gov.au/viewer/?map=hybrid&x=142.06629&y=-31.83374&z=6&uids=156.
-- **Prescribed Water Resource Areas** (PWRAs) - very similar to PWAs, but they
-  are used for both groundwater and surface water resources - see https://location.sa.gov.au/viewer/?map=hybrid&x=140.33869&y=-34.35527&z=8&uids=154
-- **Observation Well Networks** - these are not spatially as such, but they are
-  manually maintained groupings of water monitoring wells which DEW visits
-  each year to measure water level and/or salinity from, and they are grouped
-  into geographical areas. You can see a list on the Groundwater Data
+  water resources - see `Landscape SA <https://www.landscape.sa.gov.au/>`__ for
+  more information.
+
+- **Prescribed well area** (PWA) - these are smaller scale areas which are
+  used to manage groundwater resources via a water allocation plans (WAP). 
+  You can see all of the PWAs in SA on 
+  `Location SA <https://location.sa.gov.au/viewer/?map=hybrid&x=142.06629&y=-31.83374&z=6&uids=156>`__.
+
+- **Prescribed water resource area** (PWRA) - similar to a PWA, but they
+  are used for both groundwater and surface water resources. To see all of the
+  PWRAs in SA visit `Location SA <https://location.sa.gov.au/viewer/?map=hybrid&x=140.33869&y=-34.35527&z=8&uids=154>`__.
+
+- **Observation well network** - these are not defined spatially. They are
+  manually maintained lists of monitoring wells which DEW visits
+  each year to measure water level and/or salinity. They generally correspond
+  to a geographical area. You can see a list on the Groundwater Data
   website:
 
 .. figure:: figures/obswell_networks.png
 
+
+.. |br| raw:: html
+
+   <br />

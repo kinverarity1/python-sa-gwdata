@@ -12,6 +12,8 @@ Water well monitoring data is available through Groundwater Data:
   deliberately for monitoring (or sampled from an irrigation pump), and
   the salinity estimated by measuring the electrical conductivity (EC)
 
+See here for an example: :doc:`tutorial-water-monitoring-data`.
+
 Lithological and stratigraphic data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
