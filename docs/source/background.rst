@@ -13,35 +13,50 @@ a data point of view it doesn't matter much). I'll use the language
 "drillhole" and "well" largely interchangeably from here on, as this is focused
 only on the data point of view.
 
-- **Drillhole number**: Drillholes are uniquely identified by this. It is 
-  strictly an integer which ranges from one up to six digits. e.g. 53925. 
-  Note that it forms part of the unique URL to both Groundwater Data:
+.. _drillhole-number:
 
-  https://www.waterconnect.sa.gov.au/Systems/GD/Pages/Details.aspx?DHNO=53925
+Drillhole number
+----------------
+
+Drillholes are uniquely identified by this. It is 
+strictly an integer which ranges from one up to six digits. e.g. 53925. 
+Note that it forms part of the unique URL to both Groundwater Data:
+
+https://www.waterconnect.sa.gov.au/Systems/GD/Pages/Details.aspx?DHNO=53925
   
-  and to the SARIG drillhole database:
+and to the SARIG drillhole database:
 
-  https://minerals.sarig.sa.gov.au/Details.aspx?DRILLHOLE_NO=53925
+https://minerals.sarig.sa.gov.au/Details.aspx?DRILLHOLE_NO=53925
 
-- **Unit number**: this is a set of two numbers: a four digit mapsheet number
-  e.g. 6628, and an integer as sequence number, e.g. 6956. The mapsheet and
-  sequence numbers, when presented together, form a "unit number". It can be 
-  presented in a variety of different formats e.g. "6628-6956" (the most common),
-  "662806956" (an integer representation formed by padding the sequence to
-  five digits) and "6628-06956" (seen in contexts relating to water licensing).
-  Unit numbers are available for all drillholes visible on Groundwater Data.
-  Although they are generally used only for water wells, they do exist for 
-  all wells. 
-  
-- **Observation well ID** (also known as **obsnumber**): this is a similar 
-  concept to the unit number, but utilises abbreviated observation well "hundreds"
-  for the mapsheet e.g. "YAT" (referring to the hundred of Yatala), and 
-  a similar observation well network sequence number e.g. 27. It is then presented,
-  like the unit number, a variety of ways: "YAT027", "YAT27", "YAT 27", and so on.
-  This stems from the historical use of a different database for water well
-  monitoring data, now discontinued. Obswell numbers are manually assigned, and
-  are not available for all wells, not even all water monitoring wells. The
-  presence of an obswell number also doesn't mean that a well is a monitoring well.
+.. _unit-number:
+
+Unit number
+----------- 
+
+This is a set of two numbers: a four digit mapsheet number
+e.g. 6628, and an integer as sequence number, e.g. 6956. The mapsheet and
+sequence numbers, when presented together, form a "unit number". It can be 
+presented in a variety of different formats e.g. "6628-6956" (the most common),
+"662806956" (an integer representation formed by padding the sequence to
+five digits) and "6628-06956" (seen in contexts relating to water licensing).
+Unit numbers are available for all drillholes visible on Groundwater Data.
+Although they are generally used only for water wells, they do exist for 
+all wells. 
+
+.. _obswell-number:  
+
+Observation well ID  
+-------------------
+
+Also known as **obswell number** or **obsnumber**, this is a similar  concept
+to the unit number, but utilises abbreviated observation well "hundreds"
+for the mapsheet e.g. "YAT" (referring to the hundred of Yatala), and 
+a similar observation well network sequence number e.g. 27. It is then presented,
+like the unit number, a variety of ways: "YAT027", "YAT27", "YAT 27", and so on.
+This stems from the historical use of a different database for water well
+monitoring data, now discontinued. Obswell numbers are manually assigned, and
+are not available for all wells, not even all water monitoring wells. The
+presence of an obswell number also doesn't mean that a well is a monitoring well.
 
 A drillhole is one bore, so in situations where there are multiple bores connected
 together (e.g. a multi-tail exploration or petroleum well) or located together

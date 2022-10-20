@@ -20,3 +20,6 @@ This is an unofficial project, use at your own risk/reward.
     webservices
     changelog
 
+
+* :ref:`genindex`
+* :ref:`search`

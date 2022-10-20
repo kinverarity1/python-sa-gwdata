@@ -1,0 +1,22 @@
+Property,Description,CSV,DataFrame,JSON
+:ref:`drillhole-number`,Alternative unique well ID,DHNO,dh_no,
+Observation well network,"Not all wells are part of a network - most are not, in fact.",network,network,
+Unit number (integer format),Alternative unique well ID,Unit_Number,unit_long,
+Aquifer monitored,Aquifer interval(s) opposite the production zone,Aquifer,aquifer,
+UTM easting,,Easting,easting,
+UTM northing,,Northing,northing,
+UTM zone,,Zone,zone,
+Unit number (hyphenated),Alternative unique well ID,Unit_No,unit_hyphen,
+Obswell number,Alternative unique well ID - not assigned for all wells,Obs_No,obs_no,
+Water level observation date,,obs_date,obs_date,OBS_DATE
+:ref:`Depth to water (DTW) <depth-to-water>`,The actual measurement recorded in most cases,dtw,dtw,
+:ref:`Standing water level (SWL) <standing-water-level>`,Automatically derived from DTW,swl,swl,STANDING_WATER_LEVEL
+:ref:`Reduced standing water level (RSWL) <reduced-standing-water-level>`,Automatically derived from RSWL,rswl,rswl,REDUCED_STANDING_WATER_LEVEL
+Pressure,,pressure,pressure,
+Temperature,,temperature,temperature,
+Dry indicator,,dry_ind,dry_ind,
+Anomalous indicator,Y/N indicating anomalous data,anom_ind,anomalous_ind,ANOMALOUS_IND
+Pumping indicator,Y/N indicating that pumping was observed locally at the time of measurement,pump_ind,pump_ind,PUMPING_IND
+Measured during,,measured_during,measured_during,MEASURED_DURING
+Data source,,data_source,data_source,DATA_SOURCE_CODE
+Comments,,Comments,comments,

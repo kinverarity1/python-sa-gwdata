@@ -10,6 +10,7 @@ Find wells
 .. autofunction:: sa_gwdata.find_wells
 .. autofunction:: sa_gwdata.parse_well_ids_plaintext
 .. autofunction:: sa_gwdata.find_wells_in_lat_lon
+    
 
 Download data
 -------------
