@@ -125,7 +125,7 @@ class WaterConnectSession:
         working_crs="EPSG:4326",
         **kwargs
     ):
-        self.well_cache = pd.DataFrame(columns=set(self.well_id_cols.values()))
+        self.well_cache = pd.DataFrame(columns=list(set(self.well_id_cols.values())))
         self.working_crs = working_crs
         self.verify = verify
         if not endpoint:
