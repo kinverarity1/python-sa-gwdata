@@ -640,6 +640,7 @@ class WaterConnectSession:
         self.aquifers = {
             item["V"]: item["T"].replace((item["V"] + ": "), "")
             for item in response.json["Aquifer"]
+            if "V" in item
         }
         self.networks = {item["V"]: item["T"] for item in response.json["Networks"]}
         self.nrm_regions = {
