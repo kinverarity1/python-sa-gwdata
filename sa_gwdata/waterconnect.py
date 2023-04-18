@@ -123,7 +123,7 @@ class WaterConnectSession:
         verify=True,
         load_list_data=True,
         working_crs="EPSG:4326",
-        **kwargs
+        **kwargs,
     ):
         self.well_cache = pd.DataFrame(columns=list(set(self.well_id_cols.values())))
         self.working_crs = working_crs
@@ -269,7 +269,10 @@ class WaterConnectSession:
         if len(wells):
             if hasattr(wells[0], "dh_no"):
                 dh_nos = [w.dh_no for w in wells]
-        df = self.bulk_download("GetWaterLevelDownload", {"DHNOs": dh_nos, "Pumping": pumping, "Anomalous": anomalous})
+        df = self.bulk_download(
+            "GetWaterLevelDownload",
+            {"DHNOs": dh_nos, "Pumping": pumping, "Anomalous": anomalous},
+        )
         df["obs_date"] = pd.to_datetime(df.obs_date, format="%d/%m/%Y")
         df = df.rename(
             columns={
@@ -413,7 +416,7 @@ class WaterConnectSession:
         resp = self.post(
             "GetConstructionDetailsDownload?bulkOutput=CSV",
             data={"exportdata": json.dumps({"DHNOs": [w.dh_no for w in wells]})},
-            **kwargs
+            **kwargs,
         )
         dfs = {}
         name_map = {
@@ -688,7 +691,10 @@ class WaterConnectSession:
     def search_by_network(self, *network):
         network_codes = [n for n in network if n in self.networks.keys()]
         networks_inverted = {v: k for k, v in self.networks.items()}
-        network_codes += [networks_inverted[n] for n in network if n in self.networks.values()]
+        network_codes += [
+            networks_inverted[n] for n in network if n in self.networks.values()
+        ]
         logger.debug(f"Querying for validated network codes: {network_codes}")
-        return self.get("GetObswellNetworkData", params="Network=" + ",".join(network_codes))
-
+        return self.get(
+            "GetObswellNetworkData", params="Network=" + ",".join(network_codes)
+        )

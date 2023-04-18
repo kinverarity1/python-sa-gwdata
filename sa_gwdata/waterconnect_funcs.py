@@ -162,7 +162,9 @@ def water_levels(wells, pumping=False, anomalous=True, session=None, **kwargs):
 
     """
     session = get_global_session()
-    return session.bulk_water_levels(wells, pumping=pumping, anomalous=anomalous, **kwargs)
+    return session.bulk_water_levels(
+        wells, pumping=pumping, anomalous=anomalous, **kwargs
+    )
 
 
 def salinities(wells, session=None, **kwargs):
@@ -528,6 +530,7 @@ def search_by_rect(sw_corner, ne_corner, session=None, **kwargs):
         session = get_global_session()
     return session.search_by_rect(sw_corner, ne_corner, **kwargs).gdf()
 
+
 def search_by_network(*network_codes, session=None, **kwargs):
     """Find wells within observation well networks (one or more network).
 
@@ -545,7 +548,7 @@ def search_by_network(*network_codes, session=None, **kwargs):
 
         >>> import sa_gwdata
         >>> wells = sa_gwdata.search_by_network("WMLR", "MCL_VALE")
-    
+
     """
     if session is None:
         session = get_global_session()
