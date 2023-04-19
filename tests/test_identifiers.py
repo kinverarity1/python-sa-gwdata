@@ -6,6 +6,7 @@ import pytest
 
 from sa_gwdata.identifiers import ObsNo, UnitNo, Well
 
+import numpy as np
 
 def test_accept_empty_unit_no():
     UnitNo()
@@ -198,3 +199,6 @@ def test_well_bool():
 
 def test_well_with_property_kwarg():
     well = Well(203536, unit_no=662711249, unit_hyphen="6627-11249")
+
+def test_well_with_numpy_nans():
+    well = Well(6945, unit_hyphen="5842-16", obs_no=np.nan)
