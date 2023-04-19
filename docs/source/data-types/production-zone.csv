@@ -6,7 +6,7 @@ Construction event type,"Either ""Construction"", which means the record indicat
 Interval depth from,,DepthFrom_m,depth_from,PZONE_FR
 Interval depth to,,DepthTo_m,depth_to,PZONE_TO
 Screen/hole diameter,,Diameter_mm,pzone_diam,PZONE_DIAM
-:ref:`production-zone-interval`,See linked description.,Type,pzone_type,PZONE_TYPE_CODE
+Production zone interval type,See descriptions above,Type,pzone_type,PZONE_TYPE_CODE
 Interval material,Alternative unique well ID - not assigned for all wells,Material,pzone_material,PZONE_MTRL
 Screen aperture,,Aperture_mm,pzone_aperture,APERTURE
 Comments,The actual measurement recorded in most cases,COMMENTS,comments,
