@@ -276,6 +276,10 @@ class Well:
     def set(self, dh_no, unit_no="", obs_no="", **kwargs):
         """See :class:`Well` constructor for docstring."""
         self.dh_no = dh_no
+        if "unit_hyphen" in kwargs and not unit_no:
+            unit_no = kwargs["unit_hyphen"]
+        if "unit_long" in kwargs and not unit_no:
+            unit_no = kwargs["unit_long"]
         self.set_unit_no(unit_no)
         self.set_obs_no(obs_no)
         for key, value in kwargs.items():
