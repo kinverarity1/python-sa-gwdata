@@ -57,8 +57,9 @@ class UnitNo:
 
     def set(self, *args):
         """See :class:`UnitNo` constructor for details of arguments."""
+        args = list(args)
         if len(args) == 1:
-            if args[0] == "nan":
+            if args[0] == "nan" or pd.isnull(args[0]):
                 args[0] = None
             if args[0]:
                 if isinstance(args[0], list) or isinstance(args[0], tuple):
@@ -183,8 +184,9 @@ class ObsNo:
 
     def set(self, *args):
         """See :class:`ObsNo` constructor for details of arguments."""
+        args = list(args)
         if len(args) == 1:
-            if args[0] == "nan":
+            if args[0] == "nan" or pd.isnull(args[0]):
                 args[0] = None
             if args[0]:
                 if isinstance(args[0], list) or isinstance(args[0], tuple):
