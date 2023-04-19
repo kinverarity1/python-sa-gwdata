@@ -157,7 +157,11 @@ class WaterConnectSession:
             path = self.endpoint + path
         path = path.format(app=app)
         logger.debug("GET {} verify={}".format(path, verify))
-        response = requests.get(path, verify=verify, **kwargs)
+        try:
+            response = requests.get(path, verify=verify, **kwargs)
+        except requests.exceptions.ConnectionError:
+            time.sleep(0.8)
+            response = requests.get(path, verify=verify, **kwargs)
         self.last_request = time.time()
         endpoint, name = path.rsplit("/", 1)
         logger.debug("Response content = {}".format(response.content))
