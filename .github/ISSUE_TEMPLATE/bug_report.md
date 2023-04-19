@@ -1,3 +1,12 @@
+---
+name: Bug report
+about: Create a report to help us improve
+title: ''
+labels: bug
+assignees: ''
+
+---
+
 Describe the bug: a clear and concise description.
 
 If possible, provide a minimum reproducible code example, to allow us to reproduce the bug.
