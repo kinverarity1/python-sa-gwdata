@@ -1,28 +1,7 @@
----
-name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: bug
-assignees: ''
+Describe the bug: a clear and concise description.
 
----
+If possible, provide a minimum reproducible code example, to allow us to reproduce the bug.
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+If relevant or not obvious, provide a description of what you would ***expect*** to happen.
 
-**To Reproduce**
-Steps to reproduce the behavior:
-
-**Expected behavior**
-A clear and concise description of what you expected to happen.
-
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
-
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Python version: 
- - python-sa-gwdata version: [e.g. ```>>> import sa_gwdata; sa_gwdata.__version__```]
-
-**Additional context**
-Add any other context about the problem here.
+Please include the version of python-sa-gwdata you are using: ```import sa_gwdata; print(sa_gwdata.__version__)```
