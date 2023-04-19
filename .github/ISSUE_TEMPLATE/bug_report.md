@@ -7,22 +7,10 @@ assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+Describe the bug: a clear and concise description.
 
-**To Reproduce**
-Steps to reproduce the behavior:
+If possible, provide a minimum reproducible code example, to allow us to reproduce the bug.
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+If relevant or not obvious, provide a description of what you would ***expect*** to happen.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
-
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Python version: 
- - python-sa-gwdata version: [e.g. ```>>> import sa_gwdata; sa_gwdata.__version__```]
-
-**Additional context**
-Add any other context about the problem here.
+Please include the version of python-sa-gwdata you are using: ```import sa_gwdata; print(sa_gwdata.__version__)```

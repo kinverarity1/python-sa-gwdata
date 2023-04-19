@@ -10,7 +10,7 @@ from datetime import datetime
 import pandas as pd
 import shapefile
 
-SPATIAL_DATA_DRILLHOLES_URL = "https://www.waterconnect.sa.gov.au/Content/Downloads/DEW/WATER_Drillholes_geojson.zip"
+SPATIAL_DATA_DRILLHOLES_URL = "https://www.waterconnect.sa.gov.au/Content/Downloads/DEW/WATER_Drillholes_shp.zip"
 
 LOCAL = Path(user_data_dir("sa_gwdata", "sa_gwdata")).mkdir(parents=True, exist_ok=True)
 
