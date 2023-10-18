@@ -192,6 +192,25 @@ def process_dh_layer_download(temp_fn=TEMP_DH_LAYER_FN):
 
     df.loc[df.PERMIT_NO == 0, "PERMIT_NO"] = pd.NA
 
+    col_remapper = {
+        "LOGHYDROST": "LOGHYDROSTRAT",
+        "LOGGER_DAT": "LOGGER_DATA",
+        "TELEMETRY_": "TELEMETRY_DATA",
+        "STATE_ASSE": "STATE_ASSET",
+        "SW_CATCHME": "SW_CATCHMENT",
+        "LANDSCAPES": "LANDSCAPESA_CODE",
+        "NRM_REGION": "NRM_REGION_CODE",
+        "PRESCRIBED": "PRESCRIBED_WELL_AREA",
+        "PRESC_WATE": "PRESC_WATER_RES_AREA",
+        "TITLE_PREF": "TITLE_PREFIX",
+        "TITLE_VOLU": "TITLE_VOLUME",
+        "TITLE_FOLI": "TITLE_FOLIO",
+        "GRND_ELEV_": "GRND_ELEV_DEM",
+        "LATEST_REF": "LATEST_REF_POINT_TYP"
+    }
+
+    df = df.rename(columns=col_remapper)
+
     timestamp = datetime.now().strftime("%Y-%m-%d")
     fn = LOCAL / f"drillholes_{timestamp}.feather"
 
