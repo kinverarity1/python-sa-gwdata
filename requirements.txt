@@ -15,3 +15,5 @@ coverage
 codecov
 pytest-benchmark
 black
+sphinx
+nbsphinx

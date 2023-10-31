@@ -7,6 +7,8 @@ TEST_REQS = (
     "codecov",
     "pytest-benchmark",
     "black",
+    "sphinx",
+    "nbsphinx"
 )
 
 EXTRA_REQS = (
