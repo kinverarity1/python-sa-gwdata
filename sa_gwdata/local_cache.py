@@ -206,7 +206,7 @@ def process_dh_layer_download(temp_fn=TEMP_DH_LAYER_FN):
         "TITLE_VOLU": "TITLE_VOLUME",
         "TITLE_FOLI": "TITLE_FOLIO",
         "GRND_ELEV_": "GRND_ELEV_DEM",
-        "LATEST_REF": "LATEST_REF_POINT_TYP"
+        "LATEST_REF": "LATEST_REF_POINT_TYP",
         "LATEST_REF_POINT_TYP": "LATEST_REF_POINT_TYPE"
     }
 
