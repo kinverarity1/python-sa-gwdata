@@ -7,6 +7,8 @@ TEST_REQS = (
     "codecov",
     "pytest-benchmark",
     "black",
+    "sphinx",
+    "nbsphinx"
 )
 
 EXTRA_REQS = (
@@ -27,7 +29,7 @@ setup(
     author="Kent Inverarity",
     author_email="kinverarity@hotmail.com",
     license="MIT",
-    install_requires=("requests", "pandas>=0.24.1"),
+    install_requires=("requests", "pandas>=0.24.1", "platformdirs", "pyarrow", "pyshp"),
     extras_require={
         "test": (TEST_REQS,),
         "all": (TEST_REQS, EXTRA_REQS),
