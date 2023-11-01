@@ -15,7 +15,7 @@ project = 'python-sa-gwdata'
 copyright = '2023, Kent Inverarity'
 author = 'Kent Inverarity'
 
-from importlib_metadata import distribution
+from importlib.metadata import distribution
 
 release = distribution("python-sa-gwdata").version
 version = ".".join(release.split(".")[:2])
