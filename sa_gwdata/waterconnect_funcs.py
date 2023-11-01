@@ -51,6 +51,13 @@ def find_wells_in_lat_lon(lats, lons, **kwargs):
     return session.find_wells_in_lat_lon(lats, lons, **kwargs)
 
 
+def get_networks(session=None):
+    """Return a list of obswell monitoring networks."""
+    if session is None:
+        session = get_global_session()
+    return session.networks
+
+
 def wells_summary(wells, session=None, **kwargs):
     """Get table of summary information for wells.
 

@@ -1,1 +1,0 @@
-The Boundary string which is returned is the geographical boundary in Google's `Encoded Polyline Algorithm Format <https://developers.google.com/maps/documentation/utilities/polylinealgorithm>`__. You can decode this into geographic coordinates using the `polyline <https://pypi.python.org/pypi/polyline/>`__ package.

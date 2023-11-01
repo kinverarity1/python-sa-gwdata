@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sa_gwdata.waterconnect &mdash; python-sa-gwdata 0.12.dev12+ge08a5da documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=f9e7c862"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link href="../../_static/style.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            python-sa-gwdata
+          </a>
+              <div class="version">
+                0.12
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart-guide.html">Quickstart guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../background.html">Background information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../available-data.html">Available data types on Groundwater Data (GD)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial-finding-wells.html">Tutorial: finding wells</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial-monitoring-networks.html">Tutorial: monitoring networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial-water-monitoring-data.html">Tutorial: water monitoring data (WL, TDS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidocs.html">sa_gwdata developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../webservices.html">WaterConnect web services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">python-sa-gwdata</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sa_gwdata.waterconnect</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sa_gwdata.waterconnect</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">zipfile</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="kn">from</span> <span class="nn">sa_gwdata.identifiers</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Response">
+<a class="viewcode-back" href="../../apidocs.html#sa_gwdata.Response">[docs]</a>
+<span class="k">class</span> <span class="nc">Response</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">working_crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Groundwater Data HTTP response.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            response (requests.Response object): the HTTP response</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">response</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">working_crs</span> <span class="o">=</span> <span class="n">working_crs</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">r</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the HTTP requests.Response object.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">response</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert the response to JSON. Returns a dict/list.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_json&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_json</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;If the response is a list, convert to a pandas DataFrame with</span>
+<span class="sd">        columns converted into lowercase.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_df&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;DHNO&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;DHNO&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+                        <span class="c1"># e.g. GetSuburbFromName</span>
+                        <span class="n">convert_object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;DHNO&quot;</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">convert_object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># e.g. GetPWASearchData</span>
+                    <span class="n">convert_object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span>
+
+                <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">convert_object</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="nb">str</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_df</span> <span class="o">=</span> <span class="n">df</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Response has length=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Response is empty&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">df_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if JSON can be converted to a DataFrame. Returns bool.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">gdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_col</span><span class="o">=</span><span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="n">y_col</span><span class="o">=</span><span class="s2">&quot;lat&quot;</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
+        <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span>
+        <span class="k">return</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
+            <span class="n">df</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">x_col</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="n">y_col</span><span class="p">]),</span> <span class="n">crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">working_crs</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">get_global_session</span><span class="p">(</span><span class="n">working_crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">,</span> <span class="n">force_new</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="s2">&quot;__waterconnect_session&quot;</span> <span class="ow">in</span> <span class="nb">globals</span><span class="p">():</span>
+        <span class="k">global</span> <span class="n">__waterconnect_session</span>
+        <span class="n">__waterconnect_session</span> <span class="o">=</span> <span class="n">WaterConnectSession</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">force_new</span><span class="p">:</span>
+            <span class="k">del</span> <span class="nb">globals</span><span class="p">()[</span><span class="s2">&quot;__waterconnect_session&quot;</span><span class="p">]</span>
+            <span class="n">__waterconnect_session</span> <span class="o">=</span> <span class="n">WaterConnectSession</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">__waterconnect_session</span>
+
+
+<div class="viewcode-block" id="WaterConnectSession">
+<a class="viewcode-back" href="../../apidocs.html#sa_gwdata.WaterConnectSession">[docs]</a>
+<span class="k">class</span> <span class="nc">WaterConnectSession</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper around repeated requests to Groundwater Data.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        endpoint (str): url endpoint for API, optional</span>
+<span class="sd">        sleep (int): minimum interval between requests in seconds.</span>
+<span class="sd">            Be nice, do not reduce it.</span>
+<span class="sd">        verify (bool): require valid SSL certificate</span>
+
+<span class="sd">    Other args and kwargs are passed to request.Session constructor.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">        &gt;&gt;&gt; from sa_gwdata import WaterConnectSession</span>
+<span class="sd">        &gt;&gt;&gt; s = WaterConnectSession()</span>
+<span class="sd">        &gt;&gt;&gt; df = s.get(&quot;GetObswellNetworkData&quot;, params={&quot;Network&quot;: &quot;CENT_ADEL&quot;})</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">well_id_cols</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;dhno&quot;</span><span class="p">:</span> <span class="s2">&quot;drillhole_no&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;obsnumber&quot;</span><span class="p">:</span> <span class="s2">&quot;obs_no&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mapnum&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_long&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+        <span class="n">endpoint</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">sleep</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">verify</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">load_list_data</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">working_crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">well_cache</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">well_id_cols</span><span class="o">.</span><span class="n">values</span><span class="p">())))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">working_crs</span> <span class="o">=</span> <span class="n">working_crs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verify</span> <span class="o">=</span> <span class="n">verify</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">endpoint</span><span class="p">:</span>
+            <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/</span><span class="si">{app}</span><span class="s2">.ashx/&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="n">endpoint</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_request</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">sleep</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span> <span class="o">=</span> <span class="n">sleep</span>
+        <span class="k">if</span> <span class="n">load_list_data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refresh_available_groupings</span><span class="p">()</span>
+
+<div class="viewcode-block" id="WaterConnectSession.get">
+<a class="viewcode-back" href="../../apidocs.html#sa_gwdata.WaterConnectSession.get">[docs]</a>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="s2">&quot;WDDDMS&quot;</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;HTTP GET verb to Groundwater Data.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            path (str): final portion of URL path off the end of self.endpoint</span>
+<span class="sd">                e.g. to GET</span>
+<span class="sd">                ``https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd</span>
+<span class="sd">                /WDDDMS.ashx/GetAdvancedListsData``</span>
+<span class="sd">                then you would use ``path=&quot;GetAdvancedListsData&quot;``.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">verify</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">verify</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">verify</span>
+        <span class="n">t_remain</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span> <span class="o">-</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_request</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">t_remain</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Waiting </span><span class="si">{}</span><span class="s2"> sec&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">t_remain</span><span class="p">))</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">t_remain</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">+</span> <span class="n">path</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;GET </span><span class="si">{}</span><span class="s2"> verify=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">verify</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="n">verify</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.8</span><span class="p">)</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="n">verify</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_request</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">endpoint</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Response content = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache_data</span><span class="p">(</span>
+            <span class="n">Response</span><span class="p">(</span>
+                <span class="n">response</span><span class="p">,</span> <span class="n">working_crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">working_crs</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span>
+            <span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="s2">&quot;WDDDMS&quot;</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">verify</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">verify</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">verify</span>
+        <span class="n">t_remain</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span> <span class="o">-</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_request</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">t_remain</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Waiting </span><span class="si">{}</span><span class="s2"> sec&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">t_remain</span><span class="p">))</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">t_remain</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">+</span> <span class="n">path</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;POST </span><span class="si">{}</span><span class="s2"> verify=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">verify</span><span class="p">))</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="n">verify</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_request</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">endpoint</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+            <span class="n">response</span><span class="p">,</span> <span class="n">working_crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">working_crs</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">bulk_download_wells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">bulk_download</span><span class="p">(</span><span class="n">service</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;DHNOs&quot;</span><span class="p">:</span> <span class="n">wells</span><span class="o">.</span><span class="n">dh_no</span><span class="p">},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">bulk_download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service</span><span class="p">,</span> <span class="n">json_data</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;CSV&quot;</span><span class="p">):</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{service}</span><span class="s2">?bulkOutput=</span><span class="si">{format}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">service</span><span class="o">=</span><span class="n">service</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">),</span>
+            <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;exportdata&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_data</span><span class="p">)},</span>
+        <span class="p">)</span>
+        <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span> <span class="k">as</span> <span class="n">buffer</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span> <span class="nf">bulk_wells_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wells</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">wells</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">):</span>
+                <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">dh_no</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bulk_download</span><span class="p">(</span><span class="s2">&quot;GetSummaryDownload&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;DHNOs&quot;</span><span class="p">:</span> <span class="n">dh_nos</span><span class="p">})</span>
+        <span class="k">for</span> <span class="n">date_col</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="s2">&quot;Orig_drilled_date&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;max_drill_date&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;late_open_date&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;latest_status_date&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;water_level_date&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;salinity_date&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pH_date&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;yield_date&quot;</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">date_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">date_col</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%m/%Y&quot;</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;DHNO&quot;</span><span class="p">:</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Unit_Number&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_long&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Aquifer&quot;</span><span class="p">:</span> <span class="s2">&quot;aquifer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;mga_easting&quot;</span><span class="p">:</span> <span class="s2">&quot;easting&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;mga_northing&quot;</span><span class="p">:</span> <span class="s2">&quot;northing&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;mga_zone&quot;</span><span class="p">:</span> <span class="s2">&quot;zone&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Unit_No&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_hyphen&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Obs_No&quot;</span><span class="p">:</span> <span class="s2">&quot;obs_no&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Orig_drilled_depth&quot;</span><span class="p">:</span> <span class="s2">&quot;orig_drilled_depth&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Orig_drilled_date&quot;</span><span class="p">:</span> <span class="s2">&quot;orig_drilled_date&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;max_drill_depth&quot;</span><span class="p">:</span> <span class="s2">&quot;max_drilled_depth&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;max_drill_date&quot;</span><span class="p">:</span> <span class="s2">&quot;max_drilled_date&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;late_open_depth&quot;</span><span class="p">:</span> <span class="s2">&quot;latest_open_depth&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;late_open_date&quot;</span><span class="p">:</span> <span class="s2">&quot;latest_open_date&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;late_permit_no&quot;</span><span class="p">:</span> <span class="s2">&quot;latest_permit_no&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;case_min_diam&quot;</span><span class="p">:</span> <span class="s2">&quot;casing_min_diam&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;dtw&quot;</span><span class="p">:</span> <span class="s2">&quot;latest_dtw&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;swl&quot;</span><span class="p">:</span> <span class="s2">&quot;latest_swl&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;rswl&quot;</span><span class="p">:</span> <span class="s2">&quot;latest_rswl&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;water_level_date&quot;</span><span class="p">:</span> <span class="s2">&quot;latest_wl_date&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;TDS&quot;</span><span class="p">:</span> <span class="s2">&quot;latest_tds&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;EC&quot;</span><span class="p">:</span> <span class="s2">&quot;latest_ec&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;salinity_date&quot;</span><span class="p">:</span> <span class="s2">&quot;latest_sal_date&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;pH&quot;</span><span class="p">:</span> <span class="s2">&quot;latest_ph&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;pH_date&quot;</span><span class="p">:</span> <span class="s2">&quot;latest_ph_date&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;yield&quot;</span><span class="p">:</span> <span class="s2">&quot;latest_yield&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;yield_date&quot;</span><span class="p">:</span> <span class="s2">&quot;latest_yield_date&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;long_degrees&quot;</span><span class="p">:</span> <span class="s2">&quot;lon_deg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;long_minutes&quot;</span><span class="p">:</span> <span class="s2">&quot;lon_min&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;long_seconds&quot;</span><span class="p">:</span> <span class="s2">&quot;lon_sec&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;lat_degrees&quot;</span><span class="p">:</span> <span class="s2">&quot;lat_deg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;lat_minutes&quot;</span><span class="p">:</span> <span class="s2">&quot;lat_min&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;lat_seconds&quot;</span><span class="p">:</span> <span class="s2">&quot;lat_sec&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;decimal_long&quot;</span><span class="p">:</span> <span class="s2">&quot;longitude&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;neg_decimal_lat&quot;</span><span class="p">:</span> <span class="s2">&quot;latitude&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;decimal_lat&quot;</span><span class="p">:</span> <span class="s2">&quot;latitude_positive&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Title&quot;</span><span class="p">:</span> <span class="s2">&quot;cert_title&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;water_info&quot;</span><span class="p">:</span> <span class="s2">&quot;water_info_exists&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;salinity&quot;</span><span class="p">:</span> <span class="s2">&quot;salinity_exists&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;water_chemistry&quot;</span><span class="p">:</span> <span class="s2">&quot;water_chem_exists&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;geophys_log&quot;</span><span class="p">:</span> <span class="s2">&quot;geophys_log_exists&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;drill_log&quot;</span><span class="p">:</span> <span class="s2">&quot;drillers_log_exists&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;lith_log&quot;</span><span class="p">:</span> <span class="s2">&quot;lith_log_exists&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span> <span class="nf">bulk_water_levels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="n">pumping</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">anomalous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wells</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">wells</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">):</span>
+                <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">dh_no</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bulk_download</span><span class="p">(</span>
+            <span class="s2">&quot;GetWaterLevelDownload&quot;</span><span class="p">,</span>
+            <span class="p">{</span><span class="s2">&quot;DHNOs&quot;</span><span class="p">:</span> <span class="n">dh_nos</span><span class="p">,</span> <span class="s2">&quot;Pumping&quot;</span><span class="p">:</span> <span class="n">pumping</span><span class="p">,</span> <span class="s2">&quot;Anomalous&quot;</span><span class="p">:</span> <span class="n">anomalous</span><span class="p">},</span>
+        <span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;obs_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">obs_date</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%m/%Y&quot;</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;DHNO&quot;</span><span class="p">:</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Unit_Number&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_long&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Aquifer&quot;</span><span class="p">:</span> <span class="s2">&quot;aquifer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Easting&quot;</span><span class="p">:</span> <span class="s2">&quot;easting&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Northing&quot;</span><span class="p">:</span> <span class="s2">&quot;northing&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Zone&quot;</span><span class="p">:</span> <span class="s2">&quot;zone&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Unit_No&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_hyphen&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Obs_No&quot;</span><span class="p">:</span> <span class="s2">&quot;obs_no&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;anom_ind&quot;</span><span class="p">:</span> <span class="s2">&quot;anomalous_ind&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Comments&quot;</span><span class="p">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span> <span class="nf">bulk_salinities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wells</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">wells</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">):</span>
+                <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">dh_no</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bulk_download</span><span class="p">(</span><span class="s2">&quot;GetSalinityDownload&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;DHNOs&quot;</span><span class="p">:</span> <span class="n">dh_nos</span><span class="p">})</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Collected_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Collected_date&quot;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%m/%Y&quot;</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;DHNO&quot;</span><span class="p">:</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Unit_Number&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_long&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Aquifer&quot;</span><span class="p">:</span> <span class="s2">&quot;aquifer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Easting&quot;</span><span class="p">:</span> <span class="s2">&quot;easting&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Northing&quot;</span><span class="p">:</span> <span class="s2">&quot;northing&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Zone&quot;</span><span class="p">:</span> <span class="s2">&quot;zone&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Unit_No&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_hyphen&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Obs_No&quot;</span><span class="p">:</span> <span class="s2">&quot;obs_no&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Collected_date&quot;</span><span class="p">:</span> <span class="s2">&quot;collected_date&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Collected_time&quot;</span><span class="p">:</span> <span class="s2">&quot;collected_time&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Anomalous_ind&quot;</span><span class="p">:</span> <span class="s2">&quot;anomalous_ind&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;TDS&quot;</span><span class="p">:</span> <span class="s2">&quot;tds&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;EC&quot;</span><span class="p">:</span> <span class="s2">&quot;ec&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;pH&quot;</span><span class="p">:</span> <span class="s2">&quot;ph&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Test_Place&quot;</span><span class="p">:</span> <span class="s2">&quot;test_place&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Measured_during&quot;</span><span class="p">:</span> <span class="s2">&quot;measured_during&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Sample_type&quot;</span><span class="p">:</span> <span class="s2">&quot;sample_type&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span> <span class="nf">bulk_water_chem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wells</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">wells</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">):</span>
+                <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">dh_no</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bulk_download</span><span class="p">(</span><span class="s2">&quot;GetWaterChemistryDownloadAllData&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;DHNOs&quot;</span><span class="p">:</span> <span class="n">dh_nos</span><span class="p">})</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;collected_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;collected_date&quot;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%m/%Y&quot;</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;DHNO&quot;</span><span class="p">:</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;SAMPLE_NO&quot;</span><span class="p">:</span> <span class="s2">&quot;sample_no&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Unit_No&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_hyphen&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Obs_No&quot;</span><span class="p">:</span> <span class="s2">&quot;obs_no&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Collected_date&quot;</span><span class="p">:</span> <span class="s2">&quot;collected_date&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Chem_Code&quot;</span><span class="p">:</span> <span class="s2">&quot;analysis_code&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Chem_Name&quot;</span><span class="p">:</span> <span class="s2">&quot;analysis_name&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Chem_Value&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Chem_Unit_Code&quot;</span><span class="p">:</span> <span class="s2">&quot;unit&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span> <span class="nf">bulk_elevation_surveys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wells</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">wells</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">):</span>
+                <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">dh_no</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bulk_download</span><span class="p">(</span><span class="s2">&quot;GetElevationDownload&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;DHNOs&quot;</span><span class="p">:</span> <span class="n">dh_nos</span><span class="p">})</span>
+        <span class="k">for</span> <span class="n">date_col</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;ElevationDate&quot;</span><span class="p">,</span> <span class="s2">&quot;AppliedDate&quot;</span><span class="p">):</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">date_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">date_col</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;DHNO&quot;</span><span class="p">:</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;UnitNumber&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_hyphen&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Network&quot;</span><span class="p">:</span> <span class="s2">&quot;network&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ObsNo&quot;</span><span class="p">:</span> <span class="s2">&quot;obs_no&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ElevationDate&quot;</span><span class="p">:</span> <span class="s2">&quot;elev_date&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;AppliedDate&quot;</span><span class="p">:</span> <span class="s2">&quot;applied_date&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;GroundElevation&quot;</span><span class="p">:</span> <span class="s2">&quot;ground_elev&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ReferenceElevation&quot;</span><span class="p">:</span> <span class="s2">&quot;ref_elev&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;SurveyMethod&quot;</span><span class="p">:</span> <span class="s2">&quot;survey_meth&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;VerticalAccuracy&quot;</span><span class="p">:</span> <span class="s2">&quot;vert_accuracy&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ReferencePointType&quot;</span><span class="p">:</span> <span class="s2">&quot;ref_point_type&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Comments&quot;</span><span class="p">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span> <span class="nf">bulk_construction_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wells</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">wells</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">):</span>
+                <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">dh_no</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bulk_download</span><span class="p">(</span><span class="s2">&quot;GetConstructionDownload&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;DHNOs&quot;</span><span class="p">:</span> <span class="n">dh_nos</span><span class="p">})</span>
+        <span class="k">for</span> <span class="n">date_col</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;completion_date&quot;</span><span class="p">,):</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">date_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">date_col</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%m/%Y&quot;</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;DHNO&quot;</span><span class="p">:</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Unit_No&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_hyphen&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Obs_No&quot;</span><span class="p">:</span> <span class="s2">&quot;obs_no&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Bkf_ind&quot;</span><span class="p">:</span> <span class="s2">&quot;backfilled&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;case_from&quot;</span><span class="p">:</span> <span class="s2">&quot;casing_from&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;case_to&quot;</span><span class="p">:</span> <span class="s2">&quot;casing_to&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;case_min_diameter&quot;</span><span class="p">:</span> <span class="s2">&quot;casing_min_diam&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;case_material&quot;</span><span class="p">:</span> <span class="s2">&quot;casing_material&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;pcem&quot;</span><span class="p">:</span> <span class="s2">&quot;pcemented&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;pcem_from&quot;</span><span class="p">:</span> <span class="s2">&quot;pcement_from&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;pcem_to&quot;</span><span class="p">:</span> <span class="s2">&quot;pcement_to&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;pz_from&quot;</span><span class="p">:</span> <span class="s2">&quot;pzone_from&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;pz_to&quot;</span><span class="p">:</span> <span class="s2">&quot;pzone_to&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;pz_min_diameter&quot;</span><span class="p">:</span> <span class="s2">&quot;pzone_min_diam&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;pz_type&quot;</span><span class="p">:</span> <span class="s2">&quot;pzone_type&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;pz_material&quot;</span><span class="p">:</span> <span class="s2">&quot;pzone_material&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;pz_aperture&quot;</span><span class="p">:</span> <span class="s2">&quot;pzone_aperture&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;drill_meth&quot;</span><span class="p">:</span> <span class="s2">&quot;drill_method&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;well_dev_method&quot;</span><span class="p">:</span> <span class="s2">&quot;development_method&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;well_dev_duration&quot;</span><span class="p">:</span> <span class="s2">&quot;development_duration&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Comments&quot;</span><span class="p">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span> <span class="nf">bulk_construction_details</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wells</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">wells</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">):</span>
+                <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">dh_no</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;GetConstructionDetailsDownload?bulkOutput=CSV&quot;</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;exportdata&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;DHNOs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">dh_no</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]})},</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">dfs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">name_map</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;WaterCut.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;water_cuts&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Drilling.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;drilling&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Casing.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;casing&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ProductionZone.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;prod_zones&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">))</span> <span class="k">as</span> <span class="n">zip_file</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">zip_file</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
+                <span class="k">with</span> <span class="n">zip_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">contained_file</span><span class="p">:</span>
+                    <span class="n">new_name</span> <span class="o">=</span> <span class="n">name_map</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                    <span class="n">dfs</span><span class="p">[</span><span class="n">new_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">contained_file</span><span class="p">)</span>
+
+        <span class="c1"># water_cuts</span>
+        <span class="k">if</span> <span class="s2">&quot;water_cuts&quot;</span> <span class="ow">in</span> <span class="n">dfs</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">date_col</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;WaterCutDate&quot;</span><span class="p">,):</span>
+                <span class="n">dfs</span><span class="p">[</span><span class="s2">&quot;water_cuts&quot;</span><span class="p">][</span><span class="n">date_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
+                    <span class="n">dfs</span><span class="p">[</span><span class="s2">&quot;water_cuts&quot;</span><span class="p">][</span><span class="n">date_col</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+            <span class="n">dfs</span><span class="p">[</span><span class="s2">&quot;water_cuts&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dfs</span><span class="p">[</span><span class="s2">&quot;water_cuts&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+                <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;DHNO&quot;</span><span class="p">:</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;UnitNumber&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_hyphen&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;WaterCutDate&quot;</span><span class="p">:</span> <span class="s2">&quot;water_cut_date&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;DepthFrom_m&quot;</span><span class="p">:</span> <span class="s2">&quot;depth_from&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;DepthTo_m&quot;</span><span class="p">:</span> <span class="s2">&quot;depth_to&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;WaterLevel_m&quot;</span><span class="p">:</span> <span class="s2">&quot;swl&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;EstYeld_L_Sec&quot;</span><span class="p">:</span> <span class="s2">&quot;yield&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;TestMethod&quot;</span><span class="p">:</span> <span class="s2">&quot;test_method&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;TDS_mg_L&quot;</span><span class="p">:</span> <span class="s2">&quot;tds&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;EC_us_cm&quot;</span><span class="p">:</span> <span class="s2">&quot;ec&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;SampleType&quot;</span><span class="p">:</span> <span class="s2">&quot;sample_type&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="c1"># drilling</span>
+        <span class="k">if</span> <span class="s2">&quot;drilling&quot;</span> <span class="ow">in</span> <span class="n">dfs</span><span class="p">:</span>
+            <span class="n">dfs</span><span class="p">[</span><span class="s2">&quot;drilling&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dfs</span><span class="p">[</span><span class="s2">&quot;drilling&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+                <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;DHNO&quot;</span><span class="p">:</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;UnitNumber&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_hyphen&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;From_m&quot;</span><span class="p">:</span> <span class="s2">&quot;depth_from&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;To_m&quot;</span><span class="p">:</span> <span class="s2">&quot;depth_to&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Diammeter_mm&quot;</span><span class="p">:</span> <span class="s2">&quot;hole_diam&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Method&quot;</span><span class="p">:</span> <span class="s2">&quot;drill_method&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;COMMENTS&quot;</span><span class="p">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="c1"># casing</span>
+        <span class="k">if</span> <span class="s2">&quot;casing&quot;</span> <span class="ow">in</span> <span class="n">dfs</span><span class="p">:</span>
+            <span class="n">dfs</span><span class="p">[</span><span class="s2">&quot;casing&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dfs</span><span class="p">[</span><span class="s2">&quot;casing&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+                <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;DHNO&quot;</span><span class="p">:</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;UnitNumber&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_hyphen&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;DepthFrom_m&quot;</span><span class="p">:</span> <span class="s2">&quot;depth_from&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;DepthTo_m&quot;</span><span class="p">:</span> <span class="s2">&quot;depth_to&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Diameter_mm&quot;</span><span class="p">:</span> <span class="s2">&quot;casing_diam&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Material&quot;</span><span class="p">:</span> <span class="s2">&quot;casing_material&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;CementType&quot;</span><span class="p">:</span> <span class="s2">&quot;cement_method&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;CementFrom_m&quot;</span><span class="p">:</span> <span class="s2">&quot;cement_from&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;CementTo_m&quot;</span><span class="p">:</span> <span class="s2">&quot;cement_to&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;COMMENTS&quot;</span><span class="p">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="c1"># prod_zones</span>
+        <span class="k">if</span> <span class="s2">&quot;prod_zones&quot;</span> <span class="ow">in</span> <span class="n">dfs</span><span class="p">:</span>
+            <span class="n">dfs</span><span class="p">[</span><span class="s2">&quot;prod_zones&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dfs</span><span class="p">[</span><span class="s2">&quot;prod_zones&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+                <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;DHNO&quot;</span><span class="p">:</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;UnitNumber&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_hyphen&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Type&quot;</span><span class="p">:</span> <span class="s2">&quot;pzone_type&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;DepthFrom_m&quot;</span><span class="p">:</span> <span class="s2">&quot;depth_from&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;DepthTo_m&quot;</span><span class="p">:</span> <span class="s2">&quot;depth_to&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Diameter_mm&quot;</span><span class="p">:</span> <span class="s2">&quot;pzone_diam&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Material&quot;</span><span class="p">:</span> <span class="s2">&quot;pzone_material&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Aperture_mm&quot;</span><span class="p">:</span> <span class="s2">&quot;pzone_aperture&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;COMMENTS&quot;</span><span class="p">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">dfs</span>
+
+    <span class="k">def</span> <span class="nf">bulk_drillers_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wells</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">wells</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">):</span>
+                <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">dh_no</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bulk_download</span><span class="p">(</span><span class="s2">&quot;GetDrillersLogDownload&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;DHNOs&quot;</span><span class="p">:</span> <span class="n">dh_nos</span><span class="p">})</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;log_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;log_date&quot;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%m/%Y&quot;</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;DHNO&quot;</span><span class="p">:</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">,</span> <span class="s2">&quot;Unit_No&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_hyphen&quot;</span><span class="p">,</span> <span class="s2">&quot;Obs_No&quot;</span><span class="p">:</span> <span class="s2">&quot;obs_no&quot;</span><span class="p">},</span>
+            <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span> <span class="nf">bulk_strat_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wells</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">wells</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">):</span>
+                <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">dh_no</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bulk_download</span><span class="p">(</span><span class="s2">&quot;GetStratLogDownload&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;DHNOs&quot;</span><span class="p">:</span> <span class="n">dh_nos</span><span class="p">})</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;DHNO&quot;</span><span class="p">:</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;UNITNUMBER&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_hyphen&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;STRAT_DEPTH_FROM&quot;</span><span class="p">:</span> <span class="s2">&quot;depth_from&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;STRAT_DEPTH_TO&quot;</span><span class="p">:</span> <span class="s2">&quot;depth_to&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;STRAT_NAME&quot;</span><span class="p">:</span> <span class="s2">&quot;strat_name&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;GIS_CODE&quot;</span><span class="p">:</span> <span class="s2">&quot;gis_code&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span> <span class="nf">bulk_hydrostrat_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wells</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">wells</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">):</span>
+                <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">dh_no</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bulk_download</span><span class="p">(</span><span class="s2">&quot;GetHydroStratLogDownload&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;DHNOs&quot;</span><span class="p">:</span> <span class="n">dh_nos</span><span class="p">})</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;DHNO&quot;</span><span class="p">:</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;UNITNUMBER&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_hyphen&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;HYDRO_DEPTH_FROM&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_depth_from&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;HYDRO_DEPTH_TO&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_depth_to&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;HYDRO_SUBUNIT_DEPTH_FROM&quot;</span><span class="p">:</span> <span class="s2">&quot;subunit_depth_from&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;HYDRO_SUBUNIT_DEPTH_TO&quot;</span><span class="p">:</span> <span class="s2">&quot;subunit_depth_to&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;HYDRO_TYPE&quot;</span><span class="p">:</span> <span class="s2">&quot;hydro_type&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;HYDRO_DEPTH_TO_GREATER_FLAG&quot;</span><span class="p">:</span> <span class="s2">&quot;hydro_depth_to_greater_flag&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;COMMENTS&quot;</span><span class="p">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;MAP_SYMBOL&quot;</span><span class="p">:</span> <span class="s2">&quot;map_symbol&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;STRAT_NAME&quot;</span><span class="p">:</span> <span class="s2">&quot;strat_name&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;GIS_CODE&quot;</span><span class="p">:</span> <span class="s2">&quot;gis_code&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;HYDRO_SUBUNIT_COMMENTS&quot;</span><span class="p">:</span> <span class="s2">&quot;subunit_comments&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;HYDRO_SUBUNIT_CODE&quot;</span><span class="p">:</span> <span class="s2">&quot;subunit_code&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;HYDRO_SUBUNIT_DESC&quot;</span><span class="p">:</span> <span class="s2">&quot;subunit_desc&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span> <span class="nf">bulk_lith_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wells</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">wells</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">):</span>
+                <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">dh_no</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bulk_download</span><span class="p">(</span><span class="s2">&quot;GetLithologicalLogDownload&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;DHNOs&quot;</span><span class="p">:</span> <span class="n">dh_nos</span><span class="p">})</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;DHNO&quot;</span><span class="p">:</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Unit_No&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_hyphen&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Obs_No&quot;</span><span class="p">:</span> <span class="s2">&quot;obs_no&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Description&quot;</span><span class="p">:</span> <span class="s2">&quot;descr&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span> <span class="nf">_cache_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">df_exists</span><span class="p">:</span>
+            <span class="n">rdf</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">df</span>
+            <span class="n">cols_present</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">well_id_cols</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">rdf</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+            <span class="p">)</span>
+            <span class="n">rdf2</span> <span class="o">=</span> <span class="n">rdf</span><span class="p">[</span><span class="n">cols_present</span><span class="p">]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">well_id_cols</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">well_cache</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">well_cache</span><span class="p">,</span> <span class="n">rdf2</span><span class="p">],</span> <span class="n">sort</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
+                <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;unit_long&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">response</span>
+
+    <span class="k">def</span> <span class="nf">find_wells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_text</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">ids</span> <span class="o">=</span> <span class="n">parse_well_ids</span><span class="p">(</span><span class="n">input_text</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">dh_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">id_type</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ids</span> <span class="k">if</span> <span class="n">id_type</span> <span class="o">==</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">]</span>
+        <span class="n">unit_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">id_type</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ids</span> <span class="k">if</span> <span class="n">id_type</span> <span class="o">==</span> <span class="s2">&quot;unit_no&quot;</span><span class="p">]</span>
+        <span class="n">obs_nos</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">id_type</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ids</span> <span class="k">if</span> <span class="n">id_type</span> <span class="o">==</span> <span class="s2">&quot;obs_no&quot;</span><span class="p">]</span>
+        <span class="n">r1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GetUnitNumberSearchData&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;MAPNUM&quot;</span><span class="p">:</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">unit_nos</span><span class="p">)})</span>
+        <span class="n">r2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;GetObswellNumberSearchData&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;OBSNUMBER&quot;</span><span class="p">:</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">obs_nos</span><span class="p">)}</span>
+        <span class="p">)</span>
+        <span class="n">dfs</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">df</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="p">[</span><span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">]</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">df_exists</span><span class="p">]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+                <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;dhno&quot;</span><span class="p">:</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">,</span> <span class="s2">&quot;mapnum&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_no&quot;</span><span class="p">,</span> <span class="s2">&quot;obsnumber&quot;</span><span class="p">:</span> <span class="s2">&quot;obs_no&quot;</span><span class="p">}</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;obs_no&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">(),</span> <span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Wells</span><span class="p">([</span><span class="n">Well</span><span class="p">(</span><span class="o">**</span><span class="n">r</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()])</span>
+
+    <span class="k">def</span> <span class="nf">find_wells_in_lat_lon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lats</span><span class="p">,</span> <span class="n">lons</span><span class="p">):</span>
+        <span class="n">lons</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">lons</span><span class="p">)</span>
+        <span class="n">lats</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">lats</span><span class="p">)</span>
+        <span class="n">dfs</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">coords</span> <span class="o">=</span> <span class="p">[</span><span class="n">lats</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lons</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lats</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lons</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">box</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;</span><span class="si">{:.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">coords</span><span class="p">])</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GetGridData?Box=</span><span class="si">{box}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">))</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;dhno&quot;</span><span class="p">:</span> <span class="s2">&quot;dh_no&quot;</span><span class="p">,</span> <span class="s2">&quot;mapnum&quot;</span><span class="p">:</span> <span class="s2">&quot;unit_no&quot;</span><span class="p">,</span> <span class="s2">&quot;obsnumber&quot;</span><span class="p">:</span> <span class="s2">&quot;obs_no&quot;</span><span class="p">}</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;obs_no&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;unit_no&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">(),</span> <span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Wells</span><span class="p">([</span><span class="n">Well</span><span class="p">(</span><span class="o">**</span><span class="n">r</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()])</span>
+
+<div class="viewcode-block" id="WaterConnectSession.refresh_available_groupings">
+<a class="viewcode-back" href="../../apidocs.html#sa_gwdata.WaterConnectSession.refresh_available_groupings">[docs]</a>
+    <span class="k">def</span> <span class="nf">refresh_available_groupings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load lists data from API. Stores them in the attributes</span>
+<span class="sd">        aquifers, networks, nrm_regions, pwas, pwras.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GetAdvancedListsData&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aquifers</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">item</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]:</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">((</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;Aquifer&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">&quot;V&quot;</span> <span class="ow">in</span> <span class="n">item</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">networks</span> <span class="o">=</span> <span class="p">{</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]:</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;Networks&quot;</span><span class="p">]}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nrm_regions</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">item</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]:</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; NRM Region&quot;</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;NRMRegion&quot;</span><span class="p">]</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pwas</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">item</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]:</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; PWA&quot;</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;PrescribedArea&quot;</span><span class="p">]</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pwras</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">item</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]:</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; PWRA&quot;</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;PrescribedWRArea&quot;</span><span class="p">]</span>
+        <span class="p">}</span></div>
+
+
+    <span class="k">def</span> <span class="nf">data_pwa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pwa</span><span class="p">,</span> <span class="n">swl_status</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tds_status</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">swl_status</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">q</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;SWLSTATUS=&#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;C&quot;</span> <span class="k">if</span> <span class="n">swl_status</span> <span class="k">else</span> <span class="s2">&quot;H&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tds_status</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">q</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;SALSTATUS=&#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;H&quot;</span> <span class="k">if</span> <span class="n">tds_status</span> <span class="k">else</span> <span class="s2">&quot;H&quot;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;GetPWASearchData?PWA=</span><span class="si">{pwa}</span><span class="s2">&amp;Q=</span><span class="si">{q}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pwa</span><span class="o">=</span><span class="n">pwa</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="s2">&quot;%20AND%20&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">q</span><span class="p">))</span>
+        <span class="p">)</span>
+        <span class="c1"># SALINITY - can join by  AND</span>
+        <span class="c1"># GetPWASearchData?PWA=Angas-Bremer&amp;Q=SALSTATUS=&#39;C&#39;</span>
+        <span class="c1"># GetPWASearchData?PWA=Angas-Bremer&amp;Q=SWLSTATUS=&#39;C&#39;%20AND%20SALSTATUS=&#39;C&#39;</span>
+
+    <span class="k">def</span> <span class="nf">search_by_suburb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suburb</span><span class="p">):</span>
+        <span class="n">suburb</span> <span class="o">=</span> <span class="n">suburb</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GetSuburbFromName&quot;</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="s2">&quot;WDDWFS&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Suburb&quot;</span><span class="p">:</span> <span class="n">suburb</span><span class="p">})</span>
+
+    <span class="k">def</span> <span class="nf">search_by_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+        <span class="c1"># GetCircleData?Box=-34.155353,138.455916&amp;Radius=2</span>
+        <span class="n">lat</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span>
+        <span class="n">lon</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">lon</span><span class="p">)</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GetCircleData&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Box&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">],</span> <span class="s2">&quot;Radius&quot;</span><span class="p">:</span> <span class="n">radius</span><span class="p">})</span>
+
+    <span class="k">def</span> <span class="nf">search_by_rect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sw_corner</span><span class="p">,</span> <span class="n">ne_corner</span><span class="p">):</span>
+        <span class="n">lat0</span><span class="p">,</span> <span class="n">lon0</span> <span class="o">=</span> <span class="n">sw_corner</span>
+        <span class="n">lat1</span><span class="p">,</span> <span class="n">lon1</span> <span class="o">=</span> <span class="n">ne_corner</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;GetGridData&quot;</span><span class="p">,</span>
+            <span class="n">params</span><span class="o">=</span><span class="s2">&quot;Box=&quot;</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[</span><span class="n">lat1</span><span class="p">,</span> <span class="n">lon0</span><span class="p">,</span> <span class="n">lat0</span><span class="p">,</span> <span class="n">lon1</span><span class="p">]]),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">search_by_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">network</span><span class="p">):</span>
+        <span class="n">network_codes</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">network</span> <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+        <span class="n">networks_inverted</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="n">network_codes</span> <span class="o">+=</span> <span class="p">[</span>
+            <span class="n">networks_inverted</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">network</span> <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">networks</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="p">]</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Querying for validated network codes: </span><span class="si">{</span><span class="n">network_codes</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;GetObswellNetworkData&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="s2">&quot;Network=&quot;</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">network_codes</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Kent Inverarity.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

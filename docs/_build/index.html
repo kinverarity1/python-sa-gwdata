@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python access to groundwater data in South Australia &mdash; python-sa-gwdata 0.12.dev12+ge08a5da documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f9e7c862"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quickstart guide" href="010-quickstart-guide.html" />
+    <link href="_static/style.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            python-sa-gwdata
+          </a>
+              <div class="version">
+                0.12
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="010-quickstart-guide.html">Quickstart guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="020-background.html">Background information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="030-available-data.html">Available data types on Groundwater Data (GD)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="041-tutorial-finding-wells.html">Tutorial: finding wells</a></li>
+<li class="toctree-l1"><a class="reference internal" href="042-tutorial-monitoring-networks.html">Tutorial: monitoring networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="043-tutorial-water-monitoring-data.html">Tutorial: water monitoring data (WL, TDS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-apidocs.html">sa_gwdata developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-webservices.html">WaterConnect web services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="090-changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">python-sa-gwdata</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Python access to groundwater data in South Australia</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="python-access-to-groundwater-data-in-south-australia">
+<h1>Python access to groundwater data in South Australia<a class="headerlink" href="#python-access-to-groundwater-data-in-south-australia" title="Link to this heading"></a></h1>
+<p>sa_gwdata is a Python package to ease access to groundwater data in South Australia.
+This is an unofficial project, use at your own risk/reward.</p>
+<p><a class="reference external" href="https://github.com/kinverarity1/python-sa-gwdata">The project’s homepage is at GitHub</a>.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="010-quickstart-guide.html">Quickstart guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="010-quickstart-guide.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="010-quickstart-guide.html#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="010-quickstart-guide.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="010-quickstart-guide.html#access-to-waterconnect-webservices">Access to WaterConnect webservices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="020-background.html">Background information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="020-background.html#drillhole-well-identifiers">Drillhole/well identifiers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="020-background.html#drillhole-number">Drillhole number</a></li>
+<li class="toctree-l3"><a class="reference internal" href="020-background.html#unit-number">Unit number</a></li>
+<li class="toctree-l3"><a class="reference internal" href="020-background.html#observation-well-id">Observation well ID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="020-background.html#multiple-completions">Multiple completions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="020-background.html#spatial-groupings">Spatial groupings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="030-available-data.html">Available data types on Groundwater Data (GD)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="030-available-data.html#salinity-samples">Salinity samples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="030-available-data.html#geological-logs">Geological logs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="030-available-data.html#driller-s-logs">Driller’s logs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="030-available-data.html#lithological-logs">Lithological logs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="030-available-data.html#stratigraphic-logs">Stratigraphic logs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="030-available-data.html#hydrostratigraphic-logs">Hydrostratigraphic logs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="030-available-data.html#construction-information">Construction information</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="030-available-data.html#drilled-intervals">Drilled intervals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="030-available-data.html#casing-intervals-and-cementing-information">Casing intervals and cementing information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="030-available-data.html#production-zones">Production zones</a></li>
+<li class="toctree-l3"><a class="reference internal" href="030-available-data.html#water-cuts-groundwater-observations-during-drilling">Water cuts (groundwater observations during drilling)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="030-available-data.html#wellhead-elevation-surveys">Wellhead elevation surveys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="030-available-data.html#water-chemistry-analyses">Water chemistry analyses</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="041-tutorial-finding-wells.html">Tutorial: finding wells</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="041-tutorial-finding-wells.html#Search-for-wells-by-suburb">Search for wells by suburb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="041-tutorial-finding-wells.html#Searching-by-location-and-radius">Searching by location and radius</a></li>
+<li class="toctree-l2"><a class="reference internal" href="041-tutorial-finding-wells.html#Searching-by-a-rectangle">Searching by a rectangle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="042-tutorial-monitoring-networks.html">Tutorial: monitoring networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="042-tutorial-monitoring-networks.html#Get-a-list-of-monitoring-networks">Get a list of monitoring networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="042-tutorial-monitoring-networks.html#Download-wells-in-the-network">Download wells in the network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="042-tutorial-monitoring-networks.html#Download-more-than-one-network-at-once">Download more than one network at once</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="043-tutorial-water-monitoring-data.html">Tutorial: water monitoring data (WL, TDS)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="043-tutorial-water-monitoring-data.html#Water-level-data">Water level data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="043-tutorial-water-monitoring-data.html#Anomalous-data-points">Anomalous data points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="043-tutorial-water-monitoring-data.html#Groundwater-level-parameters">Groundwater level parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="043-tutorial-water-monitoring-data.html#Measured-during!">Measured during!</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="043-tutorial-water-monitoring-data.html#Salinity-data">Salinity data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="070-apidocs.html">sa_gwdata developer guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="070-apidocs.html#docstrings">Docstrings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="070-apidocs.html#find-wells">Find wells</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="070-apidocs.html#sa_gwdata.find_wells"><code class="docutils literal notranslate"><span class="pre">find_wells()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="070-apidocs.html#sa_gwdata.parse_well_ids_plaintext"><code class="docutils literal notranslate"><span class="pre">parse_well_ids_plaintext()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="070-apidocs.html#sa_gwdata.find_wells_in_lat_lon"><code class="docutils literal notranslate"><span class="pre">find_wells_in_lat_lon()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="070-apidocs.html#download-data">Download data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="070-apidocs.html#sa_gwdata.wells_summary"><code class="docutils literal notranslate"><span class="pre">wells_summary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="070-apidocs.html#sa_gwdata.water_levels"><code class="docutils literal notranslate"><span class="pre">water_levels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="070-apidocs.html#sa_gwdata.salinities"><code class="docutils literal notranslate"><span class="pre">salinities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="070-apidocs.html#sa_gwdata.water_chem"><code class="docutils literal notranslate"><span class="pre">water_chem()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="070-apidocs.html#sa_gwdata.elevation_surveys"><code class="docutils literal notranslate"><span class="pre">elevation_surveys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="070-apidocs.html#sa_gwdata.construction_events"><code class="docutils literal notranslate"><span class="pre">construction_events()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="070-apidocs.html#sa_gwdata.construction_details"><code class="docutils literal notranslate"><span class="pre">construction_details()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="070-apidocs.html#sa_gwdata.drillers_logs"><code class="docutils literal notranslate"><span class="pre">drillers_logs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="070-apidocs.html#sa_gwdata.strat_logs"><code class="docutils literal notranslate"><span class="pre">strat_logs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="070-apidocs.html#sa_gwdata.hydrostrat_logs"><code class="docutils literal notranslate"><span class="pre">hydrostrat_logs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="070-apidocs.html#sa_gwdata.lith_logs"><code class="docutils literal notranslate"><span class="pre">lith_logs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="070-apidocs.html#well-identifiers">Well identifiers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="070-apidocs.html#sa_gwdata.Well"><code class="docutils literal notranslate"><span class="pre">Well</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.Well.id"><code class="docutils literal notranslate"><span class="pre">Well.id</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.Well.title"><code class="docutils literal notranslate"><span class="pre">Well.title</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.Well.obs_no"><code class="docutils literal notranslate"><span class="pre">Well.obs_no</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.Well.unit_no"><code class="docutils literal notranslate"><span class="pre">Well.unit_no</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.Well.set"><code class="docutils literal notranslate"><span class="pre">Well.set()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.Well.set_obs_no"><code class="docutils literal notranslate"><span class="pre">Well.set_obs_no()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.Well.set_unit_no"><code class="docutils literal notranslate"><span class="pre">Well.set_unit_no()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.Well.to_scalar_dict"><code class="docutils literal notranslate"><span class="pre">Well.to_scalar_dict()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.Well.path_safe_repr"><code class="docutils literal notranslate"><span class="pre">Well.path_safe_repr()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="070-apidocs.html#sa_gwdata.UnitNo"><code class="docutils literal notranslate"><span class="pre">UnitNo</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.UnitNo.map"><code class="docutils literal notranslate"><span class="pre">UnitNo.map</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.UnitNo.seq"><code class="docutils literal notranslate"><span class="pre">UnitNo.seq</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.UnitNo.hyphen"><code class="docutils literal notranslate"><span class="pre">UnitNo.hyphen</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.UnitNo.long"><code class="docutils literal notranslate"><span class="pre">UnitNo.long</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.UnitNo.long_int"><code class="docutils literal notranslate"><span class="pre">UnitNo.long_int</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.UnitNo.wilma"><code class="docutils literal notranslate"><span class="pre">UnitNo.wilma</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.UnitNo.hydstra"><code class="docutils literal notranslate"><span class="pre">UnitNo.hydstra</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.UnitNo.set"><code class="docutils literal notranslate"><span class="pre">UnitNo.set()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="070-apidocs.html#sa_gwdata.ObsNo"><code class="docutils literal notranslate"><span class="pre">ObsNo</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.ObsNo.plan"><code class="docutils literal notranslate"><span class="pre">ObsNo.plan</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.ObsNo.seq"><code class="docutils literal notranslate"><span class="pre">ObsNo.seq</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.ObsNo.id"><code class="docutils literal notranslate"><span class="pre">ObsNo.id</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.ObsNo.egis"><code class="docutils literal notranslate"><span class="pre">ObsNo.egis</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.ObsNo.parse"><code class="docutils literal notranslate"><span class="pre">ObsNo.parse()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.ObsNo.set"><code class="docutils literal notranslate"><span class="pre">ObsNo.set()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="070-apidocs.html#waterconnect-web-service-utilities">WaterConnect web service utilities</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="070-apidocs.html#sa_gwdata.WaterConnectSession"><code class="docutils literal notranslate"><span class="pre">WaterConnectSession</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.WaterConnectSession.get"><code class="docutils literal notranslate"><span class="pre">WaterConnectSession.get()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.WaterConnectSession.refresh_available_groupings"><code class="docutils literal notranslate"><span class="pre">WaterConnectSession.refresh_available_groupings()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="070-apidocs.html#sa_gwdata.Response"><code class="docutils literal notranslate"><span class="pre">Response</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.Response.r"><code class="docutils literal notranslate"><span class="pre">Response.r</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.Response.json"><code class="docutils literal notranslate"><span class="pre">Response.json</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.Response.df"><code class="docutils literal notranslate"><span class="pre">Response.df</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="070-apidocs.html#sa_gwdata.Response.df_exists"><code class="docutils literal notranslate"><span class="pre">Response.df_exists</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="080-webservices.html">WaterConnect web services</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="080-webservices.html#searching-for-wells">Searching for wells</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="080-webservices.html#by-unit-observation-well-permit-number">By unit/observation well/permit number</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getunitnumbersearchdata">GetUnitNumberSearchData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getobswellnumbersearchdata">GetObswellNumberSearchData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getpermitnumbersearchdata">GetPermitNumberSearchData</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="080-webservices.html#spatially-by-rectangle-or-circle">Spatially (by rectangle or circle)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getgriddata">GetGridData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getcircledata">GetCircleData</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="080-webservices.html#spatially-by-suburb-council-nrm-or-hundred">Spatially (by suburb, council, NRM, or hundred)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getsuburbfromname">GetSuburbFromName</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getlgafromname">GetLGAFromName</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getnrmregionsearchdata">GetNRMRegionSearchData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getnrmregionfromname">GetNRMRegionFromName</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getlbsearchdata">GetLBSearchData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getlbfromname">GetLBFromName</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#gethundredparceldata-by-hundred-name">GetHundredParcelData (by hundred name)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#gethundredparceldata-by-parcel-plan-title-numbers">GetHundredParcelData (by parcel/plan/title numbers)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getboundaryfromtitle">GetBoundaryFromTitle</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="080-webservices.html#spatially-by-observation-network-pwa-or-pwra">Spatially (by observation network, PWA, or PWRA)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getobswellnetworkdata">GetObswellNetworkData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getpwasearchdata">GetPWASearchData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getpwafromname">GetPWAFromName</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getpwrasearchdata">GetPWRASearchData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getpwrafromname">GetPWRAFromName</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="080-webservices.html#data-for-a-single-well">Data for a single well</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="080-webservices.html#query-by-drillhole-number">Query by drillhole number</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getsummarydetails-for-a-well">GetSummaryDetails (for a well)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getextrasummarydetails-for-a-well">GetExtraSummaryDetails (for a well)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getwaterleveldetails">GetWaterLevelDetails</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getsalinitydetails">GetSalinityDetails</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getwellyielddetails">GetWellYieldDetails</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getwaterchemistrydetails">GetWaterChemistryDetails</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getextrawaterchemistryalldata">GetExtraWaterChemistryAllData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getelevationdetails">GetElevationDetails</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getlithologicalloginformation">GetLithologicalLogInformation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getstratigraphiclogsdetails">GetStratigraphicLogsDetails</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getdrillersloginformation">GetDrillersLogInformation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getdrillerslogsummary">GetDrillersLogSummary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#gethydrostratinformation">GetHydrostratInformation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="080-webservices.html#getconstructioninformation">GetConstructionInformation</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="080-webservices.html#getconstructionsummaryinformation">GetConstructionSummaryInformation</a></li>
+<li class="toctree-l5"><a class="reference internal" href="080-webservices.html#getdrillingsummary">GetDrillingSummary</a></li>
+<li class="toctree-l5"><a class="reference internal" href="080-webservices.html#getconstructionwatercut">GetConstructionWaterCut</a></li>
+<li class="toctree-l5"><a class="reference internal" href="080-webservices.html#getcasingsummary">GetCasingSummary</a></li>
+<li class="toctree-l5"><a class="reference internal" href="080-webservices.html#getproductionzonesummary">GetProductionZoneSummary</a></li>
+<li class="toctree-l5"><a class="reference internal" href="080-webservices.html#getextrasummarydetails">GetExtraSummaryDetails</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="080-webservices.html#metadata-getadvancedlistsdata">Metadata - GetAdvancedListsData</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="090-changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="090-changelog.html#version-0-10-0">Version 0.10.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="090-changelog.html#version-0-7-0">Version 0.7.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="090-changelog.html#version-0-6-0">Version 0.6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="090-changelog.html#version-0-5-4">Version 0.5.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="090-changelog.html#version-0-5-3">Version 0.5.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="090-changelog.html#version-0-5-2">Version 0.5.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="090-changelog.html#version-0-5-1">Version 0.5.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="090-changelog.html#version-0-5-0">Version 0.5.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="090-changelog.html#version-0-4-1">Version 0.4.1</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="010-quickstart-guide.html" class="btn btn-neutral float-right" title="Quickstart guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Kent Inverarity.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

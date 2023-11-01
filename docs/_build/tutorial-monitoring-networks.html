@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tutorial: monitoring networks &mdash; python-sa-gwdata 0.12.dev12+ge08a5da documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/nbsphinx-code-cells.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f9e7c862"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorial: water monitoring data (WL, TDS)" href="tutorial-water-monitoring-data.html" />
+    <link rel="prev" title="Tutorial: finding wells" href="tutorial-finding-wells.html" />
+    <link href="_static/style.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            python-sa-gwdata
+          </a>
+              <div class="version">
+                0.12
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart-guide.html">Quickstart guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="background.html">Background information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="available-data.html">Available data types on Groundwater Data (GD)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial-finding-wells.html">Tutorial: finding wells</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial: monitoring networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Get-a-list-of-monitoring-networks">Get a list of monitoring networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Download-wells-in-the-network">Download wells in the network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Download-more-than-one-network-at-once">Download more than one network at once</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial-water-monitoring-data.html">Tutorial: water monitoring data (WL, TDS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apidocs.html">sa_gwdata developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="webservices.html">WaterConnect web services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">python-sa-gwdata</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Tutorial: monitoring networks</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tutorial-monitoring-networks.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Tutorial:-monitoring-networks">
+<h1>Tutorial: monitoring networks<a class="headerlink" href="#Tutorial:-monitoring-networks" title="Link to this heading"></a></h1>
+<p>This tutorial covers what information is available about monitoring networks.</p>
+<p>We will download the relevant data using this package (python-sa-gwdata) – importable as <code class="docutils literal notranslate"><span class="pre">sa_gwdata</span></code> – and use some other packages for other things:</p>
+<ul class="simple">
+<li><p>matplotlib, numpy, pandas - used in the background</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sa_gwdata</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">contextily</span> <span class="k">as</span> <span class="nn">cx</span>
+</pre></div>
+</div>
+</div>
+<p>This step is optional:</p>
+<p>You can specify the working coordinate reference system (CRS). I’m going to use <a class="reference external" href="https://epsg.io/8059">SA Lambert GDA2020</a>, which is in eastings and northings and covers the whole state. You can pick any!</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">session</span> <span class="o">=</span> <span class="n">sa_gwdata</span><span class="o">.</span><span class="n">get_global_session</span><span class="p">(</span><span class="n">working_crs</span><span class="o">=</span><span class="s2">&quot;EPSG:8059&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>This variable (<code class="docutils literal notranslate"><span class="pre">session</span></code>), you can either use, or ignore. If you use the module-level functions as shown below, the package will use <code class="docutils literal notranslate"><span class="pre">session</span></code> in the background. There are some subtle differences which you can see more information about HERE (TODO)</p>
+<section id="Get-a-list-of-monitoring-networks">
+<h2>Get a list of monitoring networks<a class="headerlink" href="#Get-a-list-of-monitoring-networks" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">session</span><span class="o">.</span><span class="n">networks</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;AW_NP&#39;: &#39;Alinytjara Wilurara Non-Prescribed Area&#39;,
+ &#39;ANGBRM&#39;: &#39;Angas Bremer PWA&#39;,
+ &#39;BAROOTA&#39;: &#39;Baroota PWRA&#39;,
+ &#39;BAROSS_IRR&#39;: &#39;Barossa irrigation wells salinity monitoring&#39;,
+ &#39;BAROSSA&#39;: &#39;Barossa PWRA&#39;,
+ &#39;BERI_REN&#39;: &#39;Berri and Renmark Irrigation Areas&#39;,
+ &#39;BOT_GDNS&#39;: &#39;Botanic Gardens wetlands&#39;,
+ &#39;CENT_ADEL&#39;: &#39;Central Adelaide PWA&#39;,
+ &#39;CHOWILLA&#39;: &#39;Chowilla Floodplain&#39;,
+ &#39;CLARE&#39;: &#39;Clare PWRA&#39;,
+ &#39;EMLR&#39;: &#39;Eastern Mount Lofty Ranges PWRA&#39;,
+ &#39;EP_NP&#39;: &#39;Eyre Peninsula Non-Prescribed Area&#39;,
+ &#39;FAR NORTH&#39;: &#39;Far North PWA&#39;,
+ &#39;GG_EIZ&#39;: &#39;Golden Grove extractive indust zone&#39;,
+ &#39;KANGFLAT&#39;: &#39;Kangaroo Flat irrigation wells salinity monitoring&#39;,
+ &#39;KI_NP&#39;: &#39;Kangaroo Island Non-Prescribed Area&#39;,
+ &#39;KAT_FP&#39;: &#39;Katarapko Floodplain&#39;,
+ &#39;LEIGHCK&#39;: &#39;Leigh Creek&#39;,
+ &#39;LLC_NTH&#39;: &#39;Lower Limestone Coast PWA_North&#39;,
+ &#39;LLC_STH&#39;: &#39;Lower Limestone Coast PWA_South&#39;,
+ &#39;LOXTON&#39;: &#39;Loxton - Bookpurnong Irrigation Areas&#39;,
+ &#39;MALLEE&#39;: &#39;Mallee PWA&#39;,
+ &#39;MARLA&#39;: &#39;Marla Township&#39;,
+ &#39;MARNE&#39;: &#39;Marne River and Saunders Creek PWRA&#39;,
+ &#39;MV_IRR_TDS&#39;: &#39;McLaren Vale  PWA irrigation wells salinity monitoring&#39;,
+ &#39;MCL_VALE&#39;: &#39;McLaren Vale PWA&#39;,
+ &#39;MUSGRAVE&#39;: &#39;Musgrave PWA&#39;,
+ &#39;NOORA_SAW&#39;: &#39;Noora Disposal Basin&#39;,
+ &#39;NY_NP_NTH&#39;: &#39;Northern &amp; Yorke Non-Prescribed Area - NORTH&#39;,
+ &#39;NY_NP_STH&#39;: &#39;Northern &amp; Yorke Non-Prescribed Area - SOUTH&#39;,
+ &#39;NAP_PERCH&#39;: &#39;Northern Adelaide Plains Perched Aquifers&#39;,
+ &#39;NAP&#39;: &#39;Northern Adelaide Plains PWA&#39;,
+ &#39;NAP_LIC&#39;: &#39;Northern Adelaide Plains PWA irrigation wells salinity monitoring&#39;,
+ &#39;PADTH&#39;: &#39;Padthaway PWA&#39;,
+ &#39;PEAKE&#39;: &#39;Peake, Roby and Sherlock PWA&#39;,
+ &#39;PIKEMURTHO&#39;: &#39;Pike and Murtho Irrigation Areas&#39;,
+ &#39;PIKE_FP&#39;: &#39;Pike Floodplain&#39;,
+ &#39;SAAL_NP&#39;: &#39;SA Arid Lands Non-Prescribed Area&#39;,
+ &#39;SAMDB_SAW&#39;: &#39;SA Murray Darling Basin - SA Water&#39;,
+ &#39;SAMDB_NP&#39;: &#39;SA Murray Darling Basin Non-Prescribed Area&#39;,
+ &#39;SAW_MURTHO&#39;: &#39;SA Water Murtho SIS&#39;,
+ &#39;SAW_PIKE&#39;: &#39;SA Water Pike SIS&#39;,
+ &#39;SA_TWS&#39;: &#39;SA Water Town Water Supplies salinity monitoring&#39;,
+ &#39;SAW_WAIK&#39;: &#39;SA Water Waikerie SIS&#39;,
+ &#39;SAW_WOOLP&#39;: &#39;SA Water Woolpunda SIS&#39;,
+ &#39;SE_NP&#39;: &#39;South East Non-Prescribed Area&#39;,
+ &#39;STHNBASINS&#39;: &#39;Southern Basins PWA&#39;,
+ &#39;STKILD_MAN&#39;: &#39;St Kilda mangroves&#39;,
+ &#39;EP_STREAKY&#39;: &#39;Streaky Bay Non-Prescribed Area&#39;,
+ &#39;TATIARA&#39;: &#39;Tatiara PWA&#39;,
+ &#39;TINT_COON&#39;: &#39;Tintinara Coonalpyn PWA&#39;,
+ &#39;WAK_MRK&#39;: &#39;Waikerie Moorook Irrigation Areas&#39;,
+ &#39;WMLR&#39;: &#39;Western Mount Lofty Ranges PWRA&#39;}
+</pre></div></div>
+</div>
+</section>
+<section id="Download-wells-in-the-network">
+<h2>Download wells in the network<a class="headerlink" href="#Download-wells-in-the-network" title="Link to this heading"></a></h2>
+<p>Let’s look at the status of monitoring wells in McLaren Vale PWA</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wells</span> <span class="o">=</span> <span class="n">sa_gwdata</span><span class="o">.</span><span class="n">search_by_network</span><span class="p">(</span><span class="s1">&#39;MCL_VALE&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The monitoring status of a well is conveyed in these columns:</p>
+<ul class="simple">
+<li><p><strong>swlstatus</strong>: water level monitoring status. C = currently monitored</p></li>
+<li><p><strong>salstatus</strong>: salinity monitoring status. C = currently monitored</p></li>
+</ul>
+<p>“H” means historic i.e. was monitored once, and probably has some data, but not currently monitored.</p>
+<p>“N” means “not monitored”, so a similar meaning to “H”, in effect.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wells</span><span class="p">[[</span><span class="s1">&#39;obsnumber&#39;</span><span class="p">,</span> <span class="s1">&#39;obsnetwork&#39;</span><span class="p">,</span> <span class="s1">&#39;swlstatus&#39;</span><span class="p">,</span> <span class="s1">&#39;salstatus&#39;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>obsnumber</th>
+      <th>obsnetwork</th>
+      <th>swlstatus</th>
+      <th>salstatus</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>WLG036</td>
+      <td>MCL_VALE</td>
+      <td>N</td>
+      <td>H</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>WLG035</td>
+      <td>MCL_VALE</td>
+      <td>N</td>
+      <td>H</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>WLG039</td>
+      <td>MCL_VALE</td>
+      <td>H</td>
+      <td>H</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>WLG038</td>
+      <td>MCL_VALE</td>
+      <td>C</td>
+      <td>H</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>WLG040</td>
+      <td>MCL_VALE</td>
+      <td>H</td>
+      <td>H</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>150</th>
+      <td>WLG156</td>
+      <td>MCL_VALE</td>
+      <td>C</td>
+      <td>N</td>
+    </tr>
+    <tr>
+      <th>151</th>
+      <td>WLG157</td>
+      <td>MCL_VALE</td>
+      <td>C</td>
+      <td>N</td>
+    </tr>
+    <tr>
+      <th>152</th>
+      <td>WLG158</td>
+      <td>MCL_VALE</td>
+      <td>C</td>
+      <td>N</td>
+    </tr>
+    <tr>
+      <th>153</th>
+      <td>NaN</td>
+      <td>MCL_VALE</td>
+      <td>N</td>
+      <td>N</td>
+    </tr>
+    <tr>
+      <th>154</th>
+      <td>WLG190</td>
+      <td>MCL_VALE</td>
+      <td>C</td>
+      <td>N</td>
+    </tr>
+  </tbody>
+</table>
+<p>155 rows × 4 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="n">wells</span><span class="p">[</span><span class="n">wells</span><span class="o">.</span><span class="n">swlstatus</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Water level&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">wells</span><span class="p">[</span><span class="n">wells</span><span class="o">.</span><span class="n">salstatus</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Salinity&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">historic</span> <span class="o">=</span> <span class="p">(</span><span class="n">wells</span><span class="o">.</span><span class="n">swlstatus</span> <span class="o">!=</span> <span class="s2">&quot;C&quot;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">wells</span><span class="o">.</span><span class="n">salstatus</span> <span class="o">!=</span> <span class="s2">&quot;C&quot;</span><span class="p">)</span>
+<span class="n">wells</span><span class="p">[</span><span class="n">historic</span><span class="p">]</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Historic&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">cx</span><span class="o">.</span><span class="n">add_basemap</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">cx</span><span class="o">.</span><span class="n">providers</span><span class="o">.</span><span class="n">Esri</span><span class="o">.</span><span class="n">WorldImagery</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">session</span><span class="o">.</span><span class="n">working_crs</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/tutorial-monitoring-networks_13_0.png" src="_images/tutorial-monitoring-networks_13_0.png" />
+</div>
+</div>
+</section>
+<section id="Download-more-than-one-network-at-once">
+<h2>Download more than one network at once<a class="headerlink" href="#Download-more-than-one-network-at-once" title="Link to this heading"></a></h2>
+<p>Let’s now download all the Adelaide Plains monitoring networks in one go, and colour the wells by the network they are in.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wells</span> <span class="o">=</span> <span class="n">sa_gwdata</span><span class="o">.</span><span class="n">search_by_network</span><span class="p">(</span>
+    <span class="s1">&#39;NAP&#39;</span><span class="p">,</span> <span class="s1">&#39;NAP_LIC&#39;</span><span class="p">,</span> <span class="s1">&#39;NAP_PERCH&#39;</span><span class="p">,</span> <span class="s1">&#39;CENT_ADEL&#39;</span><span class="p">,</span> <span class="s1">&#39;GG_EIZ&#39;</span><span class="p">,</span> <span class="s1">&#39;STKILD_MAN&#39;</span><span class="p">,</span> <span class="s1">&#39;KANGFLAT&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">network</span> <span class="ow">in</span> <span class="n">wells</span><span class="o">.</span><span class="n">obsnetwork</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
+    <span class="n">wells</span><span class="p">[</span><span class="n">wells</span><span class="o">.</span><span class="n">obsnetwork</span> <span class="o">==</span> <span class="n">network</span><span class="p">]</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">network</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">cx</span><span class="o">.</span><span class="n">add_basemap</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">cx</span><span class="o">.</span><span class="n">providers</span><span class="o">.</span><span class="n">Esri</span><span class="o">.</span><span class="n">WorldImagery</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">session</span><span class="o">.</span><span class="n">working_crs</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/tutorial-monitoring-networks_17_0.png" src="_images/tutorial-monitoring-networks_17_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorial-finding-wells.html" class="btn btn-neutral float-left" title="Tutorial: finding wells" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorial-water-monitoring-data.html" class="btn btn-neutral float-right" title="Tutorial: water monitoring data (WL, TDS)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Kent Inverarity.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Well summary/header information &mdash; python-sa-gwdata 0.12.dev12+ge08a5da documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f9e7c862"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Groundwater level" href="data-types-groundwater-level.html" />
+    <link rel="prev" title="Available data types on Groundwater Data (GD)" href="available-data.html" />
+    <link href="_static/style.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            python-sa-gwdata
+          </a>
+              <div class="version">
+                0.12
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart-guide.html">Quickstart guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="background.html">Background information</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="available-data.html">Available data types on Groundwater Data (GD)</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Well summary/header information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data-types-groundwater-level.html">Groundwater level</a></li>
+<li class="toctree-l2"><a class="reference internal" href="available-data.html#salinity-samples">Salinity samples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="available-data.html#driller-s-logs">Driller’s logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="available-data.html#lithological-logs">Lithological logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="available-data.html#stratigraphic-logs">Stratigraphic logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="available-data.html#hydrostratigraphic-logs">Hydrostratigraphic logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="available-data.html#drilled-intervals">Drilled intervals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="available-data.html#casing-intervals-and-cementing-information">Casing intervals and cementing information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="available-data.html#production-zones">Production zones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="available-data.html#water-cuts-groundwater-observations-during-drilling">Water cuts (groundwater observations during drilling)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="available-data.html#wellhead-elevation-surveys">Wellhead elevation surveys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="available-data.html#water-chemistry-analyses">Water chemistry analyses</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial-finding-wells.html">Tutorial: finding wells</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial-monitoring-networks.html">Tutorial: monitoring networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial-water-monitoring-data.html">Tutorial: water monitoring data (WL, TDS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apidocs.html">sa_gwdata developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="webservices.html">WaterConnect web services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">python-sa-gwdata</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="available-data.html">Available data types on Groundwater Data (GD)</a></li>
+      <li class="breadcrumb-item active">Well summary/header information</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/data-types-well-summary.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="well-summary-header-information">
+<span id="well-summary"></span><h1>Well summary/header information<a class="headerlink" href="#well-summary-header-information" title="Link to this heading"></a></h1>
+<p>Groundwater Data provides data for all drillholes in the State drillhole database (SA Geodata). This
+covers multiple types of drillholes:</p>
+<dl class="simple">
+<dt>Water wells</dt><dd><p>Wells which are intended to intersect groundwater, whether for monitoring or for
+extraction or recharge/drainage of groundwater. The data for these type
+of wells derives from well completion reports submitted to DEW as part of the
+requirements attached to water well permits.</p>
+</dd>
+<dt>Water points</dt><dd><p>Database records to record surface expressions of groundwater such as springs and
+sinkholes.</p>
+</dd>
+<dt>Mineral exploration wells</dt><dd><p>Drilled under an exploration or mining lease. Data for these are added by
+the Department of Energy &amp; Mining.</p>
+</dd>
+<dt>Petroleum exploration or production wells</dt><dd><p>Drilled under a petroleum lease. Incomplete data are available for these
+drillholes: the main place to retrieve petroleum well data from is
+<a class="reference external" href="https://peps.sa.gov.au/">PEPS</a>.</p>
+</dd>
+<dt>Other</dt><dd><p>Engineering/geotechnical holes and other types of shallow drillholes may
+also be in the database.</p>
+</dd>
+</dl>
+<p>All the data types below can be added and present for all types of drillholes,
+but in general it will be most complete for water wells, and for some of the
+geological data types, also the case for mineral exploration wells.</p>
+<p>Well information is available through:</p>
+<ul class="simple">
+<li><p>the “Well Summary” CSV download</p></li>
+<li><p>the <a class="reference internal" href="GetSummaryDetails.html"><span class="doc">GetSummaryDetails (for a well)</span></a> JSON call</p></li>
+<li><p>the <a class="reference internal" href="apidocs.html#sa_gwdata.wells_summary" title="sa_gwdata.wells_summary"><code class="xref py py-func docutils literal notranslate"><span class="pre">sa_gwdata.wells_summary()</span></code></a> function</p></li>
+</ul>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 41%" />
+<col style="width: 18%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>CSV</p></th>
+<th class="head"><p>DataFrame</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="background.html#drillhole-number"><span class="std std-ref">Drillhole number</span></a></p></td>
+<td></td>
+<td><p>DHNO</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="background.html#unit-number"><span class="std std-ref">Unit number (hyphenated)</span></a></p></td>
+<td></td>
+<td><p>Unit_No</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="background.html#unit-number"><span class="std std-ref">Unit number (integer)</span></a></p></td>
+<td></td>
+<td><p>Unit_Number</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Drillhole name</p></td>
+<td></td>
+<td><p>dh_name</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Observation well network</p></td>
+<td></td>
+<td><p>network</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Obswell number</p></td>
+<td></td>
+<td><p>Obs_No</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Drillhole class</p></td>
+<td></td>
+<td><p>drillhole_class</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Water point type code</p></td>
+<td><p>Only relevant if the drillhole is a Water Point</p></td>
+<td><p>water_point_type_code</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Aquifer monitored</p></td>
+<td></td>
+<td><p>Aquifer</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Original drilled depth</p></td>
+<td></td>
+<td><p>Orig_drilled_depth</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Date of original drilled depth</p></td>
+<td></td>
+<td><p>Orig_drilled_date</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Maximum depth drilled</p></td>
+<td></td>
+<td><p>max_drill_depth</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Date of maximum depth drilled</p></td>
+<td></td>
+<td><p>max_drill_date</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Most recent measured depth</p></td>
+<td></td>
+<td><p>late_open_depth</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Date of most recent measured depth</p></td>
+<td></td>
+<td><p>late_open_date</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Most recent well permit</p></td>
+<td></td>
+<td><p>late_permit_no</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Maximum depth of casing</p></td>
+<td><p>Does not include production zone intervals such as screens or even sumps.</p></td>
+<td><p>cased_to</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Smallest inner diameter of casing installed in well</p></td>
+<td></td>
+<td><p>case_min_diam</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Purpose of well</p></td>
+<td></td>
+<td><p>purpose</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Most recent status</p></td>
+<td><p>This field is frequently out of date</p></td>
+<td><p>latest_status</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Date of most recent status</p></td>
+<td></td>
+<td><p>latest_status_date</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Most recent <a class="reference internal" href="data-types-groundwater-level.html#depth-to-water"><span class="std std-ref">DTW</span></a> measurement</p></td>
+<td></td>
+<td><p>dtw</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Most recent <a class="reference internal" href="data-types-groundwater-level.html#standing-water-level"><span class="std std-ref">SWL</span></a> measurement</p></td>
+<td></td>
+<td><p>swl</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Most recent <a class="reference internal" href="data-types-groundwater-level.html#reduced-standing-water-level"><span class="std std-ref">RSWL</span></a> measurement</p></td>
+<td></td>
+<td><p>rswl</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Date of most recent DTW/SWL/RSWL measurement</p></td>
+<td></td>
+<td><p>water_level_date</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Most recent <span class="xref std std-ref">TDS</span> measurement</p></td>
+<td></td>
+<td><p>TDS</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Most recent <span class="xref std std-ref">EC</span> measurement</p></td>
+<td></td>
+<td><p>EC</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Date of most recent salinity measurement</p></td>
+<td></td>
+<td><p>salinity_date</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Most recent pH measurement</p></td>
+<td></td>
+<td><p>pH</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Date of most recent pH measurement</p></td>
+<td></td>
+<td><p>pH_date</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Most recent well yield</p></td>
+<td></td>
+<td><p>yield</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Date of most recent well yield</p></td>
+<td></td>
+<td><p>yield_date</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>UTM easting</p></td>
+<td></td>
+<td><p>mga_easting</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>UTM northing</p></td>
+<td></td>
+<td><p>mga_northing</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>UTM zone</p></td>
+<td></td>
+<td><p>mga_zone</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Longitude (degrees)</p></td>
+<td></td>
+<td><p>long_degrees</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Longitude (min)</p></td>
+<td></td>
+<td><p>long_minutes</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Longitude (sec)</p></td>
+<td></td>
+<td><p>long_seconds</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Latitude (degrees)</p></td>
+<td></td>
+<td><p>lat_degrees</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Latitude (min)</p></td>
+<td></td>
+<td><p>lat_minutes</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Latitude (sec)</p></td>
+<td></td>
+<td><p>lat_seconds</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Longitude as decimal degrees</p></td>
+<td></td>
+<td><p>decimal_long</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Latitude as decimal degrees</p></td>
+<td><p>As a positive number, even though it is in the southern hemisphere</p></td>
+<td><p>decimal_lat</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Latitude as decimal degrees</p></td>
+<td><p>As a negative number</p></td>
+<td><p>neg_decimal_lat</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Hundred</p></td>
+<td></td>
+<td><p>hundred</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Plan</p></td>
+<td></td>
+<td><p>plan</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Parcel</p></td>
+<td></td>
+<td><p>parcel</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Certificate of title</p></td>
+<td></td>
+<td><p>Title</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>250K mapsheet</p></td>
+<td></td>
+<td><p>map_250k</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>100K mapsheet</p></td>
+<td></td>
+<td><p>map_100k</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>50K mapsheet</p></td>
+<td></td>
+<td><p>map_50k</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>10K mapsheet</p></td>
+<td></td>
+<td><p>map_10k</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>2500 mapsheet</p></td>
+<td></td>
+<td><p>map_2_5k</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>1000 mapsheet</p></td>
+<td></td>
+<td><p>map_1k</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Water information indicator</p></td>
+<td><p>?</p></td>
+<td><p>water_info</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Salinity data indicator</p></td>
+<td><p>Y when there are salinity records</p></td>
+<td><p>salinity</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Water chemistry data indicator</p></td>
+<td><p>Y when there are water chemistry analyses</p></td>
+<td><p>water_chemistry</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Geophysical log data indicator</p></td>
+<td><p>Y if there are geophysical logs available (please use ‘Contact Us’ to obtain)</p></td>
+<td><p>geophys_log</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Drillers log indicator</p></td>
+<td></td>
+<td><p>drill_log</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Lithological log indicator</p></td>
+<td></td>
+<td><p>lith_log</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="available-data.html" class="btn btn-neutral float-left" title="Available data types on Groundwater Data (GD)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="data-types-groundwater-level.html" class="btn btn-neutral float-right" title="Groundwater level" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Kent Inverarity.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
