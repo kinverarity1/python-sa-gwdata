@@ -8,6 +8,8 @@ shapely
 contextily
 geopandas
 
+setuptools
+setuptools_scm
 pytest>=3.6
 pytest-cov
 codacy-coverage
