@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GetGridData &mdash; python-sa-gwdata 0.12.dev12+ge08a5da documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f9e7c862"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link href="_static/style.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            python-sa-gwdata
+          </a>
+              <div class="version">
+                0.12
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart-guide.html">Quickstart guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="background.html">Background information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="available-data.html">Available data types on Groundwater Data (GD)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial-finding-wells.html">Tutorial: finding wells</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial-monitoring-networks.html">Tutorial: monitoring networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial-water-monitoring-data.html">Tutorial: water monitoring data (WL, TDS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apidocs.html">sa_gwdata developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="webservices.html">WaterConnect web services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">python-sa-gwdata</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">GetGridData</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/GetGridData.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="getgriddata">
+<h1>GetGridData<a class="headerlink" href="#getgriddata" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetGridData?Box=-35.035057,138.801484,-35.024338,138.82174">GetGridData?Box=-35.035057,138.801484,-35.024338,138.82174</a></p>
+<p>Returns a JSON array of objects - only two are shown below:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;DHNO&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">41267</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;LAT&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">-35.0258564</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;LON&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">138.8098983</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;MAPNUM&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">662702847</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;MAX_DEPTH&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">4.5</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;SWL&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.7</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;TDS&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">655</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;CLASS&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WW&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;PWRA&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Western Mount Lofty Ranges&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;NRM&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Adelaide &amp; Mt Lofty Ranges&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;LOGDRILL&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;N&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;LITHOLOG&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;N&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;CHEM&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;N&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;WATER&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Y&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;SAL&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Y&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;OBSWELL&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;N&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;STRATLOG&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;N&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;HSTRATLOG&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;N&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;LATEST_SWL_DATE&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1978-07-07&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;LATEST_SAL_DATE&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1978-07-07&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;LATEST_OPEN_DATE&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1978-07-07&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;DHNO&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">285207</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;LAT&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">-35.0255666</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;LON&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">138.8127263</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;MAPNUM&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">662715026</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;MAX_DEPTH&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">77</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;PERMIT_NO&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">241236</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;DRILL_DATE&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2015-04-14&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;SWL&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;YIELD&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.13</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;TDS&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1821</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;CLASS&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WW&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;PWRA&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Western Mount Lofty Ranges&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;NRM&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Adelaide &amp; Mt Lofty Ranges&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;LOGDRILL&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Y&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;LITHOLOG&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;N&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;CHEM&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;N&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;WATER&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Y&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;SAL&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Y&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;OBSWELL&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;N&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;STRATLOG&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;N&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;HSTRATLOG&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;N&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;LATEST_SWL_DATE&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2015-04-14&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;LATEST_SAL_DATE&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2015-04-14&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;LATEST_YIELD_DATE&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2015-04-14&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;LATEST_OPEN_DEPTH&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">77</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;LATEST_OPEN_DATE&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2015-04-14&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Kent Inverarity.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
