@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sa_gwdata.waterconnect_funcs &mdash; python-sa-gwdata 0.12.dev12+ge08a5da documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=f9e7c862"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link href="../../_static/style.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            python-sa-gwdata
+          </a>
+              <div class="version">
+                0.12
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../010-quickstart-guide.html">Quickstart guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../020-background.html">Background information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../030-available-data.html">Available data types on Groundwater Data (GD)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../041-tutorial-finding-wells.html">Tutorial: finding wells</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../042-tutorial-monitoring-networks.html">Tutorial: monitoring networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../043-tutorial-water-monitoring-data.html">Tutorial: water monitoring data (WL, TDS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../070-apidocs.html">sa_gwdata developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../080-webservices.html">WaterConnect web services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../090-changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">python-sa-gwdata</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sa_gwdata.waterconnect_funcs</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sa_gwdata.waterconnect_funcs</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">zipfile</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="kn">from</span> <span class="nn">sa_gwdata.identifiers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">sa_gwdata.waterconnect</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="find_wells">
+<a class="viewcode-back" href="../../070-apidocs.html#sa_gwdata.find_wells">[docs]</a>
+<span class="k">def</span> <span class="nf">find_wells</span><span class="p">(</span><span class="n">input_text</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find wells and retrieve some summary information.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        input_text (str): any well identifiers to parse. See</span>
+<span class="sd">            :func:`sa_gwdata.parse_well_ids_plaintext` for details of</span>
+<span class="sd">            other keyword arguments you can pass here.</span>
+
+<span class="sd">    For example:</span>
+
+<span class="sd">        &gt;&gt;&gt; import sa_gwdata</span>
+<span class="sd">        &gt;&gt;&gt; wells = sa_gwdata.find_wells(&quot;yat99 5840-46 ULE205&quot;)</span>
+<span class="sd">        ...</span>
+<span class="sd">        &gt;&gt;&gt; wells</span>
+<span class="sd">        [&#39;MLC008&#39;, &#39;ULE205&#39;, &#39;YAT099&#39;]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">find_wells</span><span class="p">(</span><span class="n">input_text</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="find_wells_in_lat_lon">
+<a class="viewcode-back" href="../../070-apidocs.html#sa_gwdata.find_wells_in_lat_lon">[docs]</a>
+<span class="k">def</span> <span class="nf">find_wells_in_lat_lon</span><span class="p">(</span><span class="n">lats</span><span class="p">,</span> <span class="n">lons</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find wells within a geographic area.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        lats (tuple): two decimal latitudes</span>
+<span class="sd">        lons (tuple): two decimal longitudes</span>
+
+<span class="sd">    Returns: a list of :class:`sa_gwdata.Well` objects (actually</span>
+<span class="sd">        a :class:`sa_gwdata.Wells` object which very closely</span>
+<span class="sd">        resembles a list).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">find_wells_in_lat_lon</span><span class="p">(</span><span class="n">lats</span><span class="p">,</span> <span class="n">lons</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">get_networks</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a list of obswell monitoring networks.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">networks</span>
+
+
+<div class="viewcode-block" id="wells_summary">
+<a class="viewcode-back" href="../../070-apidocs.html#sa_gwdata.wells_summary">[docs]</a>
+<span class="k">def</span> <span class="nf">wells_summary</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get table of summary information for wells.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        wells (list): list of drillhole numbers (ints)</span>
+<span class="sd">            or :class:`sa_gwdata.Well` objects</span>
+
+<span class="sd">    Returns: pandas DataFrame with these columns:</span>
+
+<span class="sd">        - dh_no (int64)</span>
+<span class="sd">        - unit_hyphen (str)</span>
+<span class="sd">        - unit_long (int64)</span>
+<span class="sd">        - dh_name (str)</span>
+<span class="sd">        - network (str)</span>
+<span class="sd">        - obs_no (str)</span>
+<span class="sd">        - drillhole_class (str)</span>
+<span class="sd">        - aquifer (str)</span>
+<span class="sd">        - orig_drilled_depth (float64)</span>
+<span class="sd">        - orig_drilled_date (datetime64[ns])</span>
+<span class="sd">        - max_drilled_depth (float64)</span>
+<span class="sd">        - max_drilled_date (datetime64[ns])</span>
+<span class="sd">        - latest_open_depth (float64)</span>
+<span class="sd">        - latest_open_date (datetime64[ns])</span>
+<span class="sd">        - latest_permit_no (float64)</span>
+<span class="sd">        - cased_to (float64)</span>
+<span class="sd">        - casing_min_diam (float64)</span>
+<span class="sd">        - purpose (str)</span>
+<span class="sd">        - latest_status (str)</span>
+<span class="sd">        - latest_status_date (datetime64[ns])</span>
+<span class="sd">        - latest_dtw (float64)</span>
+<span class="sd">        - latest_swl (float64)</span>
+<span class="sd">        - latest_rswl (float64)</span>
+<span class="sd">        - latest_wl_date (datetime64[ns])</span>
+<span class="sd">        - latest_tds (float64)</span>
+<span class="sd">        - latest_ec (float64)</span>
+<span class="sd">        - latest_sal_date (datetime64[ns])</span>
+<span class="sd">        - latest_ph (float64)</span>
+<span class="sd">        - latest_ph_date (datetime64[ns])</span>
+<span class="sd">        - latest_yield (float64)</span>
+<span class="sd">        - latest_yield_date (datetime64[ns])</span>
+<span class="sd">        - easting (float64)</span>
+<span class="sd">        - northing (float64)</span>
+<span class="sd">        - zone (int64)</span>
+<span class="sd">        - lon_deg (int64)</span>
+<span class="sd">        - lon_min (int64)</span>
+<span class="sd">        - lon_sec (float64)</span>
+<span class="sd">        - lat_deg (int64)</span>
+<span class="sd">        - lat_min (int64)</span>
+<span class="sd">        - lat_sec (float64)</span>
+<span class="sd">        - longitude (float64)</span>
+<span class="sd">        - latitude_positive (float64)</span>
+<span class="sd">        - latitude (float64)</span>
+<span class="sd">        - hundred (str)</span>
+<span class="sd">        - plan (str)</span>
+<span class="sd">        - parcel (str)</span>
+<span class="sd">        - cert_title (str)</span>
+<span class="sd">        - map_250k (str)</span>
+<span class="sd">        - map_100k (int64)</span>
+<span class="sd">        - map_50k (int64)</span>
+<span class="sd">        - map_10k (int64)</span>
+<span class="sd">        - map_2_5k (str)</span>
+<span class="sd">        - map_1k (int64)</span>
+<span class="sd">        - water_info_exists (str)</span>
+<span class="sd">        - salinity_exists (str)</span>
+<span class="sd">        - water_chem_exists (str)</span>
+<span class="sd">        - geophys_log_exists (str)</span>
+<span class="sd">        - drillers_log_exists (str)</span>
+<span class="sd">        - lith_log_exists (str)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">bulk_wells_summary</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="water_levels">
+<a class="viewcode-back" href="../../070-apidocs.html#sa_gwdata.water_levels">[docs]</a>
+<span class="k">def</span> <span class="nf">water_levels</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="n">pumping</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">anomalous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get table of water level measurements for wells.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        wells (list): list of drillhole numbers (ints)</span>
+<span class="sd">            or :class:`sa_gwdata.Well` objects</span>
+<span class="sd">        pumping (bool): include measurements flagged as &quot;well being subject</span>
+<span class="sd">            to the influence of local pumping&quot; - default False</span>
+<span class="sd">        anomalous (bool): include measurements flagged as being anomalous</span>
+<span class="sd">            default True, as this can be subjective.</span>
+
+<span class="sd">    Returns: pandas DataFrame with these columns:</span>
+
+<span class="sd">        - dh_no (int64)</span>
+<span class="sd">        - network (str)</span>
+<span class="sd">        - unit_long (int64)</span>
+<span class="sd">        - aquifer (str)</span>
+<span class="sd">        - easting (float64)</span>
+<span class="sd">        - northing (float64)</span>
+<span class="sd">        - zone (int64)</span>
+<span class="sd">        - unit_hyphen (str)</span>
+<span class="sd">        - obs_no (str)</span>
+<span class="sd">        - obs_date (datetime64[ns])</span>
+<span class="sd">        - dtw (float64)</span>
+<span class="sd">        - swl (float64)</span>
+<span class="sd">        - rswl (float64)</span>
+<span class="sd">        - pressure (float64)</span>
+<span class="sd">        - temperature (float64)</span>
+<span class="sd">        - dry_ind (str)</span>
+<span class="sd">        - anomalous_ind (str)</span>
+<span class="sd">        - pump_ind (str)</span>
+<span class="sd">        - measured_during (str)</span>
+<span class="sd">        - data_source (str)</span>
+<span class="sd">        - comments (str)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">bulk_water_levels</span><span class="p">(</span>
+        <span class="n">wells</span><span class="p">,</span> <span class="n">pumping</span><span class="o">=</span><span class="n">pumping</span><span class="p">,</span> <span class="n">anomalous</span><span class="o">=</span><span class="n">anomalous</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="salinities">
+<a class="viewcode-back" href="../../070-apidocs.html#sa_gwdata.salinities">[docs]</a>
+<span class="k">def</span> <span class="nf">salinities</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get table of salinity samples for wells.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        wells (list): list of drillhole numbers (ints)</span>
+<span class="sd">            or :class:`sa_gwdata.Well` objects</span>
+
+<span class="sd">    Returns: pandas DataFrame with these columns:</span>
+
+<span class="sd">        - dh_no (int64)</span>
+<span class="sd">        - network (str)</span>
+<span class="sd">        - aquifer (str)</span>
+<span class="sd">        - unit_hyphen (str)</span>
+<span class="sd">        - unit_long (int64)</span>
+<span class="sd">        - obs_no (str)</span>
+<span class="sd">        - collected_date (datetime64[ns])</span>
+<span class="sd">        - collected_time (str)</span>
+<span class="sd">        - tds (int64)</span>
+<span class="sd">        - ec (int64)</span>
+<span class="sd">        - ph (float64)</span>
+<span class="sd">        - sample_type (str)</span>
+<span class="sd">        - anomalous_ind (str)</span>
+<span class="sd">        - test_place (str)</span>
+<span class="sd">        - extract_method (str)</span>
+<span class="sd">        - measured_during (str)</span>
+<span class="sd">        - data_source (str)</span>
+<span class="sd">        - easting (float64)</span>
+<span class="sd">        - northing (float64)</span>
+<span class="sd">        - zone (int64)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">bulk_salinities</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="water_chem">
+<a class="viewcode-back" href="../../070-apidocs.html#sa_gwdata.water_chem">[docs]</a>
+<span class="k">def</span> <span class="nf">water_chem</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get table of water chemistry sample analyses for wells.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        wells (list): list of drillhole numbers (ints)</span>
+<span class="sd">            or :class:`sa_gwdata.Well` objects</span>
+
+<span class="sd">    Returns: pandas DataFrame with these columns:</span>
+
+<span class="sd">        - dh_no (int64)</span>
+<span class="sd">        - unit_hyphen (str)</span>
+<span class="sd">        - obs_no (str)</span>
+<span class="sd">        - sample_no (int64)</span>
+<span class="sd">        - collected_date (datetime64[ns])</span>
+<span class="sd">        - analysis_code (str)</span>
+<span class="sd">        - analysis_name (str)</span>
+<span class="sd">        - value (float64)</span>
+<span class="sd">        - unit (str)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">bulk_water_chem</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="elevation_surveys">
+<a class="viewcode-back" href="../../070-apidocs.html#sa_gwdata.elevation_surveys">[docs]</a>
+<span class="k">def</span> <span class="nf">elevation_surveys</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get table of elevation surveys for wells.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        wells (list): list of drillhole numbers (ints)</span>
+<span class="sd">            or :class:`sa_gwdata.Well` objects</span>
+
+<span class="sd">    Returns: pandas DataFrame with these columns:</span>
+
+<span class="sd">        - dh_no (int64)</span>
+<span class="sd">        - unit_hyphen (str)</span>
+<span class="sd">        - obs_no (str)</span>
+<span class="sd">        - network (str)</span>
+<span class="sd">        - elev_date (datetime64[ns])</span>
+<span class="sd">        - ground_elev (float64)</span>
+<span class="sd">        - ref_elev (float64)</span>
+<span class="sd">        - survey_meth (str)</span>
+<span class="sd">        - vert_accuracy (float64)</span>
+<span class="sd">        - ref_point_type (str)</span>
+<span class="sd">        - applied_date (datetime64[ns])</span>
+<span class="sd">        - comments (str)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">bulk_elevation_surveys</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="construction_events">
+<a class="viewcode-back" href="../../070-apidocs.html#sa_gwdata.construction_events">[docs]</a>
+<span class="k">def</span> <span class="nf">construction_events</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get table of construction events (summary data) for wells.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        wells (list): list of drillhole numbers (ints)</span>
+<span class="sd">            or :class:`sa_gwdata.Well` objects</span>
+
+<span class="sd">    Returns: pandas DataFrame with these columns:</span>
+
+<span class="sd">        - dh_no (int64)</span>
+<span class="sd">        - unit_hyphen (str)</span>
+<span class="sd">        - obs_no (str)</span>
+<span class="sd">        - completion_date (datetime64[ns])</span>
+<span class="sd">        - total_depth (float64)</span>
+<span class="sd">        - final_depth (float64)</span>
+<span class="sd">        - current_depth (float64)</span>
+<span class="sd">        - permit_no (float64)</span>
+<span class="sd">        - backfilled (str)</span>
+<span class="sd">        - casing_from (float64)</span>
+<span class="sd">        - casing_to (float64)</span>
+<span class="sd">        - casing_min_diam (float64)</span>
+<span class="sd">        - casing_material (str)</span>
+<span class="sd">        - pcemented (str)</span>
+<span class="sd">        - pcement_from (float64)</span>
+<span class="sd">        - pcement_to (float64)</span>
+<span class="sd">        - pzone_from (float64)</span>
+<span class="sd">        - pzone_to (float64)</span>
+<span class="sd">        - pzone_min_diam (float64)</span>
+<span class="sd">        - pzone_type (str)</span>
+<span class="sd">        - pzone_material (str)</span>
+<span class="sd">        - pzone_aperture (float64)</span>
+<span class="sd">        - drill_from (float64)</span>
+<span class="sd">        - drill_to (float64)</span>
+<span class="sd">        - drill_diam (float64)</span>
+<span class="sd">        - drill_method (str)</span>
+<span class="sd">        - development_method (str)</span>
+<span class="sd">        - development_duration (float64)</span>
+<span class="sd">        - comments (str)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">bulk_construction_events</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="construction_details">
+<a class="viewcode-back" href="../../070-apidocs.html#sa_gwdata.construction_details">[docs]</a>
+<span class="k">def</span> <span class="nf">construction_details</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get table of detailed information collected at time of construction of wells.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        wells (list): list of drillhole numbers (ints)</span>
+<span class="sd">            or :class:`sa_gwdata.Well` objects</span>
+
+<span class="sd">    Returns: dict with four pandas DataFrames. The keys, and the</span>
+<span class="sd">        columns of the DataFrames are below:</span>
+
+<span class="sd">        * &quot;water_cuts&quot;:</span>
+<span class="sd">            - dh_no (int64)</span>
+<span class="sd">            - unit_hyphen (str)</span>
+<span class="sd">            - water_cut_date (datetime64[ns])</span>
+<span class="sd">            - depth_from (float64)</span>
+<span class="sd">            - depth_to (float64)</span>
+<span class="sd">            - swl (float64)</span>
+<span class="sd">            - yield (float64)</span>
+<span class="sd">            - test_method (str)</span>
+<span class="sd">            - tds (float64)</span>
+<span class="sd">            - ec (float64)</span>
+<span class="sd">            - sample_type (str)</span>
+
+<span class="sd">        * &quot;drilling&quot;:</span>
+<span class="sd">            - dh_no (int64)</span>
+<span class="sd">            - unit_hyphen (str)</span>
+<span class="sd">            - depth_from (float64)</span>
+<span class="sd">            - depth_to (float64)</span>
+<span class="sd">            - hole_diam (float64)</span>
+<span class="sd">            - drill_method (str)</span>
+<span class="sd">            - comments (str)</span>
+
+<span class="sd">        * &quot;casing&quot;:</span>
+<span class="sd">            - dh_no (int64)</span>
+<span class="sd">            - unit_hyphen (str)</span>
+<span class="sd">            - depth_from (float64)</span>
+<span class="sd">            - depth_to (float64)</span>
+<span class="sd">            - casing_diam (int64)</span>
+<span class="sd">            - casing_material (str)</span>
+<span class="sd">            - cement_method (str)</span>
+<span class="sd">            - cement_from (float64)</span>
+<span class="sd">            - cement_to (float64)</span>
+<span class="sd">            - comments (str)</span>
+
+<span class="sd">        * &quot;prod_zones&quot;:</span>
+<span class="sd">            - dh_no (int64)</span>
+<span class="sd">            - unit_hyphen (str)</span>
+<span class="sd">            - pzone_type (str)</span>
+<span class="sd">            - depth_from (float64)</span>
+<span class="sd">            - depth_to (float64)</span>
+<span class="sd">            - pzone_diam (float64)</span>
+<span class="sd">            - pzone_material (str)</span>
+<span class="sd">            - pzone_aperture (float64)</span>
+<span class="sd">            - comments (str)</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">bulk_construction_details</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="drillers_logs">
+<a class="viewcode-back" href="../../070-apidocs.html#sa_gwdata.drillers_logs">[docs]</a>
+<span class="k">def</span> <span class="nf">drillers_logs</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get table of lithological intervals from drillers logs for wells.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        wells (list): list of drillhole numbers (ints)</span>
+<span class="sd">            or :class:`sa_gwdata.Well` objects</span>
+
+<span class="sd">    Returns: pandas DataFrame with these columns:</span>
+
+<span class="sd">        - dh_no (int64)</span>
+<span class="sd">        - unit_hyphen (str)</span>
+<span class="sd">        - obs_no (str)</span>
+<span class="sd">        - log_date (datetime64[ns])</span>
+<span class="sd">        - logger_name (str)</span>
+<span class="sd">        - depth_from (float64)</span>
+<span class="sd">        - depth_to (float64)</span>
+<span class="sd">        - lith_code (str)</span>
+<span class="sd">        - description (str)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">bulk_drillers_logs</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="strat_logs">
+<a class="viewcode-back" href="../../070-apidocs.html#sa_gwdata.strat_logs">[docs]</a>
+<span class="k">def</span> <span class="nf">strat_logs</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get table of formations from the stratigraphic logs for wells.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        wells (list): list of drillhole numbers (ints)</span>
+<span class="sd">            or :class:`sa_gwdata.Well` objects</span>
+
+<span class="sd">    Returns: pandas DataFrame with these columns:</span>
+
+<span class="sd">        - dh_no (int64)</span>
+<span class="sd">        - unit_hyphen (str)</span>
+<span class="sd">        - depth_from (float64)</span>
+<span class="sd">        - depth_to (float64)</span>
+<span class="sd">        - strat_name (str)</span>
+<span class="sd">        - gis_code (str)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">bulk_strat_logs</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="hydrostrat_logs">
+<a class="viewcode-back" href="../../070-apidocs.html#sa_gwdata.hydrostrat_logs">[docs]</a>
+<span class="k">def</span> <span class="nf">hydrostrat_logs</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get table of formations from the hydrostratigraphic logs for wells.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        wells (list): list of drillhole numbers (ints)</span>
+<span class="sd">            or :class:`sa_gwdata.Well` objects</span>
+
+<span class="sd">    Returns: pandas DataFrame with these columns:</span>
+
+<span class="sd">        - dh_no (int64)</span>
+<span class="sd">        - unit_hyphen (str)</span>
+<span class="sd">        - unit_depth_from (float64)</span>
+<span class="sd">        - unit_depth_to (float64)</span>
+<span class="sd">        - subunit_depth_from (float64)</span>
+<span class="sd">        - subunit_depth_to (float64)</span>
+<span class="sd">        - hydro_type (float64)</span>
+<span class="sd">        - hydro_depth_to_greater_flag (str)</span>
+<span class="sd">        - comments (str)</span>
+<span class="sd">        - map_symbol (str)</span>
+<span class="sd">        - strat_name (str)</span>
+<span class="sd">        - subunit_comments (float64)</span>
+<span class="sd">        - subunit_code (float64)</span>
+<span class="sd">        - subunit_desc (float64)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">bulk_hydrostrat_logs</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="lith_logs">
+<a class="viewcode-back" href="../../070-apidocs.html#sa_gwdata.lith_logs">[docs]</a>
+<span class="k">def</span> <span class="nf">lith_logs</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get table of lithological logs for wells.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        wells (list): list of drillhole numbers (ints)</span>
+<span class="sd">            or :class:`sa_gwdata.Well` objects</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pandas DataFrame with these columns:</span>
+
+<span class="sd">        - dh_no (int64)</span>
+<span class="sd">        - unit_hyphen (str)</span>
+<span class="sd">        - obs_no (str)</span>
+<span class="sd">        - depth_from (float64)</span>
+<span class="sd">        - depth_to (float64)</span>
+<span class="sd">        - major_lith_code (str)</span>
+<span class="sd">        - minor_lith_code (str)</span>
+<span class="sd">        - descr (str)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">bulk_lith_logs</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">search_by_suburb</span><span class="p">(</span><span class="n">suburb</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find wells by suburb name.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        suburb (str): case-insensitive suburb name</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pandas DataFrame with these columns:</span>
+
+<span class="sd">        - xxx</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">suburb</span> <span class="o">=</span> <span class="n">suburb</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">search_by_suburb</span><span class="p">(</span><span class="n">suburb</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">gdf</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">search_by_radius</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find wells by radius around a geographic point.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        lat (float): latitude of search point</span>
+<span class="sd">        longitude (float): longitude of search point</span>
+<span class="sd">        radius (float): search radius in kilometres</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pandas DataFrame with these columns:</span>
+
+<span class="sd">        - xxx</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lat</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span>
+    <span class="n">lon</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">lon</span><span class="p">)</span>
+    <span class="n">radius</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">lat</span> <span class="o">&lt;</span> <span class="mi">0</span>
+    <span class="k">assert</span> <span class="n">lon</span> <span class="o">&gt;</span> <span class="mi">130</span>
+    <span class="k">assert</span> <span class="n">lon</span> <span class="o">&lt;</span> <span class="mi">160</span>
+    <span class="k">assert</span> <span class="n">lat</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">50</span>
+    <span class="k">if</span> <span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">search_by_radius</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">gdf</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">search_by_rect</span><span class="p">(</span><span class="n">sw_corner</span><span class="p">,</span> <span class="n">ne_corner</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find wells within a rectangle.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sw_corner (sequence length 2): the latitude and longitude of the</span>
+<span class="sd">            south-western corner of the rectangle (i.e. minimum latitude</span>
+<span class="sd">            and minimum longitude)</span>
+<span class="sd">        ne_corner (sequence length 2): the latitude and longitude of the</span>
+<span class="sd">            north-eastern corner of the rectangle (i.e. maximum latitude</span>
+<span class="sd">            and maximum longitude)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pandas DataFrame with these columns:</span>
+
+<span class="sd">        - xxx</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">search_by_rect</span><span class="p">(</span><span class="n">sw_corner</span><span class="p">,</span> <span class="n">ne_corner</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">gdf</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">search_by_network</span><span class="p">(</span><span class="o">*</span><span class="n">network_codes</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find wells within observation well networks (one or more network).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        network_codes (str): network codes e.g. KAT_FP, NAP, STHNBASINS, LLC_STH</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pandas DataFrame with these columns:</span>
+
+<span class="sd">        - xxx</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        &gt;&gt;&gt; import sa_gwdata</span>
+<span class="sd">        &gt;&gt;&gt; wells = sa_gwdata.search_by_network(&quot;WMLR&quot;, &quot;MCL_VALE&quot;)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">get_global_session</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">search_by_network</span><span class="p">(</span><span class="o">*</span><span class="n">network_codes</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">gdf</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Kent Inverarity.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

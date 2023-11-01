@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sa_gwdata developer guide &mdash; python-sa-gwdata 0.12.dev12+ge08a5da documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f9e7c862"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="WaterConnect web services" href="webservices.html" />
+    <link rel="prev" title="Tutorial: water monitoring data (WL, TDS)" href="tutorial-water-monitoring-data.html" />
+    <link href="_static/style.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            python-sa-gwdata
+          </a>
+              <div class="version">
+                0.12
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart-guide.html">Quickstart guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="background.html">Background information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="available-data.html">Available data types on Groundwater Data (GD)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial-finding-wells.html">Tutorial: finding wells</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial-monitoring-networks.html">Tutorial: monitoring networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial-water-monitoring-data.html">Tutorial: water monitoring data (WL, TDS)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">sa_gwdata developer guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#docstrings">Docstrings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#find-wells">Find wells</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sa_gwdata.find_wells"><code class="docutils literal notranslate"><span class="pre">find_wells()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sa_gwdata.parse_well_ids_plaintext"><code class="docutils literal notranslate"><span class="pre">parse_well_ids_plaintext()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sa_gwdata.find_wells_in_lat_lon"><code class="docutils literal notranslate"><span class="pre">find_wells_in_lat_lon()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#download-data">Download data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sa_gwdata.wells_summary"><code class="docutils literal notranslate"><span class="pre">wells_summary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sa_gwdata.water_levels"><code class="docutils literal notranslate"><span class="pre">water_levels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sa_gwdata.salinities"><code class="docutils literal notranslate"><span class="pre">salinities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sa_gwdata.water_chem"><code class="docutils literal notranslate"><span class="pre">water_chem()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sa_gwdata.elevation_surveys"><code class="docutils literal notranslate"><span class="pre">elevation_surveys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sa_gwdata.construction_events"><code class="docutils literal notranslate"><span class="pre">construction_events()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sa_gwdata.construction_details"><code class="docutils literal notranslate"><span class="pre">construction_details()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sa_gwdata.drillers_logs"><code class="docutils literal notranslate"><span class="pre">drillers_logs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sa_gwdata.strat_logs"><code class="docutils literal notranslate"><span class="pre">strat_logs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sa_gwdata.hydrostrat_logs"><code class="docutils literal notranslate"><span class="pre">hydrostrat_logs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sa_gwdata.lith_logs"><code class="docutils literal notranslate"><span class="pre">lith_logs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#well-identifiers">Well identifiers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sa_gwdata.Well"><code class="docutils literal notranslate"><span class="pre">Well</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sa_gwdata.UnitNo"><code class="docutils literal notranslate"><span class="pre">UnitNo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sa_gwdata.ObsNo"><code class="docutils literal notranslate"><span class="pre">ObsNo</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#waterconnect-web-service-utilities">WaterConnect web service utilities</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sa_gwdata.WaterConnectSession"><code class="docutils literal notranslate"><span class="pre">WaterConnectSession</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sa_gwdata.Response"><code class="docutils literal notranslate"><span class="pre">Response</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="webservices.html">WaterConnect web services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">python-sa-gwdata</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">sa_gwdata developer guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/apidocs.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sa-gwdata-developer-guide">
+<h1>sa_gwdata developer guide<a class="headerlink" href="#sa-gwdata-developer-guide" title="Link to this heading"></a></h1>
+<section id="docstrings">
+<h2>Docstrings<a class="headerlink" href="#docstrings" title="Link to this heading"></a></h2>
+<section id="find-wells">
+<h3>Find wells<a class="headerlink" href="#find-wells" title="Link to this heading"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="sa_gwdata.find_wells">
+<span class="sig-prename descclassname"><span class="pre">sa_gwdata.</span></span><span class="sig-name descname"><span class="pre">find_wells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_text</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/waterconnect_funcs.html#find_wells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.find_wells" title="Link to this definition"></a></dt>
+<dd><p>Find wells and retrieve some summary information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – any well identifiers to parse. See
+<a class="reference internal" href="#sa_gwdata.parse_well_ids_plaintext" title="sa_gwdata.parse_well_ids_plaintext"><code class="xref py py-func docutils literal notranslate"><span class="pre">sa_gwdata.parse_well_ids_plaintext()</span></code></a> for details of
+other keyword arguments you can pass here.</p>
+</dd>
+</dl>
+<p>For example:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sa_gwdata</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wells</span> <span class="o">=</span> <span class="n">sa_gwdata</span><span class="o">.</span><span class="n">find_wells</span><span class="p">(</span><span class="s2">&quot;yat99 5840-46 ULE205&quot;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wells</span>
+<span class="go">[&#39;MLC008&#39;, &#39;ULE205&#39;, &#39;YAT099&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sa_gwdata.parse_well_ids_plaintext">
+<span class="sig-prename descclassname"><span class="pre">sa_gwdata.</span></span><span class="sig-name descname"><span class="pre">parse_well_ids_plaintext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('unit_no',</span> <span class="pre">'obs_no')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit_no_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs_no_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dh_re_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'\\A'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/identifiers.html#parse_well_ids_plaintext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.parse_well_ids_plaintext" title="Link to this definition"></a></dt>
+<dd><p>Parse possible well identifiers out of plain text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – the text to parse well identifiers from.
+Can include multiple lines.</p></li>
+<li><p><strong>types</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – types of identifiers to look for. Currently
+supported: “unit_no”, “obs_no”, “dh_no”</p></li>
+<li><p><strong>dh_re_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – regexp pattern required before a dh_no
+regexp will match</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns: a list of tuples e.g.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sa_gwdata</span> <span class="kn">import</span> <span class="n">parse_well_ids</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parse_well_ids</span><span class="p">(</span><span class="s1">&#39;sle15&#39;</span><span class="p">)</span>
+<span class="go">[(&#39;obs_no&#39;, &#39;SLE015&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parse_well_ids</span><span class="p">(</span><span class="s1">&#39;6628150&#39;</span><span class="p">)</span>
+<span class="go">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parse_well_ids</span><span class="p">(</span><span class="s1">&#39;6628-150&#39;</span><span class="p">)</span>
+<span class="go">[(&#39;unit_no&#39;, &#39;6628-150&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parse_well_ids</span><span class="p">(</span><span class="s1">&#39;662800150&#39;</span><span class="p">)</span>
+<span class="go">[(&#39;unit_no&#39;, &#39;6628-150&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parse_well_ids</span><span class="p">(</span><span class="s1">&#39;259001&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;dh_no&quot;</span><span class="p">])</span>
+<span class="go">[(&#39;dh_no&#39;, &#39;259001&#39;)]</span>
+</pre></div>
+</div>
+<p>Remember this doesn’t actually check whether these identifiers to a well
+in the real world; it just parses a string of text to find possible
+well identifiers. It’s pretty robust:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parse_well_ids</span><span class="p">(</span><span class="s2">&quot;SLE 15, SLE16, and also maybe 5910-1&quot;</span><span class="p">)</span>
+<span class="go">[(&#39;unit_no&#39;, &#39;5910-1&#39;), (&#39;obs_no&#39;, &#39;SLE015&#39;), (&#39;obs_no&#39;, &#39;SLE016&#39;), (&#39;obs_no&#39;, &#39;YBE591&#39;)]</span>
+</pre></div>
+</div>
+<p>It has unfortunately matched “ybe 591” from the phrase “maybe 5910-1” as an
+obs_no.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sa_gwdata.find_wells_in_lat_lon">
+<span class="sig-prename descclassname"><span class="pre">sa_gwdata.</span></span><span class="sig-name descname"><span class="pre">find_wells_in_lat_lon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lats</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lons</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/waterconnect_funcs.html#find_wells_in_lat_lon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.find_wells_in_lat_lon" title="Link to this definition"></a></dt>
+<dd><p>Find wells within a geographic area.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lats</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – two decimal latitudes</p></li>
+<li><p><strong>lons</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – two decimal longitudes</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Returns: a list of <a class="reference internal" href="#sa_gwdata.Well" title="sa_gwdata.Well"><code class="xref py py-class docutils literal notranslate"><span class="pre">sa_gwdata.Well</span></code></a> objects (actually</dt><dd><p>a <code class="xref py py-class docutils literal notranslate"><span class="pre">sa_gwdata.Wells</span></code> object which very closely
+resembles a list).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="download-data">
+<h3>Download data<a class="headerlink" href="#download-data" title="Link to this heading"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="sa_gwdata.wells_summary">
+<span class="sig-prename descclassname"><span class="pre">sa_gwdata.</span></span><span class="sig-name descname"><span class="pre">wells_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/waterconnect_funcs.html#wells_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.wells_summary" title="Link to this definition"></a></dt>
+<dd><p>Get table of summary information for wells.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>wells</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of drillhole numbers (ints)
+or <a class="reference internal" href="#sa_gwdata.Well" title="sa_gwdata.Well"><code class="xref py py-class docutils literal notranslate"><span class="pre">sa_gwdata.Well</span></code></a> objects</p>
+</dd>
+</dl>
+<p>Returns: pandas DataFrame with these columns:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>dh_no (int64)</p></li>
+<li><p>unit_hyphen (str)</p></li>
+<li><p>unit_long (int64)</p></li>
+<li><p>dh_name (str)</p></li>
+<li><p>network (str)</p></li>
+<li><p>obs_no (str)</p></li>
+<li><p>drillhole_class (str)</p></li>
+<li><p>aquifer (str)</p></li>
+<li><p>orig_drilled_depth (float64)</p></li>
+<li><p>orig_drilled_date (datetime64[ns])</p></li>
+<li><p>max_drilled_depth (float64)</p></li>
+<li><p>max_drilled_date (datetime64[ns])</p></li>
+<li><p>latest_open_depth (float64)</p></li>
+<li><p>latest_open_date (datetime64[ns])</p></li>
+<li><p>latest_permit_no (float64)</p></li>
+<li><p>cased_to (float64)</p></li>
+<li><p>casing_min_diam (float64)</p></li>
+<li><p>purpose (str)</p></li>
+<li><p>latest_status (str)</p></li>
+<li><p>latest_status_date (datetime64[ns])</p></li>
+<li><p>latest_dtw (float64)</p></li>
+<li><p>latest_swl (float64)</p></li>
+<li><p>latest_rswl (float64)</p></li>
+<li><p>latest_wl_date (datetime64[ns])</p></li>
+<li><p>latest_tds (float64)</p></li>
+<li><p>latest_ec (float64)</p></li>
+<li><p>latest_sal_date (datetime64[ns])</p></li>
+<li><p>latest_ph (float64)</p></li>
+<li><p>latest_ph_date (datetime64[ns])</p></li>
+<li><p>latest_yield (float64)</p></li>
+<li><p>latest_yield_date (datetime64[ns])</p></li>
+<li><p>easting (float64)</p></li>
+<li><p>northing (float64)</p></li>
+<li><p>zone (int64)</p></li>
+<li><p>lon_deg (int64)</p></li>
+<li><p>lon_min (int64)</p></li>
+<li><p>lon_sec (float64)</p></li>
+<li><p>lat_deg (int64)</p></li>
+<li><p>lat_min (int64)</p></li>
+<li><p>lat_sec (float64)</p></li>
+<li><p>longitude (float64)</p></li>
+<li><p>latitude_positive (float64)</p></li>
+<li><p>latitude (float64)</p></li>
+<li><p>hundred (str)</p></li>
+<li><p>plan (str)</p></li>
+<li><p>parcel (str)</p></li>
+<li><p>cert_title (str)</p></li>
+<li><p>map_250k (str)</p></li>
+<li><p>map_100k (int64)</p></li>
+<li><p>map_50k (int64)</p></li>
+<li><p>map_10k (int64)</p></li>
+<li><p>map_2_5k (str)</p></li>
+<li><p>map_1k (int64)</p></li>
+<li><p>water_info_exists (str)</p></li>
+<li><p>salinity_exists (str)</p></li>
+<li><p>water_chem_exists (str)</p></li>
+<li><p>geophys_log_exists (str)</p></li>
+<li><p>drillers_log_exists (str)</p></li>
+<li><p>lith_log_exists (str)</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sa_gwdata.water_levels">
+<span class="sig-prename descclassname"><span class="pre">sa_gwdata.</span></span><span class="sig-name descname"><span class="pre">water_levels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pumping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anomalous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/waterconnect_funcs.html#water_levels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.water_levels" title="Link to this definition"></a></dt>
+<dd><p>Get table of water level measurements for wells.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wells</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of drillhole numbers (ints)
+or <a class="reference internal" href="#sa_gwdata.Well" title="sa_gwdata.Well"><code class="xref py py-class docutils literal notranslate"><span class="pre">sa_gwdata.Well</span></code></a> objects</p></li>
+<li><p><strong>pumping</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – include measurements flagged as “well being subject
+to the influence of local pumping” - default False</p></li>
+<li><p><strong>anomalous</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – include measurements flagged as being anomalous
+default True, as this can be subjective.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns: pandas DataFrame with these columns:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>dh_no (int64)</p></li>
+<li><p>network (str)</p></li>
+<li><p>unit_long (int64)</p></li>
+<li><p>aquifer (str)</p></li>
+<li><p>easting (float64)</p></li>
+<li><p>northing (float64)</p></li>
+<li><p>zone (int64)</p></li>
+<li><p>unit_hyphen (str)</p></li>
+<li><p>obs_no (str)</p></li>
+<li><p>obs_date (datetime64[ns])</p></li>
+<li><p>dtw (float64)</p></li>
+<li><p>swl (float64)</p></li>
+<li><p>rswl (float64)</p></li>
+<li><p>pressure (float64)</p></li>
+<li><p>temperature (float64)</p></li>
+<li><p>dry_ind (str)</p></li>
+<li><p>anomalous_ind (str)</p></li>
+<li><p>pump_ind (str)</p></li>
+<li><p>measured_during (str)</p></li>
+<li><p>data_source (str)</p></li>
+<li><p>comments (str)</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sa_gwdata.salinities">
+<span class="sig-prename descclassname"><span class="pre">sa_gwdata.</span></span><span class="sig-name descname"><span class="pre">salinities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/waterconnect_funcs.html#salinities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.salinities" title="Link to this definition"></a></dt>
+<dd><p>Get table of salinity samples for wells.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>wells</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of drillhole numbers (ints)
+or <a class="reference internal" href="#sa_gwdata.Well" title="sa_gwdata.Well"><code class="xref py py-class docutils literal notranslate"><span class="pre">sa_gwdata.Well</span></code></a> objects</p>
+</dd>
+</dl>
+<p>Returns: pandas DataFrame with these columns:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>dh_no (int64)</p></li>
+<li><p>network (str)</p></li>
+<li><p>aquifer (str)</p></li>
+<li><p>unit_hyphen (str)</p></li>
+<li><p>unit_long (int64)</p></li>
+<li><p>obs_no (str)</p></li>
+<li><p>collected_date (datetime64[ns])</p></li>
+<li><p>collected_time (str)</p></li>
+<li><p>tds (int64)</p></li>
+<li><p>ec (int64)</p></li>
+<li><p>ph (float64)</p></li>
+<li><p>sample_type (str)</p></li>
+<li><p>anomalous_ind (str)</p></li>
+<li><p>test_place (str)</p></li>
+<li><p>extract_method (str)</p></li>
+<li><p>measured_during (str)</p></li>
+<li><p>data_source (str)</p></li>
+<li><p>easting (float64)</p></li>
+<li><p>northing (float64)</p></li>
+<li><p>zone (int64)</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sa_gwdata.water_chem">
+<span class="sig-prename descclassname"><span class="pre">sa_gwdata.</span></span><span class="sig-name descname"><span class="pre">water_chem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/waterconnect_funcs.html#water_chem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.water_chem" title="Link to this definition"></a></dt>
+<dd><p>Get table of water chemistry sample analyses for wells.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>wells</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of drillhole numbers (ints)
+or <a class="reference internal" href="#sa_gwdata.Well" title="sa_gwdata.Well"><code class="xref py py-class docutils literal notranslate"><span class="pre">sa_gwdata.Well</span></code></a> objects</p>
+</dd>
+</dl>
+<p>Returns: pandas DataFrame with these columns:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>dh_no (int64)</p></li>
+<li><p>unit_hyphen (str)</p></li>
+<li><p>obs_no (str)</p></li>
+<li><p>sample_no (int64)</p></li>
+<li><p>collected_date (datetime64[ns])</p></li>
+<li><p>analysis_code (str)</p></li>
+<li><p>analysis_name (str)</p></li>
+<li><p>value (float64)</p></li>
+<li><p>unit (str)</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sa_gwdata.elevation_surveys">
+<span class="sig-prename descclassname"><span class="pre">sa_gwdata.</span></span><span class="sig-name descname"><span class="pre">elevation_surveys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/waterconnect_funcs.html#elevation_surveys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.elevation_surveys" title="Link to this definition"></a></dt>
+<dd><p>Get table of elevation surveys for wells.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>wells</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of drillhole numbers (ints)
+or <a class="reference internal" href="#sa_gwdata.Well" title="sa_gwdata.Well"><code class="xref py py-class docutils literal notranslate"><span class="pre">sa_gwdata.Well</span></code></a> objects</p>
+</dd>
+</dl>
+<p>Returns: pandas DataFrame with these columns:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>dh_no (int64)</p></li>
+<li><p>unit_hyphen (str)</p></li>
+<li><p>obs_no (str)</p></li>
+<li><p>network (str)</p></li>
+<li><p>elev_date (datetime64[ns])</p></li>
+<li><p>ground_elev (float64)</p></li>
+<li><p>ref_elev (float64)</p></li>
+<li><p>survey_meth (str)</p></li>
+<li><p>vert_accuracy (float64)</p></li>
+<li><p>ref_point_type (str)</p></li>
+<li><p>applied_date (datetime64[ns])</p></li>
+<li><p>comments (str)</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sa_gwdata.construction_events">
+<span class="sig-prename descclassname"><span class="pre">sa_gwdata.</span></span><span class="sig-name descname"><span class="pre">construction_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/waterconnect_funcs.html#construction_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.construction_events" title="Link to this definition"></a></dt>
+<dd><p>Get table of construction events (summary data) for wells.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>wells</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of drillhole numbers (ints)
+or <a class="reference internal" href="#sa_gwdata.Well" title="sa_gwdata.Well"><code class="xref py py-class docutils literal notranslate"><span class="pre">sa_gwdata.Well</span></code></a> objects</p>
+</dd>
+</dl>
+<p>Returns: pandas DataFrame with these columns:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>dh_no (int64)</p></li>
+<li><p>unit_hyphen (str)</p></li>
+<li><p>obs_no (str)</p></li>
+<li><p>completion_date (datetime64[ns])</p></li>
+<li><p>total_depth (float64)</p></li>
+<li><p>final_depth (float64)</p></li>
+<li><p>current_depth (float64)</p></li>
+<li><p>permit_no (float64)</p></li>
+<li><p>backfilled (str)</p></li>
+<li><p>casing_from (float64)</p></li>
+<li><p>casing_to (float64)</p></li>
+<li><p>casing_min_diam (float64)</p></li>
+<li><p>casing_material (str)</p></li>
+<li><p>pcemented (str)</p></li>
+<li><p>pcement_from (float64)</p></li>
+<li><p>pcement_to (float64)</p></li>
+<li><p>pzone_from (float64)</p></li>
+<li><p>pzone_to (float64)</p></li>
+<li><p>pzone_min_diam (float64)</p></li>
+<li><p>pzone_type (str)</p></li>
+<li><p>pzone_material (str)</p></li>
+<li><p>pzone_aperture (float64)</p></li>
+<li><p>drill_from (float64)</p></li>
+<li><p>drill_to (float64)</p></li>
+<li><p>drill_diam (float64)</p></li>
+<li><p>drill_method (str)</p></li>
+<li><p>development_method (str)</p></li>
+<li><p>development_duration (float64)</p></li>
+<li><p>comments (str)</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sa_gwdata.construction_details">
+<span class="sig-prename descclassname"><span class="pre">sa_gwdata.</span></span><span class="sig-name descname"><span class="pre">construction_details</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/waterconnect_funcs.html#construction_details"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.construction_details" title="Link to this definition"></a></dt>
+<dd><p>Get table of detailed information collected at time of construction of wells.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>wells</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of drillhole numbers (ints)
+or <a class="reference internal" href="#sa_gwdata.Well" title="sa_gwdata.Well"><code class="xref py py-class docutils literal notranslate"><span class="pre">sa_gwdata.Well</span></code></a> objects</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Returns: dict with four pandas DataFrames. The keys, and the</dt><dd><p>columns of the DataFrames are below:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>“water_cuts”:</dt><dd><ul>
+<li><p>dh_no (int64)</p></li>
+<li><p>unit_hyphen (str)</p></li>
+<li><p>water_cut_date (datetime64[ns])</p></li>
+<li><p>depth_from (float64)</p></li>
+<li><p>depth_to (float64)</p></li>
+<li><p>swl (float64)</p></li>
+<li><p>yield (float64)</p></li>
+<li><p>test_method (str)</p></li>
+<li><p>tds (float64)</p></li>
+<li><p>ec (float64)</p></li>
+<li><p>sample_type (str)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>“drilling”:</dt><dd><ul>
+<li><p>dh_no (int64)</p></li>
+<li><p>unit_hyphen (str)</p></li>
+<li><p>depth_from (float64)</p></li>
+<li><p>depth_to (float64)</p></li>
+<li><p>hole_diam (float64)</p></li>
+<li><p>drill_method (str)</p></li>
+<li><p>comments (str)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>“casing”:</dt><dd><ul>
+<li><p>dh_no (int64)</p></li>
+<li><p>unit_hyphen (str)</p></li>
+<li><p>depth_from (float64)</p></li>
+<li><p>depth_to (float64)</p></li>
+<li><p>casing_diam (int64)</p></li>
+<li><p>casing_material (str)</p></li>
+<li><p>cement_method (str)</p></li>
+<li><p>cement_from (float64)</p></li>
+<li><p>cement_to (float64)</p></li>
+<li><p>comments (str)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>“prod_zones”:</dt><dd><ul>
+<li><p>dh_no (int64)</p></li>
+<li><p>unit_hyphen (str)</p></li>
+<li><p>pzone_type (str)</p></li>
+<li><p>depth_from (float64)</p></li>
+<li><p>depth_to (float64)</p></li>
+<li><p>pzone_diam (float64)</p></li>
+<li><p>pzone_material (str)</p></li>
+<li><p>pzone_aperture (float64)</p></li>
+<li><p>comments (str)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sa_gwdata.drillers_logs">
+<span class="sig-prename descclassname"><span class="pre">sa_gwdata.</span></span><span class="sig-name descname"><span class="pre">drillers_logs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/waterconnect_funcs.html#drillers_logs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.drillers_logs" title="Link to this definition"></a></dt>
+<dd><p>Get table of lithological intervals from drillers logs for wells.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>wells</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of drillhole numbers (ints)
+or <a class="reference internal" href="#sa_gwdata.Well" title="sa_gwdata.Well"><code class="xref py py-class docutils literal notranslate"><span class="pre">sa_gwdata.Well</span></code></a> objects</p>
+</dd>
+</dl>
+<p>Returns: pandas DataFrame with these columns:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>dh_no (int64)</p></li>
+<li><p>unit_hyphen (str)</p></li>
+<li><p>obs_no (str)</p></li>
+<li><p>log_date (datetime64[ns])</p></li>
+<li><p>logger_name (str)</p></li>
+<li><p>depth_from (float64)</p></li>
+<li><p>depth_to (float64)</p></li>
+<li><p>lith_code (str)</p></li>
+<li><p>description (str)</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sa_gwdata.strat_logs">
+<span class="sig-prename descclassname"><span class="pre">sa_gwdata.</span></span><span class="sig-name descname"><span class="pre">strat_logs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/waterconnect_funcs.html#strat_logs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.strat_logs" title="Link to this definition"></a></dt>
+<dd><p>Get table of formations from the stratigraphic logs for wells.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>wells</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of drillhole numbers (ints)
+or <a class="reference internal" href="#sa_gwdata.Well" title="sa_gwdata.Well"><code class="xref py py-class docutils literal notranslate"><span class="pre">sa_gwdata.Well</span></code></a> objects</p>
+</dd>
+</dl>
+<p>Returns: pandas DataFrame with these columns:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>dh_no (int64)</p></li>
+<li><p>unit_hyphen (str)</p></li>
+<li><p>depth_from (float64)</p></li>
+<li><p>depth_to (float64)</p></li>
+<li><p>strat_name (str)</p></li>
+<li><p>gis_code (str)</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sa_gwdata.hydrostrat_logs">
+<span class="sig-prename descclassname"><span class="pre">sa_gwdata.</span></span><span class="sig-name descname"><span class="pre">hydrostrat_logs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/waterconnect_funcs.html#hydrostrat_logs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.hydrostrat_logs" title="Link to this definition"></a></dt>
+<dd><p>Get table of formations from the hydrostratigraphic logs for wells.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>wells</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of drillhole numbers (ints)
+or <a class="reference internal" href="#sa_gwdata.Well" title="sa_gwdata.Well"><code class="xref py py-class docutils literal notranslate"><span class="pre">sa_gwdata.Well</span></code></a> objects</p>
+</dd>
+</dl>
+<p>Returns: pandas DataFrame with these columns:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>dh_no (int64)</p></li>
+<li><p>unit_hyphen (str)</p></li>
+<li><p>unit_depth_from (float64)</p></li>
+<li><p>unit_depth_to (float64)</p></li>
+<li><p>subunit_depth_from (float64)</p></li>
+<li><p>subunit_depth_to (float64)</p></li>
+<li><p>hydro_type (float64)</p></li>
+<li><p>hydro_depth_to_greater_flag (str)</p></li>
+<li><p>comments (str)</p></li>
+<li><p>map_symbol (str)</p></li>
+<li><p>strat_name (str)</p></li>
+<li><p>subunit_comments (float64)</p></li>
+<li><p>subunit_code (float64)</p></li>
+<li><p>subunit_desc (float64)</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sa_gwdata.lith_logs">
+<span class="sig-prename descclassname"><span class="pre">sa_gwdata.</span></span><span class="sig-name descname"><span class="pre">lith_logs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/waterconnect_funcs.html#lith_logs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.lith_logs" title="Link to this definition"></a></dt>
+<dd><p>Get table of lithological logs for wells.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>wells</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of drillhole numbers (ints)
+or <a class="reference internal" href="#sa_gwdata.Well" title="sa_gwdata.Well"><code class="xref py py-class docutils literal notranslate"><span class="pre">sa_gwdata.Well</span></code></a> objects</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>dh_no (int64)</p></li>
+<li><p>unit_hyphen (str)</p></li>
+<li><p>obs_no (str)</p></li>
+<li><p>depth_from (float64)</p></li>
+<li><p>depth_to (float64)</p></li>
+<li><p>major_lith_code (str)</p></li>
+<li><p>minor_lith_code (str)</p></li>
+<li><p>descr (str)</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas DataFrame with these columns</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="well-identifiers">
+<h3>Well identifiers<a class="headerlink" href="#well-identifiers" title="Link to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="sa_gwdata.Well">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sa_gwdata.</span></span><span class="sig-name descname"><span class="pre">Well</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/identifiers.html#Well"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.Well" title="Link to this definition"></a></dt>
+<dd><p>Represents a well.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dh_no</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – drillhole number (required)</p></li>
+<li><p><strong>unit_no</strong> (<em>str/int</em>) – unit number (optional)</p></li>
+<li><p><strong>obs_no</strong> (<em>str/int</em>) – obs number (optional)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Other keyword arguments will be set as attributes.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sa_gwdata.Well.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#sa_gwdata.Well.id" title="Link to this definition"></a></dt>
+<dd><p>obs number if it exists, e.g. “NOA002”, if not,
+unit number e.g. “6628-123”, and in the rare case that
+a unit number does not exist, then drillhole no. e.g.
+“200135”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sa_gwdata.Well.title">
+<span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#sa_gwdata.Well.title" title="Link to this definition"></a></dt>
+<dd><p>available attributes including name, e.g.
+“7025-3985 / WRG038 / WESTERN LAGOON”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sa_gwdata.Well.obs_no">
+<span class="sig-name descname"><span class="pre">obs_no</span></span><a class="headerlink" href="#sa_gwdata.Well.obs_no" title="Link to this definition"></a></dt>
+<dd><p>obs number</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sa_gwdata.ObsNo" title="sa_gwdata.ObsNo">ObsNo</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sa_gwdata.Well.unit_no">
+<span class="sig-name descname"><span class="pre">unit_no</span></span><a class="headerlink" href="#sa_gwdata.Well.unit_no" title="Link to this definition"></a></dt>
+<dd><p>unit number</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sa_gwdata.UnitNo" title="sa_gwdata.UnitNo">UnitNo</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sa_gwdata.Well.set">
+<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dh_no</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit_no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs_no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/identifiers.html#Well.set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.Well.set" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="#sa_gwdata.Well" title="sa_gwdata.Well"><code class="xref py py-class docutils literal notranslate"><span class="pre">Well</span></code></a> constructor for docstring.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sa_gwdata.Well.set_obs_no">
+<span class="sig-name descname"><span class="pre">set_obs_no</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/identifiers.html#Well.set_obs_no"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.Well.set_obs_no" title="Link to this definition"></a></dt>
+<dd><p>Set obswell number.</p>
+<p>Args are passed to <a class="reference internal" href="#sa_gwdata.ObsNo" title="sa_gwdata.ObsNo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ObsNo</span></code></a> constructor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sa_gwdata.Well.set_unit_no">
+<span class="sig-name descname"><span class="pre">set_unit_no</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/identifiers.html#Well.set_unit_no"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.Well.set_unit_no" title="Link to this definition"></a></dt>
+<dd><p>Set unit number.</p>
+<p>Args are passed to <a class="reference internal" href="#sa_gwdata.UnitNo" title="sa_gwdata.UnitNo"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitNo</span></code></a> constructor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sa_gwdata.Well.to_scalar_dict">
+<span class="sig-name descname"><span class="pre">to_scalar_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/identifiers.html#Well.to_scalar_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.Well.to_scalar_dict" title="Link to this definition"></a></dt>
+<dd><p>Convert Well to a dictionary containing scalar values.</p>
+<p>Returns: dict.</p>
+<p>Guaranteed keys are “dh_no”, “id”, “title” and “name”.</p>
+<p>The keys present in <cite>well.unit_no.to_scalar_dict()</cite> will
+be added with the prefix “unit_no.”. Same for <cite>obs_no</cite>.</p>
+<p>Any additional attributes will also be present.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sa_gwdata.Well.path_safe_repr">
+<span class="sig-name descname"><span class="pre">path_safe_repr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">remove_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/identifiers.html#Well.path_safe_repr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.Well.path_safe_repr" title="Link to this definition"></a></dt>
+<dd><p>Return title containing only characters which are allowed in
+Windows path names.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sa_gwdata.UnitNo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sa_gwdata.</span></span><span class="sig-name descname"><span class="pre">UnitNo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/identifiers.html#UnitNo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.UnitNo" title="Link to this definition"></a></dt>
+<dd><p>Parse a well unit number.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – either the complete unit number or the map sheet and
+drillhole sequence numbers</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">u1</span> <span class="o">=</span> <span class="n">UnitNo</span><span class="p">(</span><span class="s2">&quot;6628-123&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u2</span> <span class="o">=</span> <span class="n">UnitNo</span><span class="p">(</span><span class="s2">&quot;662800123&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u3</span> <span class="o">=</span> <span class="n">UnitNo</span><span class="p">(</span><span class="mi">662800123</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u4</span> <span class="o">=</span> <span class="n">UnitNo</span><span class="p">(</span><span class="s2">&quot;6628-00123&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u5</span> <span class="o">=</span> <span class="n">UnitNo</span><span class="p">(</span><span class="mi">6628</span><span class="p">,</span> <span class="mi">123</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u6</span> <span class="o">=</span> <span class="n">UnitNo</span><span class="p">(</span><span class="s2">&quot;6628&quot;</span><span class="p">,</span> <span class="s2">&quot;00123&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u7</span> <span class="o">=</span> <span class="n">UnitNo</span><span class="p">(</span><span class="s2">&quot;G662800123&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u1</span> <span class="o">==</span> <span class="n">u2</span> <span class="o">==</span> <span class="n">u3</span> <span class="o">==</span> <span class="n">u4</span> <span class="o">==</span> <span class="n">u5</span> <span class="o">==</span> <span class="n">u6</span> <span class="o">==</span> <span class="n">u7</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sa_gwdata.UnitNo.map">
+<span class="sig-name descname"><span class="pre">map</span></span><a class="headerlink" href="#sa_gwdata.UnitNo.map" title="Link to this definition"></a></dt>
+<dd><p>10K map sheet</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sa_gwdata.UnitNo.seq">
+<span class="sig-name descname"><span class="pre">seq</span></span><a class="headerlink" href="#sa_gwdata.UnitNo.seq" title="Link to this definition"></a></dt>
+<dd><p>sequence number</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sa_gwdata.UnitNo.hyphen">
+<span class="sig-name descname"><span class="pre">hyphen</span></span><a class="headerlink" href="#sa_gwdata.UnitNo.hyphen" title="Link to this definition"></a></dt>
+<dd><p>hyphenated format e.g. “6628-123”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sa_gwdata.UnitNo.long">
+<span class="sig-name descname"><span class="pre">long</span></span><a class="headerlink" href="#sa_gwdata.UnitNo.long" title="Link to this definition"></a></dt>
+<dd><p>zero-filled format e.g. “662800123”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sa_gwdata.UnitNo.long_int">
+<span class="sig-name descname"><span class="pre">long_int</span></span><a class="headerlink" href="#sa_gwdata.UnitNo.long_int" title="Link to this definition"></a></dt>
+<dd><p>zero-filled format as integer e.g. 662800123 or
+None if missing</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int/None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sa_gwdata.UnitNo.wilma">
+<span class="sig-name descname"><span class="pre">wilma</span></span><a class="headerlink" href="#sa_gwdata.UnitNo.wilma" title="Link to this definition"></a></dt>
+<dd><p>WILMA style e.g. “6628-00123”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sa_gwdata.UnitNo.hydstra">
+<span class="sig-name descname"><span class="pre">hydstra</span></span><a class="headerlink" href="#sa_gwdata.UnitNo.hydstra" title="Link to this definition"></a></dt>
+<dd><p>Hydstra style e.g. “G662800123”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sa_gwdata.UnitNo.set">
+<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/identifiers.html#UnitNo.set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.UnitNo.set" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="#sa_gwdata.UnitNo" title="sa_gwdata.UnitNo"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitNo</span></code></a> constructor for details of arguments.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sa_gwdata.ObsNo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sa_gwdata.</span></span><span class="sig-name descname"><span class="pre">ObsNo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/identifiers.html#ObsNo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.ObsNo" title="Link to this definition"></a></dt>
+<dd><p>Parse an observation well identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – either one string, which can be either in the format
+‘YAT017’ or ‘YAT-17’, etc.; or two values, either int or str, for
+the plan prefix (three letters referring to the hundred) and
+the sequence number. e.g. ‘YAT’, 17</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sa_gwdata</span> <span class="kn">import</span> <span class="n">ObsNo</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o1</span> <span class="o">=</span> <span class="n">ObsNo</span><span class="p">(</span><span class="s2">&quot;YAT017&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o2</span> <span class="o">=</span> <span class="n">ObsNo</span><span class="p">(</span><span class="s2">&quot;YAT17&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o3</span> <span class="o">=</span> <span class="n">ObsNo</span><span class="p">(</span><span class="s2">&quot;YAT 17&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o4</span> <span class="o">=</span> <span class="n">ObsNo</span><span class="p">(</span><span class="s2">&quot;YAT&quot;</span><span class="p">,</span> <span class="mi">17</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o1</span> <span class="o">==</span> <span class="n">o2</span> <span class="o">==</span> <span class="n">o3</span> <span class="o">==</span> <span class="n">o4</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sa_gwdata.ObsNo.plan">
+<span class="sig-name descname"><span class="pre">plan</span></span><a class="headerlink" href="#sa_gwdata.ObsNo.plan" title="Link to this definition"></a></dt>
+<dd><p>hundred prefix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sa_gwdata.ObsNo.seq">
+<span class="sig-name descname"><span class="pre">seq</span></span><a class="headerlink" href="#sa_gwdata.ObsNo.seq" title="Link to this definition"></a></dt>
+<dd><p>sequence number</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sa_gwdata.ObsNo.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#sa_gwdata.ObsNo.id" title="Link to this definition"></a></dt>
+<dd><p>consistent zero-padded identifier e.g. “YAT017”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sa_gwdata.ObsNo.egis">
+<span class="sig-name descname"><span class="pre">egis</span></span><a class="headerlink" href="#sa_gwdata.ObsNo.egis" title="Link to this definition"></a></dt>
+<dd><p>ENVGIS style e.g. “YAT 17”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sa_gwdata.ObsNo.parse">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/identifiers.html#ObsNo.parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.ObsNo.parse" title="Link to this definition"></a></dt>
+<dd><p>Parse an obs identifier, ignoring all parsing errors.</p>
+<p>Arguments are the same as those for the class constructor,
+but all exceptions are ignored.</p>
+<p>Returns: ObsNo.id if successful, a blank string if not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sa_gwdata.ObsNo.set">
+<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/identifiers.html#ObsNo.set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.ObsNo.set" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="#sa_gwdata.ObsNo" title="sa_gwdata.ObsNo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ObsNo</span></code></a> constructor for details of arguments.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="waterconnect-web-service-utilities">
+<h3>WaterConnect web service utilities<a class="headerlink" href="#waterconnect-web-service-utilities" title="Link to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="sa_gwdata.WaterConnectSession">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sa_gwdata.</span></span><span class="sig-name descname"><span class="pre">WaterConnectSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sleep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_list_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_crs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EPSG:4326'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/waterconnect.html#WaterConnectSession"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.WaterConnectSession" title="Link to this definition"></a></dt>
+<dd><p>Wrapper around repeated requests to Groundwater Data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>endpoint</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – url endpoint for API, optional</p></li>
+<li><p><strong>sleep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – minimum interval between requests in seconds.
+Be nice, do not reduce it.</p></li>
+<li><p><strong>verify</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – require valid SSL certificate</p></li>
+</ul>
+</dd>
+</dl>
+<p>Other args and kwargs are passed to request.Session constructor.</p>
+<p>Usage:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sa_gwdata</span> <span class="kn">import</span> <span class="n">WaterConnectSession</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">WaterConnectSession</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GetObswellNetworkData&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Network&quot;</span><span class="p">:</span> <span class="s2">&quot;CENT_ADEL&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="sa_gwdata.WaterConnectSession.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WDDDMS'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/waterconnect.html#WaterConnectSession.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.WaterConnectSession.get" title="Link to this definition"></a></dt>
+<dd><p>HTTP GET verb to Groundwater Data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – final portion of URL path off the end of self.endpoint
+e.g. to GET
+<code class="docutils literal notranslate"><span class="pre">https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd</span>
+<span class="pre">/WDDDMS.ashx/GetAdvancedListsData</span></code>
+then you would use <code class="docutils literal notranslate"><span class="pre">path=&quot;GetAdvancedListsData&quot;</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sa_gwdata.WaterConnectSession.refresh_available_groupings">
+<span class="sig-name descname"><span class="pre">refresh_available_groupings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sa_gwdata/waterconnect.html#WaterConnectSession.refresh_available_groupings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.WaterConnectSession.refresh_available_groupings" title="Link to this definition"></a></dt>
+<dd><p>Load lists data from API. Stores them in the attributes
+aquifers, networks, nrm_regions, pwas, pwras.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p>Any calls to <a class="reference internal" href="#sa_gwdata.WaterConnectSession.get" title="sa_gwdata.WaterConnectSession.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sa_gwdata.WaterConnectSession.get()</span></code></a> return an
+<a class="reference internal" href="#sa_gwdata.Response" title="sa_gwdata.Response"><code class="xref py py-class docutils literal notranslate"><span class="pre">sa_gwdata.Response</span></code></a> object:</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="sa_gwdata.Response">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sa_gwdata.</span></span><span class="sig-name descname"><span class="pre">Response</span></span><a class="reference internal" href="_modules/sa_gwdata/waterconnect.html#Response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sa_gwdata.Response" title="Link to this definition"></a></dt>
+<dd><dl class="py property">
+<dt class="sig sig-object py" id="sa_gwdata.Response.r">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">r</span></span><a class="headerlink" href="#sa_gwdata.Response.r" title="Link to this definition"></a></dt>
+<dd><p>Return the HTTP requests.Response object.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sa_gwdata.Response.json">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">json</span></span><a class="headerlink" href="#sa_gwdata.Response.json" title="Link to this definition"></a></dt>
+<dd><p>Convert the response to JSON. Returns a dict/list.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sa_gwdata.Response.df">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">df</span></span><a class="headerlink" href="#sa_gwdata.Response.df" title="Link to this definition"></a></dt>
+<dd><p>If the response is a list, convert to a pandas DataFrame with
+columns converted into lowercase.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sa_gwdata.Response.df_exists">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">df_exists</span></span><a class="headerlink" href="#sa_gwdata.Response.df_exists" title="Link to this definition"></a></dt>
+<dd><p>Check if JSON can be converted to a DataFrame. Returns bool.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorial-water-monitoring-data.html" class="btn btn-neutral float-left" title="Tutorial: water monitoring data (WL, TDS)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="webservices.html" class="btn btn-neutral float-right" title="WaterConnect web services" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Kent Inverarity.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

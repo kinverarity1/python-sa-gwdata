@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GetHydrostratInformation &mdash; python-sa-gwdata 0.12.dev12+ge08a5da documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f9e7c862"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link href="_static/style.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            python-sa-gwdata
+          </a>
+              <div class="version">
+                0.12
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart-guide.html">Quickstart guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="background.html">Background information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="available-data.html">Available data types on Groundwater Data (GD)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial-finding-wells.html">Tutorial: finding wells</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial-monitoring-networks.html">Tutorial: monitoring networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial-water-monitoring-data.html">Tutorial: water monitoring data (WL, TDS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apidocs.html">sa_gwdata developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="webservices.html">WaterConnect web services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">python-sa-gwdata</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">GetHydrostratInformation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/GetHydrostratInformation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="gethydrostratinformation">
+<h1>GetHydrostratInformation<a class="headerlink" href="#gethydrostratinformation" title="Link to this heading"></a></h1>
+<p>You can request a single drillhole number (DHNO) (see search queries above for how to obtain this number).</p>
+<p><a class="reference external" href="https://www.waterconnect.sa.gov.au/_layouts/15/dfw.sharepoint.wdd/WDDDMS.ashx/GetHydrostratInformation?DHNO=28083">GetHydrostratInformation?DHNO=28083</a></p>
+<p>This returns the hydrostratigraphic log (if available) for this drillhole:</p>
+<p>Note that one field present in the bulk download CSV (HYDRO_SUBUNIT_CODE) is not
+included in the JSON output.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;DRILLHOLE_NO&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">28083</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;HYDRO_INT_NO&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">52959</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;STRAT_UNIT_NO&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3642</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;HYDRO_DEPTH_FROM&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;HYDRO_DEPTH_TO&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">96</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;MAP_SYMBOL&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Qpah&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;STRAT_NAME&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hindmarsh Clay&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;STRAT_UNIT_DESC&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Consolidated mottled clay and sandy clay with sand and gravel lenses, aeolian sand, gypseous and pelletal clay dunes and calcareous palaeosols. Alluvial and colluvial red-brown sandy clay with sand and gravel beds.&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;DRILLHOLE_NO&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">28083</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;HYDRO_INT_NO&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">52960</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;STRAT_UNIT_NO&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3630</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;HYDRO_DEPTH_FROM&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">96</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;HYDRO_DEPTH_TO&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">166</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;COMMENTS&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;T1a aquifer&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;MAP_SYMBOL&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Tph&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;STRAT_NAME&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hallett Cove Sandstone&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;STRAT_UNIT_DESC&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Sandstone, calcareous; limestone, sandy, fossiliferous. Transgressive, shallow marginal marine.&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Kent Inverarity.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

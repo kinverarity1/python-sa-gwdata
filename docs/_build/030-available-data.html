@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Available data types on Groundwater Data (GD) &mdash; python-sa-gwdata 0.12.dev12+ge08a5da documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f9e7c862"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorial: finding wells" href="041-tutorial-finding-wells.html" />
+    <link rel="prev" title="Background information" href="020-background.html" />
+    <link href="_static/style.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            python-sa-gwdata
+          </a>
+              <div class="version">
+                0.12
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="010-quickstart-guide.html">Quickstart guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="020-background.html">Background information</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Available data types on Groundwater Data (GD)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#salinity-samples">Salinity samples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#geological-logs">Geological logs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#driller-s-logs">Driller’s logs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lithological-logs">Lithological logs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stratigraphic-logs">Stratigraphic logs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hydrostratigraphic-logs">Hydrostratigraphic logs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#construction-information">Construction information</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#drilled-intervals">Drilled intervals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#casing-intervals-and-cementing-information">Casing intervals and cementing information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#production-zones">Production zones</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#water-cuts-groundwater-observations-during-drilling">Water cuts (groundwater observations during drilling)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#wellhead-elevation-surveys">Wellhead elevation surveys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#water-chemistry-analyses">Water chemistry analyses</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="041-tutorial-finding-wells.html">Tutorial: finding wells</a></li>
+<li class="toctree-l1"><a class="reference internal" href="042-tutorial-monitoring-networks.html">Tutorial: monitoring networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="043-tutorial-water-monitoring-data.html">Tutorial: water monitoring data (WL, TDS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-apidocs.html">sa_gwdata developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-webservices.html">WaterConnect web services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="090-changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">python-sa-gwdata</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Available data types on Groundwater Data (GD)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/030-available-data.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="available-data-types-on-groundwater-data-gd">
+<h1>Available data types on Groundwater Data (GD)<a class="headerlink" href="#available-data-types-on-groundwater-data-gd" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="salinity-samples">
+<h2>Salinity samples<a class="headerlink" href="#salinity-samples" title="Link to this heading"></a></h2>
+<p>These are water samples collected from wells, usually by pumping
+deliberately for monitoring (or sampled from an irrigation pump), and
+the salinity estimated by measuring the electrical conductivity (EC)</p>
+<p>See the <span class="xref std std-ref">water monitoring data tutorial</span>
+for more details.</p>
+</section>
+<section id="geological-logs">
+<h2>Geological logs<a class="headerlink" href="#geological-logs" title="Link to this heading"></a></h2>
+<p>There are fundamentally two types of geological logs:</p>
+<ul class="simple">
+<li><p>Driller’s / Lithology: descriptions of the lithology</p></li>
+<li><p>Stratigraphic / Hydrostratigraphic: interpretations of the (hydro)stratigraphy</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For older wells, logs may be available in the scanned drillhole document
+images (e.g. typed or handwritten), but may not have yet been transcribed
+into the relevant part of the database, and therefore won’t show up in these
+tables.</p>
+</div>
+<section id="driller-s-logs">
+<h3>Driller’s logs<a class="headerlink" href="#driller-s-logs" title="Link to this heading"></a></h3>
+<p>These are descriptions of the lithology intersected by a drillhole, as
+recorded by the licensed water well driller on their DWCR (drillers well completion report).
+The units and descriptions are often somewhat colloquial and informal but can
+be very useful bearing in mind that drillers generally have a lot of experience
+in a given area and can be very familiar with local variations in lithology and
+aquifer properties.</p>
+<p>A driller’s log should be available for the majority of wells.</p>
+</section>
+<section id="lithological-logs">
+<h3>Lithological logs<a class="headerlink" href="#lithological-logs" title="Link to this heading"></a></h3>
+<p>Descriptions of the lithology intersected by a drillhole, as recorded by a
+geologist or hydrogeologist. These are usually collected in addition to the
+drillers log, and are more detailed and formal in nature.</p>
+<p>They are not available for most water wells.</p>
+</section>
+<section id="stratigraphic-logs">
+<h3>Stratigraphic logs<a class="headerlink" href="#stratigraphic-logs" title="Link to this heading"></a></h3>
+<p>A stratigraphic log will provide an interpretation of the stratigraphy
+intersected by a drillhole. It is generally something done for historic wells,
+and mineral and petroleum wells, rather than water wells.</p>
+</section>
+<section id="hydrostratigraphic-logs">
+<h3>Hydrostratigraphic logs<a class="headerlink" href="#hydrostratigraphic-logs" title="Link to this heading"></a></h3>
+<p>A hydrostratigraphic log provides an interpretation of the hydrostratigraphy
+(i.e. sequence of aquitards and aquifers) that a drillhole intersects. It’s
+similar to a stratigraphic log, but usually slightly more detailed and more
+relevant to groundwater work: for example, in a well on the Adelaide Plains,
+it would detail the depths of the T1 and T2 aquifers, whereas a stratigraphic
+log will only show the Port Willunga Formation.</p>
+<p>These are not available for the majority of water wells, so you may have to
+search a little further afield for a nearby one.</p>
+</section>
+</section>
+<section id="construction-information">
+<h2>Construction information<a class="headerlink" href="#construction-information" title="Link to this heading"></a></h2>
+<section id="drilled-intervals">
+<h3>Drilled intervals<a class="headerlink" href="#drilled-intervals" title="Link to this heading"></a></h3>
+</section>
+<section id="casing-intervals-and-cementing-information">
+<h3>Casing intervals and cementing information<a class="headerlink" href="#casing-intervals-and-cementing-information" title="Link to this heading"></a></h3>
+<p>Contains details of the casing installed in a well, such as the depths of installation
+and the material. It also contains
+limited information about the annular grout (e.g. a top and bottom depth,
+and the grout and water volumes).</p>
+<p>Note that production zone data is not stored alongside casing data, and that
+some things which might be considered “casing” are actually stored in the
+production zone table below (e.g. sumps, screen blanks, and riser pipe).</p>
+</section>
+<section id="production-zones">
+<h3>Production zones<a class="headerlink" href="#production-zones" title="Link to this heading"></a></h3>
+<p>Details of the production zone interval of a well e.g. screens, slotted sections, blank sections in screens,
+open hole intervals, and riser pipes.  Some of these are intervals are what might more generally be known
+as “production” zones in the sense that they are likely to provide lateral access to groundwater in the formation.
+Others, however, do not (e.g. riser pipe), although they are stored in the same table.</p>
+<p>The types of intervals that are recorded in this table are:</p>
+<table class="docutils align-default" id="production-zone-interval">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 70%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Provides access to groundwater at this depth?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>OH</p></td>
+<td><p>Open hole interval.</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>S / WS</p></td>
+<td><p>Screen. Although ‘WS’ originally indicated wirewound screen, many/most of the entries
+with ‘S’ are indeed for wirewound screens.</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td><p>SB</p></td>
+<td><p>Blank section of pipe between screened intervals</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>SMP</p></td>
+<td><p>Sump</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p>SC</p></td>
+<td><p>Slotted casing interval</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>PC</p></td>
+<td><p>Perforated casing interval</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td><p>UKN</p></td>
+<td><p>Unknown interval</p></td>
+<td><p>Maybe</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Some depth entries in this table may not always be consistent with the <span class="xref std std-ref">drilled intervals</span> table above.</p>
+</div>
+<p id="production-zone-fields">Fields and field names are listed below for: the CSV file obtainable from Groundwater Data; the JSON returned
+by <a class="reference internal" href="080-webservices.html#getproductionzonesummary"><span class="std std-ref">GetProductionZoneSummary</span></a>; and the pandas DataFrame returned under the key <code class="docutils literal notranslate"><span class="pre">&quot;prod_zones&quot;</span></code> from
+<a class="reference internal" href="070-apidocs.html#sa_gwdata.construction_details" title="sa_gwdata.construction_details"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sa_gwdata.construction_details()</span></code></a>.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 35%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Property</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>CSV</p></th>
+<th class="head"><p>DataFrame</p></th>
+<th class="head"><p>JSON</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="020-background.html#drillhole-number"><span class="std std-ref">Drillhole number</span></a></p></td>
+<td><p>Alternative unique well ID</p></td>
+<td><p>DHNO</p></td>
+<td><p>dh_no</p></td>
+<td><p>DRILLHOLE_NO</p></td>
+</tr>
+<tr class="row-odd"><td><p>Unit number (hyphenated)</p></td>
+<td><p>Alternative unique well ID</p></td>
+<td><p>UnitNumber</p></td>
+<td><p>unit_hyphen</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Completion date</p></td>
+<td><p>Date of the construction event</p></td>
+<td><p>completion_date</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Construction event type</p></td>
+<td><p>Either “Construction”, which means the record indicates an event actually took place which changed the construction of the well; or “Survey”, which means it’s a description of the well’s construction at the time, not that the construction was changed on that date.</p></td>
+<td><p>event_type</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Interval depth from</p></td>
+<td></td>
+<td><p>DepthFrom_m</p></td>
+<td><p>depth_from</p></td>
+<td><p>PZONE_FR</p></td>
+</tr>
+<tr class="row-odd"><td><p>Interval depth to</p></td>
+<td></td>
+<td><p>DepthTo_m</p></td>
+<td><p>depth_to</p></td>
+<td><p>PZONE_TO</p></td>
+</tr>
+<tr class="row-even"><td><p>Screen/hole diameter</p></td>
+<td></td>
+<td><p>Diameter_mm</p></td>
+<td><p>pzone_diam</p></td>
+<td><p>PZONE_DIAM</p></td>
+</tr>
+<tr class="row-odd"><td><p>Production zone interval type</p></td>
+<td><p>See descriptions above</p></td>
+<td><p>Type</p></td>
+<td><p>pzone_type</p></td>
+<td><p>PZONE_TYPE_CODE</p></td>
+</tr>
+<tr class="row-even"><td><p>Interval material</p></td>
+<td><p>Alternative unique well ID - not assigned for all wells</p></td>
+<td><p>Material</p></td>
+<td><p>pzone_material</p></td>
+<td><p>PZONE_MTRL</p></td>
+</tr>
+<tr class="row-odd"><td><p>Screen aperture</p></td>
+<td></td>
+<td><p>Aperture_mm</p></td>
+<td><p>pzone_aperture</p></td>
+<td><p>APERTURE</p></td>
+</tr>
+<tr class="row-even"><td><p>Comments</p></td>
+<td><p>The actual measurement recorded in most cases</p></td>
+<td><p>COMMENTS</p></td>
+<td><p>comments</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="water-cuts-groundwater-observations-during-drilling">
+<h3>Water cuts (groundwater observations during drilling)<a class="headerlink" href="#water-cuts-groundwater-observations-during-drilling" title="Link to this heading"></a></h3>
+<p>Observations of groundwater level, salinity and yield made at the time of drilling. These observations
+are much more common for historical wells drilled by cable tool rigs, but they are still occasionally collected.</p>
+</section>
+</section>
+<section id="wellhead-elevation-surveys">
+<h2>Wellhead elevation surveys<a class="headerlink" href="#wellhead-elevation-surveys" title="Link to this heading"></a></h2>
+<p>Generally water monitoring wells are surveyed specifically for their elevation, and the data are kept here.
+The data are also arranged by time such that changes in the reference point for groundwater level measurements
+can be fully corrected to have a consistent and accurate measurement of groundwater level over the well’s
+life.</p>
+<p>DEW also routinely upload elevations derived from digital elevation models (DEM) for wells which have not been
+surveyed. These elevations are included in this dataset, with the “survey method” field providing a way to
+discriminate the high-quality survey data from the much lower quality DEM data.</p>
+</section>
+<section id="water-chemistry-analyses">
+<h2>Water chemistry analyses<a class="headerlink" href="#water-chemistry-analyses" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="020-background.html" class="btn btn-neutral float-left" title="Background information" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="041-tutorial-finding-wells.html" class="btn btn-neutral float-right" title="Tutorial: finding wells" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Kent Inverarity.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

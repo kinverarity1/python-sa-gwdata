@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quickstart guide &mdash; python-sa-gwdata 0.12.dev12+ge08a5da documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f9e7c862"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Background information" href="020-background.html" />
+    <link rel="prev" title="Python access to groundwater data in South Australia" href="index.html" />
+    <link href="_static/style.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            python-sa-gwdata
+          </a>
+              <div class="version">
+                0.12
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#access-to-waterconnect-webservices">Access to WaterConnect webservices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="020-background.html">Background information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="030-available-data.html">Available data types on Groundwater Data (GD)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="041-tutorial-finding-wells.html">Tutorial: finding wells</a></li>
+<li class="toctree-l1"><a class="reference internal" href="042-tutorial-monitoring-networks.html">Tutorial: monitoring networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="043-tutorial-water-monitoring-data.html">Tutorial: water monitoring data (WL, TDS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="070-apidocs.html">sa_gwdata developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="080-webservices.html">WaterConnect web services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="090-changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">python-sa-gwdata</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Quickstart guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/010-quickstart-guide.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="quickstart-guide">
+<h1>Quickstart guide<a class="headerlink" href="#quickstart-guide" title="Link to this heading"></a></h1>
+<p>The sa_gwdata package currently provides a helpful way to access the
+WaterConnect web services (see following page) and provide data as
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> instances. Features under development will allow
+easier ways to find and use well IDs across the entire interface, and other
+things.</p>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
+<p>Strictly, the only dependencies needed to run this package are
+requests and pandas, and they will install automatically with <code class="docutils literal notranslate"><span class="pre">python-sa-gwdata</span></code>
+if needed.</p>
+<p>However, if you want to use the spatial data returned
+more easily (and e.g. run the included tutorials), you will need shapely,
+contextily, and geopandas installed.
+If you are using conda you can easily install these with:</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="p">&gt;</span> <span class="n">conda</span> <span class="n">install</span> <span class="n">-c</span> <span class="n">conda-forge</span> <span class="n">geopandas</span> <span class="n">shapely</span> <span class="n">contextily</span>
+</pre></div>
+</div>
+</section>
+<section id="install">
+<h2>Install<a class="headerlink" href="#install" title="Link to this heading"></a></h2>
+<p>You can install sa_gwdata the usual way:</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="p">&gt;</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">-U</span> <span class="n">python-sa-gwdata</span>
+</pre></div>
+</div>
+<p>This will install and/or update the Python package <code class="docutils literal notranslate"><span class="pre">sa_gwdata</span></code>.</p>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<p>You can locate any wells by plain-text search for well identifiers:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sa_gwdata</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wells</span> <span class="o">=</span> <span class="n">sa_gwdata</span><span class="o">.</span><span class="n">find_wells</span><span class="p">(</span><span class="s2">&quot;ADE206 ADE207&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wells</span>
+<span class="go">[&lt;sa_gwdata.Well(259424) 6628-25427 / ADE206 / DFW T2&gt;,</span>
+<span class="go"> &lt;sa_gwdata.Well(259425) 6628-25428 / ADE207 / DFW T1&gt;</span>
+<span class="go">]</span>
+</pre></div>
+</div>
+<p>The important thing about this step is that to obtain data, you really need to
+query by <strong>drillhole number</strong>. This step of “finding wells” allows the code
+to find and verify the appropriate drillhole numbers in the background (they
+are stored as an attribute on the Well object).</p>
+<p>Then you can query and download data for those two wells:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">wls</span> <span class="o">=</span> <span class="n">sa_gwdata</span><span class="o">.</span><span class="n">water_levels</span><span class="p">(</span><span class="n">wells</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wls</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<span class="go">&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;</span>
+<span class="go">RangeIndex: 55 entries, 0 to 54</span>
+<span class="go">Data columns (total 21 columns):</span>
+<span class="go">DHNO               55 non-null int64</span>
+<span class="go">network            55 non-null object</span>
+<span class="go">Unit_Number        55 non-null int64</span>
+<span class="go">Aquifer            55 non-null object</span>
+<span class="go">Easting            55 non-null float64</span>
+<span class="go">Northing           55 non-null float64</span>
+<span class="go">Zone               55 non-null int64</span>
+<span class="go">Unit_No            55 non-null object</span>
+<span class="go">Obs_No             55 non-null object</span>
+<span class="go">obs_date           55 non-null object</span>
+<span class="go">dtw                48 non-null float64</span>
+<span class="go">swl                48 non-null float64</span>
+<span class="go">rswl               48 non-null float64</span>
+<span class="go">pressure           8 non-null float64</span>
+<span class="go">temperature        2 non-null float64</span>
+<span class="go">dry_ind            0 non-null float64</span>
+<span class="go">anom_ind           55 non-null object</span>
+<span class="go">pump_ind           55 non-null object</span>
+<span class="go">measured_during    55 non-null object</span>
+<span class="go">data_source        55 non-null object</span>
+<span class="go">Comments           18 non-null object</span>
+<span class="go">dtypes: float64(8), int64(3), object(10)</span>
+<span class="go">memory usage: 9.1+ KB</span>
+</pre></div>
+</div>
+</section>
+<section id="access-to-waterconnect-webservices">
+<h2>Access to WaterConnect webservices<a class="headerlink" href="#access-to-waterconnect-webservices" title="Link to this heading"></a></h2>
+<p>In the background, there are web services that provide data. To access these
+directly, first create a Groundwater Data session wrapper:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sa_gwdata</span> <span class="kn">import</span> <span class="n">WaterConnectSession</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span> <span class="o">=</span> <span class="n">WaterConnectSession</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Then to access any of the web service calls:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GetObswellNetworkData&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Network&quot;</span><span class="p">:</span> <span class="s2">&quot;KAT_FP,PIKE_FP&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
+<span class="go">190</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">Index([&#39;aq_mon&#39;, &#39;chem&#39;, &#39;class&#39;, &#39;dhno&#39;, &#39;drill_date&#39;, &#39;lat&#39;,</span>
+<span class="go">   &#39;latest_open_date&#39;, &#39;latest_open_depth&#39;, &#39;latest_sal_date&#39;,</span>
+<span class="go">   &#39;latest_swl_date&#39;, &#39;latest_yield_date&#39;, &#39;litholog&#39;, &#39;logdrill&#39;, &#39;lon&#39;,</span>
+<span class="go">   &#39;mapnum&#39;, &#39;max_depth&#39;, &#39;name&#39;, &#39;nrm&#39;, &#39;obsnetwork&#39;, &#39;obsnumber&#39;,</span>
+<span class="go">   &#39;permit_no&#39;, &#39;purp_desc&#39;, &#39;pwa&#39;, &#39;replaceunitnum&#39;, &#39;sal&#39;, &#39;salstatus&#39;,</span>
+<span class="go">   &#39;stat_desc&#39;, &#39;swl&#39;, &#39;swlstatus&#39;, &#39;tds&#39;, &#39;water&#39;, &#39;yield&#39;],</span>
+<span class="go">  dtype=&#39;object&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">obsnumber</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+<span class="go">array([&#39;KTR043&#39;, &#39;KTR023&#39;, &#39;KTR025&#39;, &#39;KTR026&#39;, &#39;PYP008&#39;, &#39;PAG003&#39;,</span>
+<span class="go">       &#39;KTR065&#39;, &#39;LVD002&#39;, &#39;RMK004&#39;, &#39;RMK010&#39;, &#39;RMK006&#39;, &#39;RMK007&#39;,</span>
+<span class="go">       &#39;KTR021&#39;, &#39;KTR022&#39;, &#39;RMK074&#39;, &#39;RMK080&#39;, &#39;RMK077&#39;, &#39;RMK055&#39;,</span>
+<span class="go">       &#39;KTR034&#39;, &#39;RMK214&#39;, &#39;RMK215&#39;, &#39;RMK216&#39;, &#39;RMK229&#39;, &#39;RMK233&#39;,</span>
+<span class="go">       &#39;GDN044&#39;, &#39;GDN055&#39;, &#39;GDN064&#39;, &#39;RMK355&#39;, &#39;RMK356&#39;, &#39;PAG069&#39;,</span>
+<span class="go">       &#39;PAG070&#39;, &#39;PAG071&#39;, &#39;PAG077&#39;, &#39;PAG078&#39;, &#39;PAG079&#39;, &#39;PAG080&#39;,</span>
+<span class="go">       &#39;PAG081&#39;, &#39;PAG082&#39;, &#39;PAG083&#39;, &#39;PAG084&#39;, &#39;PAG085&#39;, &#39;PAG086&#39;,</span>
+<span class="go">       &#39;PAG038&#39;, &#39;PAG042&#39;, &#39;PAG043&#39;, &#39;PAG044&#39;, &#39;PAG045&#39;, &#39;PAG059&#39;,</span>
+<span class="go">       &#39;PAG058&#39;, &#39;GDN186&#39;, &#39;RMK361&#39;, &#39;MTH012&#39;, &#39;PAG068&#39;, &#39;GDN128&#39;,</span>
+<span class="go">       &#39;GDN132&#39;, &#39;GDN187&#39;, &#39;GDN188&#39;, &#39;PAG104&#39;, &#39;PYP055&#39;, &#39;RMK357&#39;,</span>
+<span class="go">       &#39;RMK363&#39;, &#39;RMK365&#39;, &#39;RMK359&#39;, &#39;RMK362&#39;, &#39;RMK385&#39;, &#39;RMK374&#39;,</span>
+<span class="go">       &#39;KTR060&#39;, &#39;KTR061&#39;, &#39;RMK368&#39;, &#39;GDN185&#39;, &#39;RMK369&#39;, &#39;RMK375&#39;,</span>
+<span class="go">       &#39;PAG142&#39;, &#39;PAG162&#39;, &#39;PAG161&#39;, &#39;PAG117&#39;, &#39;RMK379&#39;, &#39;PAG130&#39;,</span>
+<span class="go">       &#39;PAG129&#39;, &#39;PAG116&#39;, &#39;PAG115&#39;, &#39;MTH021&#39;, &#39;PAG089&#39;, &#39;PAG091&#39;,</span>
+<span class="go">       &#39;PAG092&#39;, &#39;PAG094&#39;, &#39;PAG097&#39;, &#39;RMK370&#39;, &#39;RMK371&#39;, &#39;KTR067&#39;,</span>
+<span class="go">       &#39;KTR068&#39;, &#39;RMK367&#39;, &#39;RMK347&#39;, &#39;RMK348&#39;, &#39;RMK349&#39;, &#39;RMK382&#39;,</span>
+<span class="go">       &#39;RMK380&#39;, &#39;RMK381&#39;, &#39;PAG118&#39;, &#39;PAG114&#39;, &#39;PAG119&#39;, &#39;RMK354&#39;,</span>
+<span class="go">       &#39;RMK384&#39;, &#39;RMK383&#39;, &#39;RMK364&#39;, &#39;RMK360&#39;, &#39;RMK366&#39;, &#39;KTR066&#39;,</span>
+<span class="go">       &#39;RMK358&#39;, &#39;RMK373&#39;, &#39;PAG158&#39;, &#39;PAG155&#39;, &#39;PAG152&#39;, &#39;PAG135&#39;,</span>
+<span class="go">       &#39;PAG134&#39;, &#39;PAG131&#39;, &#39;PAG143&#39;, &#39;PAG146&#39;, &#39;PAG151&#39;, &#39;PAG147&#39;,</span>
+<span class="go">       &#39;PAG168&#39;, &#39;PAG165&#39;, &#39;RMK376&#39;, &#39;KTR058&#39;, &#39;KTR062&#39;, &#39;RMK372&#39;,</span>
+<span class="go">       &#39;KTR064&#39;, &#39;KTR063&#39;, &#39;RMK377&#39;, &#39;KTR059&#39;, &#39;PAG139&#39;, &#39;PAG140&#39;,</span>
+<span class="go">       &#39;PAG169&#39;, &#39;PAG170&#39;, &#39;PAG175&#39;, &#39;PAG153&#39;, &#39;PAG154&#39;, &#39;PAG157&#39;,</span>
+<span class="go">       &#39;PAG156&#39;, &#39;PAG159&#39;, &#39;PAG160&#39;, &#39;PAG133&#39;, &#39;PAG132&#39;, &#39;PAG136&#39;,</span>
+<span class="go">       &#39;PAG150&#39;, &#39;PAG149&#39;, &#39;PAG148&#39;, &#39;PAG145&#39;, &#39;PAG144&#39;, &#39;PAG122&#39;,</span>
+<span class="go">       &#39;PAG174&#39;, &#39;PAG163&#39;, &#39;PAG173&#39;, &#39;PAG164&#39;, &#39;PAG166&#39;, &#39;PAG176&#39;,</span>
+<span class="go">       &#39;PAG167&#39;, &#39;PAG141&#39;, &#39;PAG171&#39;, &#39;PAG138&#39;, &#39;PAG120&#39;, &#39;PAG137&#39;,</span>
+<span class="go">       &#39;PAG177&#39;, &#39;PAG172&#39;, &#39;PAG123&#39;, &#39;PAG121&#39;, &#39;RMK386&#39;, &#39;PAG180&#39;,</span>
+<span class="go">       &#39;PAG182&#39;, &#39;PAG181&#39;, &#39;PAG183&#39;, &#39;PAG179&#39;, &#39;PAG178&#39;, &#39;KTR071&#39;,</span>
+<span class="go">       &#39;RMK388&#39;, &#39;RMK389&#39;, &#39;PAG184&#39;, &#39;PAG185&#39;, &#39;PAG186&#39;, &#39;PAG187&#39;,</span>
+<span class="go">       &#39;PAG188&#39;, &#39;PAG189&#39;, &#39;KTR070&#39;, &#39;RMK392&#39;, &#39;KTR069&#39;, &#39;RMK395&#39;,</span>
+<span class="go">       &#39;RMK394&#39;, &#39;RMK393&#39;, &#39;RMK390&#39;, &#39;RMK391&#39;], dtype=object)</span>
+</pre></div>
+</div>
+<p>Generally you shouldn’t need to rely on accessing web services directly.</p>
+<p>Keep reading for more background and detail on what you can access and how.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Python access to groundwater data in South Australia" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="020-background.html" class="btn btn-neutral float-right" title="Background information" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Kent Inverarity.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
