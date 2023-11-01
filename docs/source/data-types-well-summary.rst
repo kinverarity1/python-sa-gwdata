@@ -10,7 +10,8 @@ Water wells
    Wells which are intended to intersect groundwater, whether for monitoring or for
    extraction or recharge/drainage of groundwater. The data for these type
    of wells derives from well completion reports submitted to DEW as part of the 
-   requirements attached to water well permits.
+   requirements attached to water well permits. Any edits or updates or new data
+   should be sent to `groundwater@sa.gov.au <mailto:groundwater@sa.gov.au>`__.
 
 Water points
    Database records to record surface expressions of groundwater such as springs and

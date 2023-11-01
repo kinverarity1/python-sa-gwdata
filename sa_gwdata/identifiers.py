@@ -280,7 +280,7 @@ class Well:
             unit_no = kwargs["unit_hyphen"]
         if "unit_long" in kwargs and not unit_no:
             unit_no = kwargs["unit_long"]
-        self.set_unit_no(unit_no)
+        # self.set_unit_no(unit_no)
         self.set_obs_no(obs_no)
         for key, value in kwargs.items():
             if not key in ("unit_long", "unit_hyphen", "id", "title"):
