@@ -1,4 +1,4 @@
-python-sa-gwdata
+-e ..
 
 requests
 pandas>=0.24.1
