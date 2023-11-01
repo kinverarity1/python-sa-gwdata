@@ -1,8 +1,12 @@
-Python access to groundwater data in South Australia
-====================================================
+python-sa-gwdata: South Australian groundwater data via Python
+==============================================================
 
-sa_gwdata is a Python package to ease access to groundwater data in South Australia.
-This is an unofficial project, use at your own risk/reward.
+python-sa-gwdata is a Python package to ease access to groundwater data in South Australia.
+
+The package can be installed as usual with ``pip install python-sa-gwdata`` and can then be
+imported in Python as ``import sa_gwdata``.
+
+This is an unofficial project.
 
 `The project's homepage is at GitHub <https://github.com/kinverarity1/python-sa-gwdata>`__.
 
@@ -10,15 +14,15 @@ This is an unofficial project, use at your own risk/reward.
     :maxdepth: 6
     :caption: Contents:
 
-    010-quickstart-guide
-    020-background
-    030-available-data
-    041-tutorial-finding-wells
-    042-tutorial-monitoring-networks
-    043-tutorial-water-monitoring-data
-    070-apidocs
-    080-webservices
-    090-changelog
+    100-quickstart-guide
+    200-background
+    300-data-dictionary
+    410-tutorial-finding-wells
+    420-tutorial-monitoring-networks
+    430-tutorial-water-monitoring-data
+    700-apidocs
+    800-webservices
+    900-changelog
 
 
 * :ref:`genindex`
