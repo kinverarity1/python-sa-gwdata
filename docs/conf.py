@@ -17,7 +17,7 @@ author = 'Kent Inverarity'
 
 from importlib.metadata import distribution
 
-release = distribution("python-sa-gwdata").version
+release = distribution("sa_gwdata").version
 version = ".".join(release.split(".")[:2])
 
 # -- General configuration ---------------------------------------------------
