@@ -1,3 +1,4 @@
+python-sa-gwdata
 
 requests
 pandas>=0.24.1
