@@ -1,11 +1,21 @@
-Quickstart guide
-========================
+Introduction (Thirty second pitch)
+==================================
 
-The sa_gwdata package currently provides a helpful way to access the
-WaterConnect web services (see following page) and provide data as
-:class:`pandas.DataFrame` instances. Features under development will allow
-easier ways to find and use well IDs across the entire interface, and other
-things.
+The python-sa-gwdata repository hosts a Python package called ``sa_gwdata``
+which provides an easy way to use code to access groundwater data in
+South Australia which is otherwise available via the websites Groundwater Data
+(also known as WaterConnect) and "Water Data SA".
+
+Commonly-used data is available in bulk as pandas DataFrames, and comprehensive
+data is available via the web services which run in the background on
+Groundwater Data.
+
+Comprehensive documentation is also being worked on which will eventually
+provide a data dictionary, tutorials on how to find and access data,
+some tutorials on how you might use the data (although that won't be
+a long-term focus), and comprehensive documentation for technically-minded
+users on the Python functions and underlying web services that are 
+implemented here.
 
 Requirements
 ~~~~~~~~~~~~~
