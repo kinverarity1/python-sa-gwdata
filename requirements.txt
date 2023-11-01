@@ -1,3 +1,4 @@
+
 requests
 pandas>=0.24.1
 platformdirs
@@ -10,6 +11,7 @@ geopandas
 
 setuptools
 setuptools_scm
+
 pytest>=3.6
 pytest-cov
 codacy-coverage
@@ -17,5 +19,7 @@ coverage
 codecov
 pytest-benchmark
 black
+
 sphinx
 nbsphinx
+sphinx_rtd_theme
