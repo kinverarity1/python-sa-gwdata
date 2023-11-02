@@ -17,7 +17,7 @@ author = 'Kent Inverarity'
 
 from importlib.metadata import version as get_version
 
-version = ".".join(get_version("sa_gwdata").split(".")[:2])
+version = ".".join(get_version("python-sa-gwdata").split(".")[:2])
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
