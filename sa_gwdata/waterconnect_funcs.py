@@ -14,6 +14,26 @@ from sa_gwdata.waterconnect import *
 logger = logging.getLogger(__name__)
 
 
+def summary_layer(crs=None):
+    from sa_gwdata import cache
+
+    if crs is None:
+        crs = get_global_session().working_crs
+    df = cache.dh_layer
+    x_col = 'LON'
+    y_col = 'LAT'
+    
+    try:
+        from shapely.geometry import Point
+        import geopandas as gpd
+    except ImportError:
+        return df
+    else:
+        return gpd.GeoDataFrame(
+            df, geometry=gpd.points_from_xy(df[x_col], df[y_col]), crs="EPSG:4326"
+        ).to_crs(crs)
+
+
 def find_wells(input_text, **kwargs):
     """Find wells and retrieve some summary information.
 

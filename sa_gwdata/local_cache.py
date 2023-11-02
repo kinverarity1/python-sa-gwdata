@@ -190,6 +190,15 @@ def process_dh_layer_download(temp_fn=TEMP_DH_LAYER_FN):
     for col in null_9999_cols:
         df.loc[df[col] == -9999, col] = pd.NA
 
+    date_columns = [
+        "TDSDATE",
+        "YIELD_DATE",
+        "SWLDATE",
+        "DRILL_DATE",
+    ]
+    for col in date_columns:
+        df[col] = pd.to_datetime(df[col], format="%Y-%m-%d")
+
     df.loc[df.PERMIT_NO == 0, "PERMIT_NO"] = pd.NA
 
     col_remapper = {
