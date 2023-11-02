@@ -10,7 +10,7 @@ PATTERNS = {
 }
 
 
-class UnitNo:
+class UnitNumber:
     """Parse a well unit number.
 
     Arguments:
@@ -19,25 +19,28 @@ class UnitNo:
 
     Example::
 
-        >>> u1 = UnitNo("6628-123")
-        >>> u2 = UnitNo("662800123")
-        >>> u3 = UnitNo(662800123)
-        >>> u4 = UnitNo("6628-00123")
-        >>> u5 = UnitNo(6628, 123)
-        >>> u6 = UnitNo("6628", "00123")
-        >>> u7 = UnitNo("G662800123")
+        >>> u1 = UnitNumber("6628-7625")
+        >>> u2 = UnitNumber("662807625")
+        >>> u3 = UnitNumber(662807625)
+        >>> u4 = UnitNumber("6628-07625")
+        >>> u5 = UnitNumber(6628, 7625)
+        >>> u6 = UnitNumber("6628", "07625")
+        >>> u7 = UnitNumber("G662807625")
         >>> u1 == u2 == u3 == u4 == u5 == u6 == u7
         True
 
     Attributes:
-        map (int): 10K map sheet
-        seq (int): sequence number
-        hyphen (str): hyphenated format e.g. "6628-123"
-        long (str): zero-filled format e.g. "662800123"
-        long_int (int/None): zero-filled format as integer e.g. 662800123 or
+        map (int): 10K map sheet e.g. 6628
+        seq (int): sequence number e.g. 7625
+        hyphen (str): hyphenated format e.g. "6628-7625"
+        unit_hyphen (str): hyphenated format e.g. "6628-7625"
+        long (str): zero-filled format e.g. "662807625"
+        long_int (int/None): zero-filled format as integer e.g. 662807625 or
             None if missing
-        wilma (str): WILMA style e.g. "6628-00123"
-        hydstra (str): Hydstra style e.g. "G662800123"
+        unit_long (int/None): zero-filled format as integer e.g. 662807625 or
+            None if missing
+        wilma (str): WILMA style e.g. "6628-07625
+        hydstra (str): Hydstra style e.g. "G662807625"
 
     """
 
@@ -56,7 +59,7 @@ class UnitNo:
         self.set(*args)
 
     def set(self, *args):
-        """See :class:`UnitNo` constructor for details of arguments."""
+        """See :class:`UnitNumber` constructor for details of arguments."""
         args = list(args)
         if len(args) == 1:
             if args[0] == "nan" or pd.isnull(args[0]):
@@ -86,6 +89,10 @@ class UnitNo:
             return ""
 
     @property
+    def unit_hyphen(self):
+        return self.hyphen
+
+    @property
     def long(self):
         try:
             return "{:d}{:05d}".format(self.map, self.seq)
@@ -98,6 +105,10 @@ class UnitNo:
             return int(self.long)
         else:
             return None
+
+    @property
+    def unit_long(self):
+        return self.long
 
     @property
     def wilma(self):
@@ -132,22 +143,22 @@ class UnitNo:
         return {attr: getattr(self, attr) for attr in self._attributes}
 
 
-class ObsNo:
+class ObsNumber:
     """Parse an observation well identifier.
 
     Arguments:
         *args (str or int): either one string, which can be either in the format
-            'YAT017' or 'YAT-17', etc.; or two values, either int or str, for
+            'ADE037' or 'ADE-37', etc.; or two values, either int or str, for
             the plan prefix (three letters referring to the hundred) and
-            the sequence number. e.g. 'YAT', 17
+            the sequence number. e.g. 'ADE', 37
 
     Example::
 
-        >>> from sa_gwdata import ObsNo
-        >>> o1 = ObsNo("YAT017")
-        >>> o2 = ObsNo("YAT17")
-        >>> o3 = ObsNo("YAT 17")
-        >>> o4 = ObsNo("YAT", 17)
+        >>> from sa_gwdata import ObsNumber
+        >>> o1 = ObsNumber("ADE037")
+        >>> o2 = ObsNumber("ADE37")
+        >>> o3 = ObsNumber("ADE 37")
+        >>> o4 = ObsNumber("ADE", 37)
         >>> o1 == o2 == o3 == o4
         True
 
@@ -156,6 +167,7 @@ class ObsNo:
         seq (int): sequence number
         id (str): consistent zero-padded identifier e.g. "YAT017"
         egis (str): ENVGIS style e.g. "YAT 17"
+        obs_no (str): consistent zero-padded identifier e.g. "YAT017"
 
     """
 
@@ -172,18 +184,18 @@ class ObsNo:
         Arguments are the same as those for the class constructor,
         but all exceptions are ignored.
 
-        Returns: ObsNo.id if successful, a blank string if not.
+        Returns: ObsNumber.id if successful, a blank string if not.
 
         """
         try:
-            obs_no = cls(*args, **kwargs)
+            obs_number = cls(*args, **kwargs)
         except:
             return ""
         else:
-            return obs_no.id
+            return obs_number.id
 
     def set(self, *args):
-        """See :class:`ObsNo` constructor for details of arguments."""
+        """See :class:`ObsNumber` constructor for details of arguments."""
         args = list(args)
         if len(args) == 1:
             if args[0] == "nan" or pd.isnull(args[0]):
@@ -216,6 +228,10 @@ class ObsNo:
             return "{}{:03d}".format(self.plan.upper(), self.seq)
         except TypeError:
             return ""
+
+    @property
+    def obs_no(self):
+        return self.id
 
     @property
     def egis(self):
@@ -255,21 +271,26 @@ class Well:
 
     Attributes:
 
-        id (str): obs number if it exists, e.g. "NOA002", if not,
-            unit number e.g. "6628-123", and in the rare case that
+        id (str): obs number if it exists, e.g. "ADE037", if not,
+            unit number e.g. "6628-7625", and in the rare case that
             a unit number does not exist, then drillhole no. e.g.
-            "200135".
+            "54594".
+        well_id (str): as for id
         title (str): available attributes including name, e.g.
-            "7025-3985 / WRG038 / WESTERN LAGOON".
-        obs_no (ObsNo): obs number
-        unit_no (UnitNo): unit number
+            "6628-7625 / ADE037 / WEST BEACH PRIMARY".
+        obs_no (str): consistent zero-padded identifier e.g. "ADE037"
+        unit_hyphen (str): hyphenated format e.g. "6628-7625"
+        unit_long (int/None): zero-filled format as integer e.g. 662807625 or
+            None if missing
+        obs_number (ObsNumber): obs number
+        unit_number (UnitNumber): unit number
 
     """
 
     def __init__(self, *args, **kwargs):
         self._attributes = []
-        self.unit_no = UnitNo()
-        self.obs_no = ObsNo()
+        self.unit_number = UnitNumber()
+        self.obs_number = ObsNumber()
         self.name = ""
         self.set(*args, **kwargs)
 
@@ -277,11 +298,12 @@ class Well:
         """See :class:`Well` constructor for docstring."""
         self.dh_no = dh_no
         if "unit_hyphen" in kwargs and not unit_no:
-            unit_no = kwargs["unit_hyphen"]
-        if "unit_long" in kwargs and not unit_no:
-            unit_no = kwargs["unit_long"]
-        # self.set_unit_no(unit_no)
-        self.set_obs_no(obs_no)
+            unit_number = kwargs["unit_hyphen"]
+        elif "unit_long" in kwargs and not unit_no:
+            unit_number = kwargs["unit_long"]
+        elif unit_no:
+            self.set_unit_number(unit_no)
+        self.set_obs_number(obs_no)
         for key, value in kwargs.items():
             if not key in ("unit_long", "unit_hyphen", "id", "title"):
                 try:
@@ -294,29 +316,29 @@ class Well:
         self._attributes.append(key)
         setattr(self, key, value)
 
-    def set_obs_no(self, *args):
+    def set_obs_number(self, *args):
         """Set obswell number.
 
-        Args are passed to :class:`ObsNo` constructor.
+        Args are passed to :class:`ObsNumber` constructor.
 
         """
-        self.obs_no.set(*args)
+        self.obs_number.set(*args)
 
-    def set_unit_no(self, *args):
+    def set_unit_number(self, *args):
         """Set unit number.
 
-        Args are passed to :class:`UnitNo` constructor.
+        Args are passed to :class:`UnitNumber` constructor.
 
         """
-        self.unit_no.set(*args)
+        self.unit_number.set(*args)
 
     @property
     def unit_hyphen(self):
-        return self.unit_no.hyphen
+        return self.unit_number.hyphen
 
     @property
     def unit_long(self):
-        return self.unit_no.long
+        return self.unit_number.long
 
     def __eq__(self, other):
         if hasattr(other, "dh_no"):
@@ -332,31 +354,31 @@ class Well:
 
     @property
     def id(self):
-        if self.obs_no:
-            return self.obs_no
-        elif self.unit_no:
-            return self.unit_no
+        if self.obs_number:
+            return self.obs_number
+        elif self.unit_number:
+            return self.unit_number
         else:
             return str(self.dh_no)
 
     @property
     def title(self):
-        names = [self.unit_no.hyphen]
+        names = [self.unit_number.hyphen]
         if not names[0]:
             names[0] = "[dh_no={:d}]".format(self.dh_no)
-        if self.obs_no:
-            names.append(self.obs_no.id)
+        if self.obs_number:
+            names.append(self.obs_number.id)
         if self.name:
             names.append(self.name)
         return " / ".join(names)
 
     def __repr__(self):
-        if self.obs_no:
-            return f"'{str(self.obs_no)}'"
+        if self.obs_number:
+            return f"Well(obs_no='{self.obs_number}')"
         elif self.unit_hyphen:
-            return f"'{str(self.unit_hyphen)}'"
+            return f"Well(unit_hyphen='{self.unit_hyphen}')"
         else:
-            return str(self.dh_no)
+            return f"Well({self.dh_no})"
 
     def to_scalar_dict(self):
         """Convert Well to a dictionary containing scalar values.
@@ -365,17 +387,17 @@ class Well:
 
         Guaranteed keys are "dh_no", "id", "title" and "name".
 
-        The keys present in `well.unit_no.to_scalar_dict()` will
-        be added with the prefix "unit_no.". Same for `obs_no`.
+        The keys present in `well.unit_number.to_scalar_dict()` will
+        be added with the prefix "unit_number.". Same for `obs_number`.
 
         Any additional attributes will also be present.
 
         """
         d = {"dh_no": self.dh_no, "id": self.id, "title": self.title, "name": self.name}
         d.update(
-            {("unit_no." + k): v for k, v in self.unit_no.to_scalar_dict().items()}
+            {("unit_number." + k): v for k, v in self.unit_number.to_scalar_dict().items()}
         )
-        d.update({("obs_no." + k): v for k, v in self.obs_no.to_scalar_dict().items()})
+        d.update({("obs_number." + k): v for k, v in self.obs_number.to_scalar_dict().items()})
         d.update({attr: getattr(self, attr) for attr in self._attributes})
         return d
 
@@ -463,7 +485,7 @@ class Wells(collections.abc.MutableSequence):
         name = name.split(".")[0]
         if name in self._attributes:
             return self.df()[name].values.tolist()
-        elif name in ["unit_no", "obs_no"]:
+        elif name in ["unit_number", "obs_number"]:
             return [getattr(w, name) for w in self]
         else:
             raise AttributeError(
@@ -476,8 +498,8 @@ class Wells(collections.abc.MutableSequence):
         else:
             self._attributes = []
         self._map = {w.dh_no: w for w in self}
-        self._map.update({w.obs_no.id: w for w in self if w.obs_no.id})
-        self._map.update({w.unit_no.hyphen: w for w in self if w.unit_no.hyphen})
+        self._map.update({w.obs_number.id: w for w in self if w.obs_number.id})
+        self._map.update({w.unit_number.hyphen: w for w in self if w.unit_number.hyphen})
 
     def __dir__(self):
         return sorted(
@@ -493,9 +515,9 @@ class Wells(collections.abc.MutableSequence):
         the "dh_no", "id", "title" attributes from the contained
         Well objects.
 
-        Additional columns in the form "unit_no." + key will exist
-        for all the keys in :meth:`UnitNo.to_scalar_dict`. Same for
-        :meth:`ObsNo.to_scalar_dict`.
+        Additional columns in the form "unit_number." + key will exist
+        for all the keys in :meth:`UnitNumber.to_scalar_dict`. Same for
+        :meth:`ObsNumber.to_scalar_dict`.
 
         Remaining columns depend on the additional attributes present
         on the contained Well objects.

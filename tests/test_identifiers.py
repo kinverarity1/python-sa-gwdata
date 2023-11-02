@@ -4,41 +4,41 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 import pytest
 
-from sa_gwdata.identifiers import ObsNo, UnitNo, Well
+from sa_gwdata.identifiers import ObsNumber, UnitNumber, Well
 
 import numpy as np
 
-def test_accept_empty_unit_no():
-    UnitNo()
+def test_accept_empty_unit_number():
+    UnitNumber()
 
 
 def test_accept_empty_obs_no():
-    ObsNo()
+    ObsNumber()
 
 
-def test_dodgy_unit_no():
+def test_dodgy_unit_number():
     with pytest.raises(ValueError):
-        UnitNo("yat", 124)
+        UnitNumber("yat", 124)
 
 
-def test_dodgy_unit_no_1():
+def test_dodgy_unit_number_1():
     with pytest.raises(ValueError):
-        UnitNo(615)
+        UnitNumber(615)
 
 
 def test_dodgy_obs_no():
     with pytest.raises(ValueError):
-        ObsNo(6628, 142)
+        ObsNumber(6628, 142)
 
 
 def test_dodgy_obs_no_2():
     with pytest.raises(TypeError):
-        ObsNo(662800142)
+        ObsNumber(662800142)
 
 
 def test_dodgy_obs_no_3():
     with pytest.raises(ValueError):
-        ObsNo("662800142")
+        ObsNumber("662800142")
 
 
 @pytest.mark.parametrize(
@@ -53,7 +53,7 @@ def test_dodgy_obs_no_3():
     ],
 )
 def test_obs_no_parsing(test_input, expected):
-    assert ObsNo(test_input) == expected
+    assert ObsNumber(test_input) == expected
 
 
 @pytest.mark.parametrize(
@@ -68,39 +68,39 @@ def test_obs_no_parsing(test_input, expected):
         (662800123, "6628-123"),
     ],
 )
-def test_unit_no_parsing(test_input, expected):
-    assert UnitNo(test_input) == expected
+def test_unit_number_parsing(test_input, expected):
+    assert UnitNumber(test_input) == expected
 
 
 @pytest.mark.parametrize(
     "attr_name,expected_value",
     [("hyphen", ""), ("long", ""), ("long_int", None), ("wilma", ""), ("hydstra", "")],
 )
-def test_empty_unit_no(attr_name, expected_value):
+def test_empty_unit_number(attr_name, expected_value):
     assert (
-        getattr(UnitNo(), attr_name) == expected_value
+        getattr(UnitNumber(), attr_name) == expected_value
     )  # against PEP8 for None but should work
 
 
 @pytest.mark.parametrize("attr_name,expected_value", [("id", ""), ("egis", "")])
 def test_empty_obs_no(attr_name, expected_value):
     assert (
-        getattr(ObsNo(), attr_name) == expected_value
+        getattr(ObsNumber(), attr_name) == expected_value
     )  # against PEP8 for None but should work
 
 
-def test_unit_no_long_int():
-    unit_no = UnitNo("6628-123")
-    assert unit_no.long_int == 662800123
+def test_unit_number_long_int():
+    unit_number = UnitNumber("6628-123")
+    assert unit_number.long_int == 662800123
 
 
-def test_unit_no_iter():
-    unit_no = UnitNo("6628-123")
-    assert [x for x in unit_no] == [6628, 123]
+def test_unit_number_iter():
+    unit_number = UnitNumber("6628-123")
+    assert [x for x in unit_number] == [6628, 123]
 
 
 def test_obs_no_iter():
-    obs_no = ObsNo("NOA-2")
+    obs_no = ObsNumber("NOA-2")
     assert [x for x in obs_no] == ["NOA", 2]
 
 
@@ -131,17 +131,17 @@ def test_well_manual(attr_name, expected_value):
 
 def test_well_repr():
     well = Well(28255, unit_no="6528-1127", obs_no="YAT124")
-    assert str(well) == "'YAT124'"
+    assert str(well) == "Well(obs_no='YAT124')"
 
 
 def test_well_path_safe_repr():
     well = Well(28255, unit_no="6528-1127", obs_no="YAT124")
-    assert well.path_safe_repr() == "'YAT124'"
+    assert well.path_safe_repr() == "Well(obs_no='YAT124')"
 
 
 def test_well_path_safe_repr_keep_prefix():
     well = Well(28255, unit_no="6528-1127", obs_no="YAT124")
-    assert well.path_safe_repr(remove_prefix=False) == "'YAT124'"
+    assert well.path_safe_repr(remove_prefix=False) == "Well(obs_no='YAT124')"
 
 
 def test_well_name():
@@ -165,12 +165,12 @@ def test_well_hash():
 
 
 def test_unit_no_hash():
-    unit_no = UnitNo("6628-1527")
-    assert {unit_no: "value"}[unit_no] == "value"
+    unit_number = UnitNumber("6628-1527")
+    assert {unit_number: "value"}[unit_number] == "value"
 
 
 def test_obs_no_hash():
-    obs_no = ObsNo("NOA 2")
+    obs_no = ObsNumber("NOA 2")
     assert {obs_no: "value"}[obs_no] == "value"
 
 
