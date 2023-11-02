@@ -81,7 +81,7 @@ With this information we can make some direct REST calls:
 
 ## Install
 
-You will need Python 3.6 or a more recent version.
+You will need Python 3.8 or a more recent version.
 
 ```bash
 $ pip install -U python-sa-gwdata
