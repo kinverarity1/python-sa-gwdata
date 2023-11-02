@@ -20,27 +20,18 @@ implemented here.
 Requirements
 ~~~~~~~~~~~~~
 
-Strictly, the only dependencies needed to run this package are 
-requests and pandas, and they will install automatically with ``python-sa-gwdata``
-if needed.
+Python >= 3.8
 
-However, if you want to use the spatial data returned
-more easily (and e.g. run the included tutorials), you will need shapely,
-contextily, and geopandas installed. 
-If you are using conda you can easily install these with:
+Required: pandas>0.24.1, requests, platformdirs, pyarrow, and pyshp - 
+these are installed automatically with ``pip install python-sa-gwdata``.
 
-.. code-block:: powershell
-
-    > conda install -c conda-forge geopandas shapely contextily
+Recommended but optional dependencies: shapely, contextily, geopandas. 
+These are best installed with conda/mamba if you are using that: ``conda/mamba install -c conda-forge geopandas shapely contextily``
 
 Install
 ~~~~~~~~~~
 
-You can install sa_gwdata the usual way:
-
-.. code-block:: powershell
-
-    > pip install -U python-sa-gwdata
+You can install sa_gwdata the usual way with ``pip install python-sa-gwdata``
 
 This will install and/or update the Python package ``sa_gwdata``.
 

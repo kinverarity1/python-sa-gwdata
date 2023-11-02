@@ -15,10 +15,9 @@ project = 'python-sa-gwdata'
 copyright = '2023, Kent Inverarity'
 author = 'Kent Inverarity'
 
-from pkg_resources import get_distribution
+from importlib.metadata import version as get_version
 
-release = get_distribution("python-sa-gwdata").version
-version = ".".join(release.split(".")[:2])
+version = ".".join(get_version("sa_gwdata").split(".")[:2])
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
