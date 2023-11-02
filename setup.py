@@ -35,12 +35,10 @@ setup(
         "all": (TEST_REQS, EXTRA_REQS),
     },
     tests_require=(TEST_REQS),
-    python_requires=">=3.8",
+    python_requires=">=3.6",
     classifiers=(
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
     ),
     keywords="groundwater data",
 )
