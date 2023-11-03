@@ -11,9 +11,9 @@ master_doc = "index"
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'python-sa-gwdata'
-copyright = '2023, Kent Inverarity'
-author = 'Kent Inverarity'
+project = "python-sa-gwdata"
+copyright = "2023, Kent Inverarity"
+author = "Kent Inverarity"
 
 from importlib.metadata import version as get_version
 
@@ -35,8 +35,8 @@ extensions = [
     "nbsphinx",
 ]
 
-templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+templates_path = ["_templates"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 language = "en"
 pygments_style = "sphinx"
 todo_include_todos = True
@@ -45,5 +45,5 @@ todo_include_todos = True
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "sphinx_rtd_theme"
-html_static_path = ['_static']
+html_static_path = ["_static"]
 intersphinx_mapping = {"https://docs.python.org/": None}

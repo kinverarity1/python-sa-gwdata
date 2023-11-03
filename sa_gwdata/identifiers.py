@@ -395,9 +395,17 @@ class Well:
         """
         d = {"dh_no": self.dh_no, "id": self.id, "title": self.title, "name": self.name}
         d.update(
-            {("unit_number." + k): v for k, v in self.unit_number.to_scalar_dict().items()}
+            {
+                ("unit_number." + k): v
+                for k, v in self.unit_number.to_scalar_dict().items()
+            }
         )
-        d.update({("obs_number." + k): v for k, v in self.obs_number.to_scalar_dict().items()})
+        d.update(
+            {
+                ("obs_number." + k): v
+                for k, v in self.obs_number.to_scalar_dict().items()
+            }
+        )
         d.update({attr: getattr(self, attr) for attr in self._attributes})
         return d
 
@@ -499,7 +507,9 @@ class Wells(collections.abc.MutableSequence):
             self._attributes = []
         self._map = {w.dh_no: w for w in self}
         self._map.update({w.obs_number.id: w for w in self if w.obs_number.id})
-        self._map.update({w.unit_number.hyphen: w for w in self if w.unit_number.hyphen})
+        self._map.update(
+            {w.unit_number.hyphen: w for w in self if w.unit_number.hyphen}
+        )
 
     def __dir__(self):
         return sorted(

@@ -8,7 +8,7 @@ TEST_REQS = (
     "pytest-benchmark",
     "black",
     "sphinx",
-    "nbsphinx"
+    "nbsphinx",
 )
 
 EXTRA_REQS = (

@@ -25,6 +25,7 @@ TEMP_DH_LAYER_FN = LOCAL / "drillholes_shapefiles.zip"
 
 LOCAL_DH_CACHE_MISSING = "Local drillhole cache missing. We strongly recommend you run sa_gwdata.cache.update() once to populate. It will download ~80 MB and take about 10 seconds to complete. Total storage required ~125 MB."
 
+
 class LocalCache:
     def __init__(self):
         self._dh_layer = None
@@ -36,7 +37,9 @@ class LocalCache:
         if not self._dh_cache_missing:
             age = self._dh_layer_age()
             if age.days > 7:
-                logger.info(f"The local drillhole cache is {age.days} days old. You may wish to run sa_gwdata.cache.update() to download a new version.")
+                logger.info(
+                    f"The local drillhole cache is {age.days} days old. You may wish to run sa_gwdata.cache.update() to download a new version."
+                )
 
     @property
     def dh_layer_path(self):
@@ -93,11 +96,15 @@ class LocalCache:
         if not force and not self._dh_cache_missing:
             delta = self._dh_layer_age()
             if delta.days > ndays:
-                logger.debug(f"Updating cache as it is {delta.days} days out of date (> {ndays})")
+                logger.debug(
+                    f"Updating cache as it is {delta.days} days out of date (> {ndays})"
+                )
                 update = True
                 remove_file = self.dh_layer_path
             else:
-                logger.debug(f"Not updating cache as it is {delta.days} days out of date (<= {ndays})")
+                logger.debug(
+                    f"Not updating cache as it is {delta.days} days out of date (<= {ndays})"
+                )
         if not update and force:
             logger.debug("Force-updating")
             update = True
@@ -108,7 +115,7 @@ class LocalCache:
             if remove_file:
                 os.remove(remove_file)
             logger.debug("Updated cache.")
-            
+
 
 def download_dh_layer(temp_fn=TEMP_DH_LAYER_FN):
     temp_fn = TEMP_DH_LAYER_FN
@@ -216,7 +223,7 @@ def process_dh_layer_download(temp_fn=TEMP_DH_LAYER_FN):
         "TITLE_FOLI": "TITLE_FOLIO",
         "GRND_ELEV_": "GRND_ELEV_DEM",
         "LATEST_REF": "LATEST_REF_POINT_TYP",
-        "LATEST_REF_POINT_TYP": "LATEST_REF_POINT_TYPE"
+        "LATEST_REF_POINT_TYP": "LATEST_REF_POINT_TYPE",
     }
 
     df = df.rename(columns=col_remapper)

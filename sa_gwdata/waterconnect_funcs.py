@@ -20,9 +20,9 @@ def summary_layer(crs=None):
     if crs is None:
         crs = get_global_session().working_crs
     df = cache.dh_layer
-    x_col = 'LON'
-    y_col = 'LAT'
-    
+    x_col = "LON"
+    y_col = "LAT"
+
     try:
         from shapely.geometry import Point
         import geopandas as gpd
