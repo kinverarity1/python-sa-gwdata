@@ -233,8 +233,6 @@ the production zone (see below).
       }
     ]
 
-.. _GetProductionZoneSummary:
-
 GetProductionZoneSummary
 """"""""""""""""""""""""
 

@@ -11,7 +11,7 @@ A wide variety of information is stored and available as attributes for a well
 (so for example where you have a spreadsheet table and each well forms one row, 
 then each of these fields would be a column with one value for one well).
 
-Details of the fields available are in :ref:`data fields: general well information <data-fields-well-info>`.
+Details of the fields available are in :ref:`data fields: general well summary data <305-data-fields-well-summary>`.
 
 Groundwater level
 -----------------------------------
@@ -22,7 +22,7 @@ depending on the monitoring requirements.
 
 #TODO: logger data via Aquarius to be made available in this package soon.
 
-See :ref:`groundwater level data fields <data-fields-groundwater-level>`
+See :ref:`groundwater level data fields <310-data-fields-groundwater-level>`
 for more details.
 
 Salinity samples
@@ -32,7 +32,7 @@ These are water samples collected from wells, usually by pumping
 deliberately for monitoring (or sampled from an irrigation pump), and
 the salinity estimated by measuring the electrical conductivity (EC)
 
-See the :ref:`water monitoring data tutorial <420-tutorial-water-monitoring-data>`
+See the :ref:`water monitoring data tutorial <430-tutorial-water-monitoring-data>`
 for more details.
 
 Wellhead elevation surveys
@@ -204,5 +204,5 @@ See the following links for details of the tables and fields that are available 
 .. toctree::
     :maxdepth: 1
 
-    305-data-fields-well-info
+    305-data-fields-well-summary
     310-data-fields-groundwater-level

@@ -1,7 +1,7 @@
 .. _data-fields-groundwater-level:
 
 Data fields: groundwater level 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Groundwater level observations made manually with a dipping tape are available. The frequency of observations
 varies from monthly to once every six months, with significant missing periods across different drillholes

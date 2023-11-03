@@ -1,7 +1,7 @@
-.. _data-fields-well-info:
+.. _data-fields-well-summary:
 
-Data fields: general well information
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Data fields: general well summary data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Groundwater Data provides data for all drillholes in the State drillhole database (SA Geodata). This
 covers multiple types of drillholes:

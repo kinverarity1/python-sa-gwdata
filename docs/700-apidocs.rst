@@ -33,9 +33,9 @@ Well identifiers
 
 .. autoclass:: sa_gwdata.Well
     :members:
-.. autoclass:: sa_gwdata.UnitNo
+.. autoclass:: sa_gwdata.UnitNumber
     :members:
-.. autoclass:: sa_gwdata.ObsNo
+.. autoclass:: sa_gwdata.ObsNumber
     :members:
 
 WaterConnect web service utilities

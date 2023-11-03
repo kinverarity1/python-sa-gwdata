@@ -21,6 +21,7 @@ This is an unofficial project.
     410-tutorial-finding-wells
     420-tutorial-monitoring-networks
     430-tutorial-water-monitoring-data
+    490-tutorial-webservices
     700-apidocs
     800-webservices
     900-changelog
