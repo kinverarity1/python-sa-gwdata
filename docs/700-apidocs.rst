@@ -1,11 +1,10 @@
-sa_gwdata developer guide
+sa_gwdata docstrings
 =========================
 
-Docstrings
-~~~~~~~~~~
+.. contents:: :local:
 
 Find wells
-----------
+~~~~~~~~~~
 
 .. autofunction:: sa_gwdata.find_wells
 .. autofunction:: sa_gwdata.parse_well_ids_plaintext
@@ -13,7 +12,7 @@ Find wells
     
 
 Download data
--------------
+~~~~~~~~~~~~~
 
 .. autofunction:: sa_gwdata.wells_summary
 .. autofunction:: sa_gwdata.water_levels
@@ -29,7 +28,7 @@ Download data
 
 
 Well identifiers
-----------------
+~~~~~~~~~~~~~~~~
 
 .. autoclass:: sa_gwdata.Well
     :members:
@@ -38,8 +37,10 @@ Well identifiers
 .. autoclass:: sa_gwdata.ObsNumber
     :members:
 
-WaterConnect web service utilities
-----------------------------------
+Groundwater Data web service utilities
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: sa_gwdata.get_global_session
 
 .. autoclass:: sa_gwdata.WaterConnectSession
     :members:

@@ -1,5 +1,5 @@
-WaterConnect web services
-=========================
+Groundwater Data web services
+==============================
 
 Most of the data that can be accessed through this package comes from HTTP requests to some web services
 on the `Groundwater Data <https://www.waterconnect.sa.gov.au/Systems/GD/Pages/Default.aspx>`__ section of the WaterConnect website, which return JSON. Although you do not need to understand these requests to use the sa_gwdata

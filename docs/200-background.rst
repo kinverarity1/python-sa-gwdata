@@ -1,11 +1,17 @@
 Background information
 ========================
 
+.. contents:: :local:
+
+This package facilitates access to data from a variety of sources, which
+are explained in the data dictionary on the next page. Before getting to
+that there are some common terms which it would help to explain first.
+
 Drillhole/well identifiers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Groundwater Data provides access to a wide variety of information for drillholes
-or water wells, sourced from SA Geodata. The fundamental piece of data to
+This package provides access to a wide variety of information for drillholes
+or water wells located in South Australia. The fundamental piece of data to
 understand is the drillhole, which represents either a mineral or petroleum 
 exploration drillhole, petroleum production well, or a water well 
 (could be a monitoring well or a production well -- from

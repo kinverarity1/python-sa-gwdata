@@ -1,10 +1,37 @@
 Data dictionary
 =============================================
 
-Summary of datasets
+.. contents:: :local:
+
+Data systems
+~~~~~~~~~~~~~
+
+This package gets data from a range of different websites:
+
+- **Groundwater Data** (on **WaterConnect**). This portal is maintained by the
+  SA Government Department for Environment and Water (DEW) and is the main source of data
+  for python-sa-gwdata. It presents a set of groundwater-focused exports/reports
+  for effectively all drillholes in SA (not just water wells). There are some 
+  primary datasets which I call "bulk downloads", and then a wide variety of
+  endpoints on the internal APIs.
+
+- **Water Data SA** (an instance of **Aquarius Web Portal**) - this portal maintained
+  by DEW presents continuous water monitoring data, both surface water and groundwater.
+  The main aspect of data used from here is continuous data logger timeseries mainly of
+  groundwater level in monitoring wells.
+
+- **SARIG**. This is a data portal maintained by the SA Government Department of
+  Energy and Mining and is intended for use by the mining and petroleum
+  industries. python-sa-gwdata accesses a small part of the website to show
+  historical scanned files relating to drillholes.
+
+- **Spatial Data** on **WaterConnect**. This provides some large spatial layers
+  with groundwater data.
+
+Datasets
 ~~~~~~~~~~~~~~~~~~~~~
 
-General well information
+Well summary data
 -----------------------------------
 
 A wide variety of information is stored and available as attributes for a well 
@@ -69,8 +96,8 @@ There are fundamentally two types of geological logs:
   into the relevant part of the database, and therefore won't show up in these
   tables.
 
-Logs - Driller's logs
------------------------------------
+Driller's logs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 These are descriptions of the lithology intersected by a drillhole, as
 recorded by the licensed water well driller on their DWCR (drillers well completion report).
@@ -81,8 +108,8 @@ aquifer properties.
 
 A driller's log should be available for the majority of wells.
 
-Logs - Lithological logs
------------------------------------
+Lithological logs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Descriptions of the lithology intersected by a drillhole, as recorded by a
 geologist or hydrogeologist. These are usually collected in addition to the 
@@ -90,15 +117,15 @@ drillers log, and are more detailed and formal in nature.
 
 They are not available for most water wells.
 
-Logs - Stratigraphic logs
------------------------------------
+Stratigraphic logs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A stratigraphic log will provide an interpretation of the stratigraphy
 intersected by a drillhole. It is generally something done for historic wells,
 and mineral and petroleum wells, rather than water wells.
 
-Logs - Hydrostratigraphic logs
------------------------------------
+Hydrostratigraphic logs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A hydrostratigraphic log provides an interpretation of the hydrostratigraphy
 (i.e. sequence of aquitards and aquifers) that a drillhole intersects. It's 
@@ -117,14 +144,14 @@ There is a summary view of a well's construction which is available as a table.
 
 There are then also tables with details of the well's construction:
 
-Construction - Drilled intervals
-------------------------------------------
+Drilled intervals
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Detailed information about the drilled intervals that make up a drillhole: 
 the depth interval, diameter, and drilling method used.
 
-Construction - Casing intervals and cementing information
-------------------------------------------------------------------------------------
+Casing intervals and cementing information
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Contains details of the casing installed in a well, such as the depths of installation
 and the material. It also contains 
@@ -135,8 +162,8 @@ Note that production zone data is not stored alongside casing data, and that
 some things which might be considered "casing" are actually stored in the
 production zone table below (e.g. sumps, screen blanks, and riser pipe).
 
-Construction - Production zones
-------------------------------------------
+Production zones
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Details of the production zone interval of a well e.g. screens, slotted sections, blank sections in screens,
 open hole intervals, and riser pipes.  Some of these are intervals are what might more generally be known
@@ -189,20 +216,9 @@ by :ref:`GetProductionZoneSummary`; and the pandas DataFrame returned under the 
   :header-rows: 1
   :widths: 20 35 15 15 15
 
-Construction - Water cuts 
------------------------------------------------------
+Water cuts 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Observations of groundwater level, salinity and yield made at the time of drilling. These observations
 are much more common for historical wells drilled by cable tool rigs, but they are still occasionally collected.
 
-
-Detailed data dictionary
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-See the following links for details of the tables and fields that are available for each of the datasets mentioned above:
-
-.. toctree::
-    :maxdepth: 1
-
-    305-data-fields-well-summary
-    310-data-fields-groundwater-level
