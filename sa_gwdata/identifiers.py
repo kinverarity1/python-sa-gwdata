@@ -4,7 +4,7 @@ import re
 import pandas as pd
 
 PATTERNS = {
-    "unit_no": [r"G?(\d{4})-?(\d{5})", r"G?(\d{4})-(\d{1,5})"],
+    "unit_no": [r"G?(\d{4})-?(\d{5})", r"G?(\d{4})-(\d{1,5})", r"(\d{4})\d\d\dWW(\d{5})"],
     "dh_no": [r"(\d{1,6})"],
     "obs_no": [r"([a-zA-Z]{3})[ -]?(\d{1,3})"],
 }
