@@ -22,11 +22,19 @@ Requirements
 
 Python >= 3.8
 
-Required: pandas>0.24.1, requests, platformdirs, pyarrow, and pyshp - 
-these are installed automatically with ``pip install python-sa-gwdata``.
+Required: pandas>0.24.1, requests, platformdirs, pyarrow, pyshp, geopandas and contextily.
 
-Recommended but optional dependencies: shapely, contextily, geopandas. 
-These are best installed with conda/mamba if you are using that: ``conda/mamba install -c conda-forge geopandas shapely contextily``
+The best way to install these is to use conda/mamba: 
+
+.. code-block::
+    
+    conda/mamba install -c conda-forge geopandas contextily
+
+Then:
+
+.. code-block::
+    
+    pip install python-sa-gwdata
 
 Install
 ~~~~~~~~~~
