@@ -1,13 +1,21 @@
 import collections.abc
+import logging
 import re
 
 import pandas as pd
 
 PATTERNS = {
-    "unit_no": [r"G?(\d{4})-?(\d{5})", r"G?(\d{4})-(\d{1,5})", r"(\d{4})\d\d\dWW(\d{5})"],
+    "unit_no": [
+        r"G?(\d{4})-?(\d{5})",
+        r"G?(\d{4})-(\d{1,5})",
+        r"(\d{4})\d\d\dWW(\d{5})",
+    ],
     "dh_no": [r"(\d{1,6})"],
     "obs_no": [r"([a-zA-Z]{3})[ -]?(\d{1,3})"],
 }
+
+
+logger = logging.getLogger()
 
 
 class UnitNumber:
@@ -608,8 +616,10 @@ def parse_well_ids_plaintext(
     well_ids = []
     if "unit_no" in types:
         for pattern in PATTERNS["unit_no"]:
+            logger.debug(f"matching pattern '{pattern}'")
             matches = re.findall(unit_no_prefix + pattern, input_text)
             for match in matches:
+                print(f" > matched '{match[0]}' '{match[1]}'")
                 match_counts["unit_no"] += 1
                 well_ids.append(
                     ("unit_no", "{}-{:.0f}".format(match[0], int(match[1])))
